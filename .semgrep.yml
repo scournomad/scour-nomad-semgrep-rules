@@ -1,0 +1,6 @@
+# Root Semgrep config: include all custom rules under rules/
+# Run: semgrep --config .
+
+include:
+  - rules/**.yml
+  - csharp/**.yml

@@ -1,0 +1,25 @@
+rules:
+  - id: dotnet-header-response-splitting
+    languages: [csharp]
+    message: Potential HTTP response splitting. Unvalidated input used in response header value.
+    severity: ERROR
+    patterns:
+      - pattern: Response.Headers[$NAME] = $VAL
+    metavariable-pattern:
+      VAL:
+        pattern-regex: .*
+    metadata:
+      cwe: "CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Header_Cheat_Sheet.html
+      verification:
+        strategy: integration
+        steps:
+          - Send input containing CR/LF (e.g., %0d%0aInjected: value) through code path
+          - Inspect response headers for injection
+        expected_outcome: Header injection occurs if not sanitized
+        tooling:
+          unit: none
+          dast: curl

@@ -1,0 +1,34 @@
+rules:
+  - id: dotnet-sqli-sqlcommand-concat
+    languages: [csharp]
+    message: Potential SQL injection. Avoid string concatenation in SqlCommand; use parameters.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          new SqlCommand($QUERY, $CONN)
+      - pattern-either:
+          - pattern: string $S = $A + $B
+          - pattern: $QUERY = $A + $B
+          - pattern: $QUERY += $X
+      - pattern: new SqlCommand($QUERY, ...)
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/framework/data/adonet/parameters
+        - https://owasp.org/www-community/attacks/SQL_Injection
+      verification:
+        strategy: integration
+        preconditions:
+          - Test DB available (local Docker SQL Server)
+        inputs:
+          - name: payload
+            value: "' OR 1=1 --"
+        steps:
+          - Execute vulnerable path with metadata.inputs.payload
+          - Observe SQL text or DB behavior
+        expected_outcome: Payload appears unescaped in SQL or query returns unexpected rows
+        tooling:
+          unit: xunit
+          dast: none

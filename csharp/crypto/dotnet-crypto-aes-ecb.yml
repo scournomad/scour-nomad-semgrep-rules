@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-crypto-aes-ecb
+    languages: [csharp]
+    message: AES in ECB mode is insecure due to pattern leakage. Use CBC or GCM with random IV.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: new AesCryptoServiceProvider { Mode = CipherMode.ECB, ... }
+          - pattern: $AES.Mode = CipherMode.ECB
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+      verification:
+        strategy: unit
+        steps:
+          - Initialize AES with ECB and encrypt known plaintext
+        expected_outcome: Code configures AES with ECB mode
+        tooling:
+          unit: xunit
+          dast: none

@@ -1,0 +1,35 @@
+rules:
+  - id: dotnet-path-traversal-file-read
+    languages: [csharp]
+    message: Potential path traversal. Unvalidated input used as file path for read operations.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          $RET $METHOD($P, ...){
+            ...
+            File.$READ($PATH, ...);
+            ...
+          }
+      - pattern-either:
+          - pattern: File.ReadAllText($PATH)
+          - pattern: File.OpenRead($PATH)
+          - pattern: new FileStream($PATH, ...)
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        preconditions:
+          - Method accepts user-provided path
+        inputs:
+          - name: payload
+            value: "../../etc/passwd"
+        steps:
+          - Call method with metadata.inputs.payload
+        expected_outcome: Read attempt on parent directory path
+        tooling:
+          unit: xunit
+          dast: none

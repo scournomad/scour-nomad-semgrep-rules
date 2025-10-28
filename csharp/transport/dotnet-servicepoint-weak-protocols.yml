@@ -1,0 +1,25 @@
+rules:
+  - id: dotnet-servicepoint-weak-protocols
+    languages: [csharp]
+    message: Weak or deprecated TLS/SSL protocols enabled. Disable SSL3/TLS1.0/TLS1.1.
+    severity: WARNING
+    pattern-either:
+      - pattern: ServicePointManager.SecurityProtocol |= SecurityProtocolType.Ssl3
+      - pattern: ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls
+      - pattern: ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls11
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/framework/network-programming/tls
+      verification:
+        strategy: integration
+        preconditions:
+          - App configures ServicePointManager.SecurityProtocol
+        steps:
+          - Inspect configured flags include SSL3/TLS1.0/1.1
+        expected_outcome: Weak protocols are enabled
+        tooling:
+          unit: none
+          dast: none

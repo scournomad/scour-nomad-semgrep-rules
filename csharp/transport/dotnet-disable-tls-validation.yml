@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-disable-tls-validation
+    languages: [csharp]
+    message: Disabling TLS certificate validation is insecure.
+    severity: ERROR
+    pattern-either:
+      - pattern: ServicePointManager.ServerCertificateValidationCallback = ...
+      - pattern: new HttpClientHandler { ServerCertificateCustomValidationCallback = ... }
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.net.http.httpclienthandler.servercertificatecustomvalidationcallback
+        - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+      verification:
+        strategy: integration
+        preconditions:
+          - Outbound HTTP client code path executed in test/staging
+        steps:
+          - Instrument code to set a callback that accepts any certificate
+          - Connect to an endpoint with an invalid/self-signed certificate
+        expected_outcome: Request succeeds despite invalid certificate
+        tooling:
+          unit: none
+          dast: curl

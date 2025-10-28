@@ -1,0 +1,27 @@
+rules:
+  - id: dotnet-process-start-userinput
+    languages: [csharp]
+    message: Process.Start with untrusted input can lead to command injection. Avoid shell or validate/escape args.
+    severity: ERROR
+    patterns:
+      - pattern: Process.Start($CMD)
+    metadata:
+      cwe: "CWE-78: OS Command Injection"
+      owasp: "A03:2021-Injection"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.diagnostics.processstartinfo
+        - https://cheatsheetseries.owasp.org/cheatsheets/Command_Injection_Defense_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        preconditions:
+          - None (sandboxed test environment)
+        inputs:
+          - name: payload
+            value: "; whoami"
+        steps:
+          - Invoke Process.Start with concatenated/tainted payload
+        expected_outcome: Shell is invoked or arguments include payload
+        tooling:
+          unit: xunit
+          dast: none

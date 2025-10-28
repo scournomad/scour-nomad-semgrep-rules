@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-crypto-md5
+    languages: [csharp]
+    message: MD5 is considered broken. Use SHA-256 or stronger, or a password hashing function.
+    severity: ERROR
+    pattern-either:
+      - pattern: MD5.Create(...)
+      - pattern: new MD5CryptoServiceProvider(...)
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+        - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+      verification:
+        strategy: unit
+        preconditions:
+          - None
+        steps:
+          - Invoke MD5 hashing on known input
+          - Assert algorithm is MD5 (or replace with SHA256 in fix)
+        expected_outcome: MD5 usage is present
+        tooling:
+          unit: xunit
+          dast: none

@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-deserialization-binaryformatter
+    languages: [csharp]
+    message: BinaryFormatter deserialization is unsafe; avoid with untrusted data.
+    severity: ERROR
+    pattern-either:
+      - pattern: new BinaryFormatter().Deserialize(...)
+      - pattern: $BF.Deserialize(...)
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/standard/serialization/binaryformatter-security-guide
+      verification:
+        strategy: unit
+        preconditions:
+          - None
+        steps:
+          - Call Deserialize on arbitrary data stream
+        expected_outcome: Unsafe API invocation detected
+        tooling:
+          unit: xunit
+          dast: none

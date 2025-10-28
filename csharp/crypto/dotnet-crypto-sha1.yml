@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-crypto-sha1
+    languages: [csharp]
+    message: SHA1 is deprecated for security purposes. Use SHA-256 or stronger.
+    severity: ERROR
+    pattern-either:
+      - pattern: SHA1.Create(...)
+      - pattern: new SHA1CryptoServiceProvider(...)
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+      verification:
+        strategy: unit
+        preconditions:
+          - None
+        steps:
+          - Invoke SHA1 hashing on known input
+        expected_outcome: SHA1 usage is present
+        tooling:
+          unit: xunit
+          dast: none

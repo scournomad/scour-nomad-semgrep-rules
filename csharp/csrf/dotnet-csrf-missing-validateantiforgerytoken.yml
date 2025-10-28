@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-csrf-missing-validateantiforgerytoken
+    languages: [csharp]
+    message: Potential missing CSRF protection. [HttpPost]/[HttpPut]/[HttpDelete] action without [ValidateAntiForgeryToken]. Confirm if endpoint requires CSRF.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: "[HttpPost]\n$RET $ACTION(...){ ... }"
+          - pattern: "[HttpPut]\n$RET $ACTION(...){ ... }"
+          - pattern: "[HttpDelete]\n$RET $ACTION(...){ ... }"
+      - pattern-not: "[ValidateAntiForgeryToken]\n$RET $ACTION(...){ ... }"
+    metadata:
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/anti-request-forgery
+      verification:
+        strategy: manual
+        steps:
+          - Confirm action is cookie-authenticated and performs state change
+          - If so, ensure antiforgery validation is required
+        expected_outcome: CSRF protection is required or exemption is justified
+        tooling:
+          unit: none
+          dast: none

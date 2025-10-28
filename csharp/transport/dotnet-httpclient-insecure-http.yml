@@ -1,0 +1,30 @@
+rules:
+  - id: dotnet-httpclient-insecure-http
+    languages: [csharp]
+    message: HttpClient is used with an http:// URL. Use HTTPS.
+    severity: WARNING
+    pattern-either:
+      - pattern: $C.GetAsync("http://...", ...)
+      - pattern: $C.PostAsync("http://...", ...)
+      - pattern: $C.SendAsync($REQ)
+    metadata:
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/fundamentals/networking/http/httpclient-guidelines
+        - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+      verification:
+        strategy: integration
+        preconditions:
+          - ASP.NET Core app or console app making outbound HTTP requests
+        inputs:
+          - name: target_url
+            value: http://example.com/
+        steps:
+          - Replace outbound URL with metadata.inputs.target_url
+          - Run app; capture network trace or logs
+        expected_outcome: Request made over plaintext HTTP (no TLS)
+        tooling:
+          unit: none
+          dast: curl

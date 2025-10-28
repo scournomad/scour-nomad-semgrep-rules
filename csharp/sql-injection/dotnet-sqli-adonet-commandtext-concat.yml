@@ -1,0 +1,33 @@
+rules:
+  - id: dotnet-sqli-adonet-commandtext-concat
+    languages: [csharp]
+    message: Potential SQL injection. SqlCommand.CommandText built via string concatenation. Use parameters.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          SqlCommand $CMD = new SqlCommand(...);
+          ...
+          $CMD.CommandText = $SQL;
+          ...
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/framework/data/adonet/parameters
+      verification:
+        strategy: integration
+        preconditions:
+          - Test DB available
+        inputs:
+          - name: payload
+            value: "' OR 1=1 --"
+        steps:
+          - Execute command with concatenated CommandText
+        expected_outcome: Payload appears unescaped in SQL or affects result
+        tooling:
+          unit: xunit
+          dast: none

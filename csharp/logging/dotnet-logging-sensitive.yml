@@ -1,0 +1,31 @@
+rules:
+  - id: dotnet-logging-sensitive
+    languages: [csharp]
+    message: Potential logging of secrets/PII. Avoid logging credentials, tokens, or personal data.
+    severity: WARNING
+    pattern-either:
+      - pattern: $LOG.Log$(... $SENSITIVE ..., ...)
+      - pattern: Console.WriteLine(... $SENSITIVE ...)
+    metavariable-pattern:
+      SENSITIVE:
+        pattern-regex: (?i)(password|secret|apikey|api_key|token|ssn|creditcard|credit_card|cvv)
+    metadata:
+      cwe: "CWE-359: Exposure of Private Information ('Privacy Violation')"
+      owasp: "A09:2021-Security Logging and Monitoring Failures"
+      confidence: low
+      references:
+        - https://owasp.org/www-project-proactive-controls/v3/en/c8-protect-data-everywhere
+      verification:
+        strategy: unit
+        preconditions:
+          - Use a test logger sink to capture logs
+        inputs:
+          - name: secret
+            value: "password=SuperSecret123!"
+        steps:
+          - Call logging statement with metadata.inputs.secret
+          - Assert sink receives sensitive token
+        expected_outcome: Sensitive value is present in log output
+        tooling:
+          unit: xunit
+          dast: none

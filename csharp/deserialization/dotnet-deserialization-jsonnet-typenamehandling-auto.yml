@@ -1,0 +1,27 @@
+rules:
+  - id: dotnet-deserialization-jsonnet-typenamehandling-auto
+    languages: [csharp]
+    message: Json.NET TypeNameHandling Auto/All with untrusted data can enable gadget-based attacks. Disable or restrict known types.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto, ... }
+          - pattern: new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, ... }
+          - pattern: $S.TypeNameHandling = TypeNameHandling.Auto
+          - pattern: $S.TypeNameHandling = TypeNameHandling.All
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      confidence: high
+      references:
+        - https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_TypeNameHandling.htm
+        - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+      verification:
+        strategy: unit
+        steps:
+          - Configure JsonSerializerSettings with TypeNameHandling Auto/All
+          - Deserialize payload containing $type metadata
+        expected_outcome: Type name-based polymorphic deserialization occurs
+        tooling:
+          unit: xunit
+          dast: none

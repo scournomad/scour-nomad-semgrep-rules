@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-deserialization-netdatacontract
+    languages: [csharp]
+    message: NetDataContractSerializer can be dangerous with untrusted data. Prefer data contracts without type metadata.
+    severity: WARNING
+    pattern-either:
+      - pattern: new NetDataContractSerializer(...)
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/framework/wcf/feature-details/serialization-and-deserialization
+      verification:
+        strategy: unit
+        preconditions:
+          - None
+        steps:
+          - Instantiate NetDataContractSerializer and deserialize arbitrary payload
+        expected_outcome: Unsafe deserializer API is used
+        tooling:
+          unit: xunit
+          dast: none
