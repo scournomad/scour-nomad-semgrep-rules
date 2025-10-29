@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-smtpclient-auth-without-ssl
+    languages: [csharp]
+    message: Authenticating to SMTP without TLS. Set EnableSsl=true or use modern libs.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          var $C = new SmtpClient($H, $P) { EnableSsl = false, ... };
+          ...
+          $C.Credentials = $CREDS
+    metadata:
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.net.mail.smtpclient
+      verification:
+        strategy: unit
+        steps:
+          - Configure EnableSsl=false and set credentials
+        expected_outcome: Credentials sent without TLS
+        tooling:
+          unit: xunit
+          dast: none

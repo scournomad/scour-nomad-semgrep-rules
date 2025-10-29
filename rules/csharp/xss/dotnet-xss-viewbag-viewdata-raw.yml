@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-xss-viewbag-viewdata-raw
+    languages: [csharp]
+    message: Potential XSS. Passing variable HTML via ViewData/ViewBag and rendering with Html.Raw.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: ViewData[$KEY] = $VAL
+          - pattern: ViewBag.$KEY = $VAL
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cross-site-scripting
+      verification:
+        strategy: manual
+        steps:
+          - Ensure view renders with Html.Raw($KEY)
+        expected_outcome: Script injection possible without sanitization
+        tooling:
+          unit: none
+          dast: none

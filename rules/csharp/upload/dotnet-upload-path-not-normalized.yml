@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-upload-path-not-normalized
+    languages: [csharp]
+    message: Using untrusted `IFormFile.FileName` directly can lead to path traversal. Use Path.GetFileName.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: Path.Combine($DIR, $FILE.FileName)
+          - pattern: $PATH = $FILE.FileName
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: medium
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Save file using original filename without sanitization
+        expected_outcome: Dangerous path construction
+        tooling:
+          unit: xunit
+          dast: none

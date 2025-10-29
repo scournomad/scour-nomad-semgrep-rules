@@ -1,0 +1,27 @@
+rules:
+  - id: dotnet-sqli-dapper-unsafe-anonymous-params
+    languages: [csharp]
+    message: Potential SQL injection. Dapper query built via concat before passing anonymous params object.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          var $sql = $S;
+          ...
+          $DB.Query($sql, new { $P })
+      - pattern-either:
+          - pattern: $S = $A + $B
+          - pattern: $S += $X
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://github.com/DapperLib/Dapper#parameterization
+      verification:
+        strategy: integration
+        steps:
+          - Pass tainted value into concatenated SQL using anonymous params
+        expected_outcome: Value appears unescaped in SQL
+        tooling:
+          unit: xunit
+          dast: none

@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-grpc-channel-unsafe-address
+    languages: [csharp]
+    message: gRPC channel created with variable/insecure address. Validate scheme and host.
+    severity: WARNING
+    patterns:
+      - pattern: GrpcChannel.ForAddress($ADDR, ...)
+    metadata:
+      cwe: "CWE-918: SSRF"
+      owasp: "A10:2021-SSRF"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/grpc/
+      verification:
+        strategy: manual
+        steps:
+          - Trace $ADDR provenance; ensure allowlist/https
+        expected_outcome: Safe address enforcement
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-jwt-issuer-audience-validation-disabled-alt
+    languages: [csharp]
+    message: JWT issuer/audience validation disabled via alternate builder/API. Enable full validation.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          new TokenValidationParameters { $OPTS }
+      - pattern-either:
+          - pattern: ValidateIssuer = false
+          - pattern: ValidateAudience = false
+          - pattern: ValidateIssuerSigningKey = false
+    metadata:
+      cwe: "CWE-287: Improper Authentication"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/authentication/jwt
+      verification:
+        strategy: unit
+        steps:
+          - Configure disabled validations and accept invalid token
+        expected_outcome: Invalid tokens accepted
+        tooling:
+          unit: xunit
+          dast: none

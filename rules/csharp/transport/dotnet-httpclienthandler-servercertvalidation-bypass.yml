@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-httpclienthandler-servercertvalidation-bypass
+    languages: [csharp]
+    message: TLS server certificate validation bypassed. Do not disable in production.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: new HttpClientHandler { ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator, ... }
+          - pattern: new HttpClientHandler { ServerCertificateCustomValidationCallback = ($MSG, $CERT, $CHAIN, $ERR) => true, ... }
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.net.http.httpclienthandler.servercertificatecustomvalidationcallback
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate handler with permissive validator
+        expected_outcome: All certs accepted
+        tooling:
+          unit: xunit
+          dast: none

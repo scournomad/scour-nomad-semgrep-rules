@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-authz-minimalapi-missing-requireauthorization
+    languages: [csharp]
+    message: Minimal API endpoint without `RequireAuthorization()` may expose endpoints unintentionally.
+    severity: WARNING
+    patterns:
+      - pattern: $EP.Map$ROUTE($PATH, $HANDLER)
+      - pattern-not: $EP.Map$ROUTE($PATH, $HANDLER).RequireAuthorization(...)
+    metadata:
+      cwe: "CWE-306: Missing Authentication for Critical Function"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/authorization/middleware
+      verification:
+        strategy: manual
+        steps:
+          - Review endpoints expected to be protected
+        expected_outcome: Add RequireAuthorization where intended
+        tooling:
+          unit: none
+          dast: none

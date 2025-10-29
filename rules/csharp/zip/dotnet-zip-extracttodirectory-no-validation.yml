@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-zip-extracttodirectory-no-validation
+    languages: [csharp]
+    message: Zip Slip risk. ExtractToDirectory without validating entry paths allows traversal.
+    severity: ERROR
+    patterns:
+      - pattern: ZipFile.ExtractToDirectory($ZIP, $DEST, ...)
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://snyk.io/research/zip-slip-vulnerability
+      verification:
+        strategy: unit
+        steps:
+          - Extract zip with entries containing '../'
+        expected_outcome: Files can be written outside target dir
+        tooling:
+          unit: xunit
+          dast: none

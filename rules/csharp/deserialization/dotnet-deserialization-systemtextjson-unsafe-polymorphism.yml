@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-deserialization-systemtextjson-unsafe-polymorphism
+    languages: [csharp]
+    message: Potential unsafe polymorphic deserialization with System.Text.Json (unbounded type resolution).
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          new JsonSerializerOptions { $OPTS }
+      - pattern-either:
+          - pattern: TypeInfoResolver = $R
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/standard/serialization/system-text-json-polymorphism
+      verification:
+        strategy: manual
+        steps:
+          - Confirm resolver allows unbounded types on untrusted data
+        expected_outcome: Risk of gadget-like behavior
+        tooling:
+          unit: none
+          dast: none

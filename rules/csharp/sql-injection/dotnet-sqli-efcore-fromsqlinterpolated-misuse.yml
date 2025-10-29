@@ -1,0 +1,25 @@
+rules:
+  - id: dotnet-sqli-efcore-fromsqlinterpolated-misuse
+    languages: [csharp]
+    message: Potential SQL injection. Concatenation before FromSqlInterpolated reduces safety. Use parameters within interpolation.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          $DB.Set<$E>().FromSqlInterpolated($SQL)
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/ef/core/querying/raw-sql
+      verification:
+        strategy: manual
+        steps:
+          - Ensure concatenated fragments are tainted
+        expected_outcome: Risk of unsafe interpolation
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-directory-delete-variable-path
+    languages: [csharp]
+    message: Potential path traversal. Directory.Delete invoked with variable path without validation.
+    severity: WARNING
+    patterns:
+      - pattern: Directory.Delete($PATH, ...)
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Attempt delete outside intended root
+        expected_outcome: Deletion risk identified
+        tooling:
+          unit: xunit
+          dast: none

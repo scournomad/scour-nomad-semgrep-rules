@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-headers-content-disposition-filename-variable
+    languages: [csharp]
+    message: Content-Disposition filename set from variable without sanitization.
+    severity: WARNING
+    patterns:
+      - pattern: Response.Headers["Content-Disposition"] = $VAL
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
+      verification:
+        strategy: manual
+        steps:
+          - Confirm filename is sanitized with Path.GetFileName
+        expected_outcome: Safe header value
+        tooling:
+          unit: none
+          dast: none

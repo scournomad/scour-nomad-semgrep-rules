@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-refit-variable-baseurl
+    languages: [csharp]
+    message: Refit client created with variable base URL. Validate/allowlist.
+    severity: WARNING
+    patterns:
+      - pattern: RestService.For<$T>($BASEURL)
+    metadata:
+      cwe: "CWE-918: SSRF"
+      owasp: "A10:2021-SSRF"
+      confidence: low
+      references:
+        - https://github.com/reactiveui/refit
+      verification:
+        strategy: manual
+        steps:
+          - Trace $BASEURL provenance; restrict domains
+        expected_outcome: Allowlist enforced
+        tooling:
+          unit: none
+          dast: none

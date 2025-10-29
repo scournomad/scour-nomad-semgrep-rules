@@ -1,0 +1,27 @@
+rules:
+  - id: dotnet-sqli-sqlcommandbuilder-tainted
+    languages: [csharp]
+    message: Potential SQL injection. SqlCommandBuilder used on tainted SelectCommand text.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          var $DA = new SqlDataAdapter($SQL, $CN);
+          ...
+          var $CB = new SqlCommandBuilder($DA);
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/framework/data/adonet/ef/language-reference
+      verification:
+        strategy: manual
+        steps:
+          - Ensure SelectCommand constructed from untrusted input
+        expected_outcome: CommandBuilder builds queries from tainted SQL
+        tooling:
+          unit: none
+          dast: none

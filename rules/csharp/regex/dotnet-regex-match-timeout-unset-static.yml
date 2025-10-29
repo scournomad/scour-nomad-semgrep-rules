@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-regex-match-timeout-unset-static
+    languages: [csharp]
+    message: Regex static methods without explicit timeout may allow ReDoS. Provide a timeout.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: Regex.IsMatch($S, $R)
+          - pattern: Regex.Match($S, $R)
+          - pattern: Regex.Matches($S, $R)
+    metadata:
+      cwe: "CWE-1333: Inefficient Regular Expression Complexity"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/standard/base-types/best-practices#use-timeout-values
+      verification:
+        strategy: unit
+        steps:
+          - Use complex regex without timeout
+        expected_outcome: Potential catastrophic backtracking
+        tooling:
+          unit: xunit
+          dast: none

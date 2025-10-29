@@ -1,0 +1,25 @@
+rules:
+  - id: dotnet-xpathexpression-compile-concat
+    languages: [csharp]
+    message: Potential XPath injection. XPathExpression.Compile with concatenated expression.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          var $E = XPathExpression.Compile($Q)
+      - pattern-either:
+          - pattern: $Q = $A + $B
+          - pattern: $Q += $X
+    metadata:
+      cwe: "CWE-643: XPath Injection"
+      owasp: "A03:2021-Injection"
+      confidence: medium
+      references:
+        - https://owasp.org/www-community/attacks/XPATH_Injection
+      verification:
+        strategy: unit
+        steps:
+          - Compile expression including payload
+        expected_outcome: Expression altered by input
+        tooling:
+          unit: xunit
+          dast: none

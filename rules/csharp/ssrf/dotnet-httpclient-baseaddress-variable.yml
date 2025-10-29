@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-httpclient-baseaddress-variable
+    languages: [csharp]
+    message: HttpClient.BaseAddress set from variable. Validate/allowlist.
+    severity: WARNING
+    patterns:
+      - pattern: new HttpClient { BaseAddress = $URI, ... }
+    metadata:
+      cwe: "CWE-918: SSRF"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      verification:
+        strategy: manual
+        steps:
+          - Trace origin of BaseAddress
+        expected_outcome: Restricted/validated destinations
+        tooling:
+          unit: none
+          dast: none

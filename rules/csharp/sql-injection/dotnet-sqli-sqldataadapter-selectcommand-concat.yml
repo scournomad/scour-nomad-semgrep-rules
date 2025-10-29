@@ -1,0 +1,27 @@
+rules:
+  - id: dotnet-sqli-sqldataadapter-selectcommand-concat
+    languages: [csharp]
+    message: Potential SQL injection. SqlDataAdapter.SelectCommand.CommandText built via concatenation. Use parameters.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          var $AD = new SqlDataAdapter(...);
+          ...
+          $AD.SelectCommand = new SqlCommand($SQL, ...);
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/framework/data/adonet/parameters
+      verification:
+        strategy: integration
+        steps:
+          - Execute adapter with concatenated SQL
+        expected_outcome: Payload appears unescaped in SQL
+        tooling:
+          unit: xunit
+          dast: none

@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-xmlreader-create-dtd-parse
+    languages: [csharp]
+    message: XXE risk. XmlReader.Create with DtdProcessing.Parse enables DTD processing.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: XmlReader.Create($SRC, new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, ... })
+    metadata:
+      cwe: "CWE-611: XML External Entity"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/standard/data/xml/preventing-xxe-in-dotnet
+      verification:
+        strategy: unit
+        steps:
+          - Load XML with external entity
+        expected_outcome: External entity resolution attempted
+        tooling:
+          unit: xunit
+          dast: none

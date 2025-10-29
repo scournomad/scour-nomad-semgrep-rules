@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-deserialization-xmlserializer-overrides-untrusted
+    languages: [csharp]
+    message: Potential unsafe XmlSerializer with dynamic XmlAttributeOverrides from untrusted input.
+    severity: WARNING
+    patterns:
+      - pattern: new XmlSerializer($T, $OVERRIDES)
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/standard/serialization/introducing-xml-serialization
+      verification:
+        strategy: manual
+        steps:
+          - Trace provenance of overrides
+        expected_outcome: Overrides not influenced by untrusted data
+        tooling:
+          unit: none
+          dast: none

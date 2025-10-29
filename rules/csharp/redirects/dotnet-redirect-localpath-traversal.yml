@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-redirect-localpath-traversal
+    languages: [csharp]
+    message: Redirecting to local file path or path with traversal sequences from variable input.
+    severity: WARNING
+    patterns:
+      - pattern: Response.Redirect($PATH, ...)
+    metadata:
+      cwe: "CWE-601: Open Redirect"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+      verification:
+        strategy: integration
+        steps:
+          - Provide path like "/../../etc/passwd"
+        expected_outcome: Unsafe redirect behavior
+        tooling:
+          unit: none
+          dast: curl

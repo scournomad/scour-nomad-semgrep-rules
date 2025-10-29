@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-process-startinfo-file-name-variable
+    languages: [csharp]
+    message: ProcessStartInfo.FileName set from variable may enable command injection. Validate or use absolute paths.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          var $PSI = new ProcessStartInfo { $OPTS };
+          ...
+          $PSI.FileName = $VAL
+    metadata:
+      cwe: "CWE-78: OS Command Injection"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.diagnostics.processstartinfo.filename
+      verification:
+        strategy: unit
+        steps:
+          - Set FileName from untrusted data and start
+        expected_outcome: Execution influenced by input
+        tooling:
+          unit: xunit
+          dast: none
