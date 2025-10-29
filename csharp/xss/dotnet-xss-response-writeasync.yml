@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-xss-response-writeasync
+    languages: [csharp]
+    message: Potential XSS. Writing unencoded variable directly to HTTP response.
+    severity: ERROR
+    patterns:
+      - pattern: await Response.WriteAsync($VAL)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cross-site-scripting
+      verification:
+        strategy: integration
+        steps:
+          - Write `<script>alert(1)</script>` to response
+        expected_outcome: Script executes if not encoded
+        tooling:
+          unit: none
+          dast: none

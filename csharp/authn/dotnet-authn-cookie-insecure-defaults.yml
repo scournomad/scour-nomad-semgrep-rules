@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-authn-cookie-insecure-defaults
+    languages: [csharp]
+    message: Cookie authentication options missing Secure/HttpOnly/SameSite hardening.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                  .AddCookie(options => { $BODY })
+      - pattern-not: |
+          services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                  .AddCookie(options => { options.Cookie.SecurePolicy = CookieSecurePolicy.Always; ... })
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/authentication/cookie
+      verification:
+        strategy: manual
+        steps:
+          - Review cookie options for Secure/HttpOnly/SameSite
+        expected_outcome: Hardened cookie settings present
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-process-startinfo-argumentlist-tainted
+    languages: [csharp]
+    message: Potential command injection. ProcessStartInfo.ArgumentList includes variable/tainted input.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          var $PSI = new ProcessStartInfo { UseShellExecute = false, ... };
+          ...
+          $PSI.ArgumentList.Add($ARG)
+    metadata:
+      cwe: "CWE-78: OS Command Injection"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.diagnostics.processstartinfo.argumentlist
+      verification:
+        strategy: unit
+        steps:
+          - Add untrusted input to ArgumentList and execute
+        expected_outcome: Command behavior depends on input
+        tooling:
+          unit: xunit
+          dast: none

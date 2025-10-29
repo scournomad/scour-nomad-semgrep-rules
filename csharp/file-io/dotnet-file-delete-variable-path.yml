@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-file-delete-variable-path
+    languages: [csharp]
+    message: Potential path traversal. Deleting file using variable path without validation.
+    severity: WARNING
+    patterns:
+      - pattern: File.Delete($PATH)
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Attempt delete with `../../` path
+        expected_outcome: Deletion outside intended directory
+        tooling:
+          unit: xunit
+          dast: none

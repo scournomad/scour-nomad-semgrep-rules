@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-header-set-cookie-untrusted
+    languages: [csharp]
+    message: Potential header injection. Building Set-Cookie header from untrusted input.
+    severity: WARNING
+    patterns:
+      - pattern: Response.Headers["Set-Cookie"] = $VAL
+    metadata:
+      cwe: "CWE-113: HTTP Response Splitting"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Header_Cheat_Sheet.html
+      verification:
+        strategy: integration
+        steps:
+          - Supply CRLF in input and observe header behavior
+        expected_outcome: Potential header injection if not sanitized
+        tooling:
+          unit: none
+          dast: curl

@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-directory-move-variable-path
+    languages: [csharp]
+    message: Potential path traversal. Moving directories using variable paths without validation.
+    severity: WARNING
+    patterns:
+      - pattern: Directory.Move($SRC, $DST)
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Move into parent with `../` paths
+        expected_outcome: Directory traversal possible
+        tooling:
+          unit: xunit
+          dast: none

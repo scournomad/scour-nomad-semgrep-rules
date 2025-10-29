@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-cookies-formsauth-setauthcookie-http
+    languages: [csharp]
+    message: FormsAuthentication auth cookie may be issued over HTTP; ensure HTTPS.
+    severity: WARNING
+    patterns:
+      - pattern: System.Web.Security.FormsAuthentication.SetAuthCookie($U, $PERSIST)
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/previous-versions/aspnet/system.web.security.formsauthentication
+      verification:
+        strategy: manual
+        steps:
+          - Confirm transport security and cookie flags in legacy apps
+        expected_outcome: Auth cookie secured with Secure/HttpOnly
+        tooling:
+          unit: none
+          dast: none

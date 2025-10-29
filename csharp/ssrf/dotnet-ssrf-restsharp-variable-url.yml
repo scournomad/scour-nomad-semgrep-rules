@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-ssrf-restsharp-variable-url
+    languages: [csharp]
+    message: Potential SSRF. RestSharp request with variable URL.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: new RestRequest($URL)
+          - pattern: $CLIENT.Execute($REQ)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      confidence: low
+      references:
+        - https://restsharp.dev/
+      verification:
+        strategy: manual
+        steps:
+          - Trace $URL provenance; allowlist destinations
+        expected_outcome: Variable target may enable SSRF
+        tooling:
+          unit: none
+          dast: none

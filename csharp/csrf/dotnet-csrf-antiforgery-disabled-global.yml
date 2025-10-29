@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-csrf-antiforgery-disabled-global
+    languages: [csharp]
+    message: Global antiforgery disabled or bypassed. Ensure endpoints requiring CSRF protection enforce it.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: services.AddAntiforgery($O => $O.SuppressXFrameOptionsHeader = true)
+          - pattern: filters.Add(new IgnoreAntiforgeryTokenAttribute())
+    metadata:
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/anti-request-forgery
+      verification:
+        strategy: manual
+        steps:
+          - Confirm cookie-authenticated, state-changing endpoints have protection
+        expected_outcome: CSRF protection enforced or justified
+        tooling:
+          unit: none
+          dast: none

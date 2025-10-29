@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-xss-razor-suppress-encoding
+    languages: [csharp]
+    message: Razor encoding suppressed; ensure variable content is safe.
+    severity: WARNING
+    patterns:
+      - pattern: @Html.Raw($VAL)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cross-site-scripting
+      verification:
+        strategy: integration
+        steps:
+          - Render Html.Raw with attacker-controlled input
+        expected_outcome: Script may execute if not sanitized
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-cors-exposeheaders-sensitive
+    languages: [csharp]
+    message: CORS exposes sensitive headers to browsers. Review necessity.
+    severity: WARNING
+    patterns:
+      - pattern: $POLICY.WithExposedHeaders($H)
+    metadata:
+      cwe: "CWE-200: Exposure of Sensitive Information"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cors
+      verification:
+        strategy: manual
+        steps:
+          - Inspect exposed headers list
+        expected_outcome: Sensitive headers unnecessarily exposed
+        tooling:
+          unit: none
+          dast: none

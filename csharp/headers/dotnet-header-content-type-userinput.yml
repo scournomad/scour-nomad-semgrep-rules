@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-header-content-type-userinput
+    languages: [csharp]
+    message: Content-Type header set from variable input. Validate allowed media types.
+    severity: WARNING
+    patterns:
+      - pattern: Response.ContentType = $VAL
+    metadata:
+      cwe: "CWE-16: Configuration"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
+      verification:
+        strategy: manual
+        steps:
+          - Trace $VAL provenance; restrict to allowed types
+        expected_outcome: Variable media types may cause unsafe rendering
+        tooling:
+          unit: none
+          dast: none

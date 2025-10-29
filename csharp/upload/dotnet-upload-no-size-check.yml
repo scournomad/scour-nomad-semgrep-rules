@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-upload-no-size-check
+    languages: [csharp]
+    message: File upload saved without checking size. Validate `IFormFile.Length` and enforce limits.
+    severity: WARNING
+    patterns:
+      - pattern: $FILE.CopyToAsync($DEST)
+    metadata:
+      cwe: "CWE-400: Uncontrolled Resource Consumption"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Save large upload without size checks
+        expected_outcome: Excessive resource usage risk
+        tooling:
+          unit: xunit
+          dast: none

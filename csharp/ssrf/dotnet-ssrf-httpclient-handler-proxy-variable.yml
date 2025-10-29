@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-ssrf-httpclient-handler-proxy-variable
+    languages: [csharp]
+    message: HTTP proxy configured from variable; validate/allowlist to avoid SSRF pivots.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          new HttpClientHandler { Proxy = $PROXY, ... }
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      verification:
+        strategy: manual
+        steps:
+          - Trace proxy value source; ensure allowlist
+        expected_outcome: Variable proxy can redirect traffic
+        tooling:
+          unit: none
+          dast: none

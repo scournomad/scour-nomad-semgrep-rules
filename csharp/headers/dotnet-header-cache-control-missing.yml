@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-header-cache-control-missing
+    languages: [csharp]
+    message: Missing Cache-Control/Pragma no-store on sensitive responses can leak data.
+    severity: WARNING
+    patterns:
+      - pattern: return $R
+    pattern-not: |
+      Response.Headers["Cache-Control"] = "no-store"
+    metadata:
+      cwe: "CWE-524: Use of Cache Containing Sensitive Information"
+      owasp: "A06:2021-Vulnerable and Outdated Components"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
+      verification:
+        strategy: manual
+        steps:
+          - Confirm endpoint returns sensitive data without no-store
+        expected_outcome: Sensitive data may be cached
+        tooling:
+          unit: none
+          dast: none

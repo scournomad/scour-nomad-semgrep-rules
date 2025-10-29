@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-config-requirehttps-permanent-false
+    languages: [csharp]
+    message: HTTPS redirection not permanent. Consider `UseHsts` and permanent redirects in production.
+    severity: WARNING
+    patterns:
+      - pattern: app.UseHttpsRedirection()
+    metadata:
+      cwe: "CWE-16: Configuration"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/enforcing-ssl
+      verification:
+        strategy: manual
+        steps:
+          - Ensure HSTS and permanent redirects enabled in prod
+        expected_outcome: Strong transport enforcement
+        tooling:
+          unit: none
+          dast: none

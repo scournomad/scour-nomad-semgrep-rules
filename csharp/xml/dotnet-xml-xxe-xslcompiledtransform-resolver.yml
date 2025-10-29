@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-xml-xxe-xslcompiledtransform-resolver
+    languages: [csharp]
+    message: XXE/XXL risk. XslCompiledTransform with XmlUrlResolver allows external entity or resource access.
+    severity: WARNING
+    patterns:
+      - pattern: new XslCompiledTransform(...).Load($XSLT, $ARGS, new XmlUrlResolver())
+    metadata:
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.xml.xsl.xslcompiledtransform
+      verification:
+        strategy: unit
+        steps:
+          - Load XSLT with external resources using XmlUrlResolver
+        expected_outcome: External resource resolution attempted
+        tooling:
+          unit: xunit
+          dast: none

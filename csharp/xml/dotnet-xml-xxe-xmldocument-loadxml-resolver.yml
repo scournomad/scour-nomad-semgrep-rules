@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-xml-xxe-xmldocument-loadxml-resolver
+    languages: [csharp]
+    message: XXE risk. XmlDocument with XmlResolver enabled and Load/LoadXml on untrusted XML.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          XmlDocument $D = new XmlDocument();
+          ...
+          $D.XmlResolver = $R;
+          ...
+          $D.LoadXml($X)
+    metadata:
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/standard/data/xml/preventing-xxe-in-dotnet
+      verification:
+        strategy: unit
+        steps:
+          - Load XML with external entity; resolver enabled
+        expected_outcome: XXE attempted
+        tooling:
+          unit: xunit
+          dast: none
