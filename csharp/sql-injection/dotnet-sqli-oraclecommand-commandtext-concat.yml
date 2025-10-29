@@ -1,0 +1,28 @@
+rules:
+  - id: dotnet-sqli-oraclecommand-commandtext-concat
+    languages: [csharp]
+    message: Potential SQL injection. OracleCommand.CommandText built via concatenation. Use parameters.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          OracleCommand $CMD = new OracleCommand(...);
+          ...
+          $CMD.CommandText = $SQL;
+          ...
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: medium
+      references:
+        - https://owasp.org/www-community/attacks/SQL_Injection
+      verification:
+        strategy: integration
+        steps:
+          - Execute with injected payload
+        expected_outcome: Payload appears unescaped in SQL
+        tooling:
+          unit: xunit
+          dast: none

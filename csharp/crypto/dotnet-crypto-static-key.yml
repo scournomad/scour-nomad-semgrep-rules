@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-crypto-static-key
+    languages: [csharp]
+    message: Static symmetric key detected in code. Store keys securely and rotate.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $ALG.Key = new byte[] { ... }
+          - pattern: $ALG.Key = Convert.FromBase64String("...")
+    metadata:
+      cwe: "CWE-321: Use of Hard-coded Cryptographic Key"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: low
+      references:
+        - https://owasp.org/www-community/vulnerabilities/Use_of_hard-coded_cryptographic_key
+      verification:
+        strategy: unit
+        steps:
+          - Inspect code for constant key assignment
+        expected_outcome: Static key assignment present
+        tooling:
+          unit: xunit
+          dast: none

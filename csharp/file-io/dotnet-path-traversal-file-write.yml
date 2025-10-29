@@ -1,0 +1,27 @@
+rules:
+  - id: dotnet-path-traversal-file-write
+    languages: [csharp]
+    message: Potential path traversal. Unvalidated input used as file path for write operations.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: File.WriteAllText($PATH, ...)
+          - pattern: File.OpenWrite($PATH)
+          - pattern: new FileStream($PATH, FileMode.Create, ...)
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        inputs:
+          - name: payload
+            value: "../../var/www/index.html"
+        steps:
+          - Call write path with payload
+        expected_outcome: Attempted write outside intended directory
+        tooling:
+          unit: xunit
+          dast: none

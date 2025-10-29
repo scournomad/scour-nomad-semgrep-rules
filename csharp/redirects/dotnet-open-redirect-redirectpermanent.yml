@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-open-redirect-redirectpermanent
+    languages: [csharp]
+    message: Potential open redirect. RedirectPermanent called with variable URL; validate target.
+    severity: WARNING
+    patterns:
+      - pattern: Response.RedirectPermanent($URL, ...)
+    metadata:
+      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+      verification:
+        strategy: integration
+        steps:
+          - Provide external URL; observe Location header
+        expected_outcome: Redirects to external domain
+        tooling:
+          unit: none
+          dast: curl

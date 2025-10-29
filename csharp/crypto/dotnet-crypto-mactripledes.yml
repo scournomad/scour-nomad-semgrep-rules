@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-crypto-mactripledes
+    languages: [csharp]
+    message: MACTripleDES is deprecated. Use HMAC with SHA-256 or stronger.
+    severity: ERROR
+    pattern-either:
+      - pattern: new MACTripleDES(...)
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate MACTripleDES
+        expected_outcome: Deprecated MAC algorithm used
+        tooling:
+          unit: xunit
+          dast: none

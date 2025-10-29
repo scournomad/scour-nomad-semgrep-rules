@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-regex-without-timeout
+    languages: [csharp]
+    message: Regex without explicit timeout may be vulnerable to ReDoS. Provide a timeout.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: new Regex($PATTERN)
+          - pattern: new Regex($PATTERN, $OPTS)
+    metadata:
+      cwe: "CWE-1333: Inefficient Regular Expression Complexity"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/standard/base-types/best-practices#use-timeout-values
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate Regex without timeout
+        expected_outcome: Missing timeout parameter
+        tooling:
+          unit: xunit
+          dast: none

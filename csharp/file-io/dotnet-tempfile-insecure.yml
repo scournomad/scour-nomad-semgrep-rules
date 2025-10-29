@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-tempfile-insecure
+    languages: [csharp]
+    message: Insecure temp file usage. Predictable file name in world-readable temp directory.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: File.WriteAllText(Path.Combine(Path.GetTempPath(), $NAME), ...)
+          - pattern: new FileStream(Path.Combine(Path.GetTempPath(), $NAME), ...)
+    metadata:
+      cwe: "CWE-377: Insecure Temporary File"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Create predictable temp file; verify permissions and location
+        expected_outcome: Predictable name in shared temp directory
+        tooling:
+          unit: xunit
+          dast: none

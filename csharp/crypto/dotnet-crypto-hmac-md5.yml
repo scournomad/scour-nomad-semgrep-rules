@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-crypto-hmac-md5
+    languages: [csharp]
+    message: HMACMD5 is weak. Prefer HMACSHA256 or stronger.
+    severity: WARNING
+    pattern-either:
+      - pattern: new HMACMD5(...)
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate HMACMD5
+        expected_outcome: Weak MAC used
+        tooling:
+          unit: xunit
+          dast: none

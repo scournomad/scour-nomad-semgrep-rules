@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-xss-html-raw-userinput
+    languages: [csharp]
+    message: Potential XSS. Html.Raw used with variable input; ensure output encoding or sanitization.
+    severity: ERROR
+    patterns:
+      - pattern: Html.Raw($VAL)
+    metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cross-site-scripting
+      verification:
+        strategy: integration
+        steps:
+          - Render view with `<script>alert(1)</script>` as input
+        expected_outcome: Script executes if not encoded
+        tooling:
+          unit: none
+          dast: none

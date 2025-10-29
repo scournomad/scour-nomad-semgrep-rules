@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-jwt-validate-lifetime-disabled
+    languages: [csharp]
+    message: Token lifetime validation disabled. Enable ValidateLifetime to reject expired tokens.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          new TokenValidationParameters { $OPTS }
+      - pattern: ValidateLifetime = false
+    metadata:
+      cwe: "CWE-287: Improper Authentication"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/authentication/jwt
+      verification:
+        strategy: unit
+        steps:
+          - Configure ValidateLifetime=false and test expired token
+        expected_outcome: Expired token accepted
+        tooling:
+          unit: xunit
+          dast: none

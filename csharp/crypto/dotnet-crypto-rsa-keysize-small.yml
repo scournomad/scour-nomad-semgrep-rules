@@ -1,0 +1,25 @@
+rules:
+  - id: dotnet-crypto-rsa-keysize-small
+    languages: [csharp]
+    message: RSA key size less than 2048 bits. Use 2048 or higher.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: new RSACryptoServiceProvider($N)
+    metavariable-pattern:
+      N:
+        pattern-regex: ^(512|768|1024|1536)$
+    metadata:
+      cwe: "CWE-326: Inadequate Encryption Strength"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate RSA with small key size
+        expected_outcome: RSA key < 2048 bits
+        tooling:
+          unit: xunit
+          dast: none

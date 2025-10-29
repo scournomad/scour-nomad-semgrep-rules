@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-crypto-rsa-pkcs1v15-encrypt
+    languages: [csharp]
+    message: RSA encryption with PKCS#1 v1.5 padding is discouraged. Use OAEP (RSAEncryptionPadding.OaepSHA256) instead.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $RSA.Encrypt($DATA, RSAEncryptionPadding.Pkcs1)
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.security.cryptography.rsaencryptionalgorithm
+      verification:
+        strategy: unit
+        steps:
+          - Call RSA.Encrypt with PKCS1 padding
+        expected_outcome: PKCS#1 v1.5 padding used
+        tooling:
+          unit: xunit
+          dast: none

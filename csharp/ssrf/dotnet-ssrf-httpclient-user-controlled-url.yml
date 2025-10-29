@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-ssrf-httpclient-user-controlled-url
+    languages: [csharp]
+    message: Potential SSRF. HttpClient invoked with variable URL; validate/allowlist destinations.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $C.GetAsync($URL, ...)
+          - pattern: $C.PostAsync($URL, ...)
+          - pattern: $C.SendAsync($REQ)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      verification:
+        strategy: manual
+        steps:
+          - Trace provenance of $URL; if user-controlled, confirm SSRF risk
+        expected_outcome: Variable URL must be validated/allowlisted
+        tooling:
+          unit: none
+          dast: none

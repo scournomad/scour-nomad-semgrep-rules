@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-crypto-rc2
+    languages: [csharp]
+    message: RC2 is obsolete and insecure. Use AES instead.
+    severity: ERROR
+    pattern-either:
+      - pattern: RC2.Create(...)
+      - pattern: new RC2CryptoServiceProvider(...)
+    metadata:
+      cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate RC2 algorithm
+        expected_outcome: RC2 usage is present
+        tooling:
+          unit: xunit
+          dast: none

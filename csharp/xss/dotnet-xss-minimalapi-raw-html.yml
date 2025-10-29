@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-xss-minimalapi-raw-html
+    languages: [csharp]
+    message: Potential XSS in Minimal APIs. Returning raw HTML content from variable input.
+    severity: WARNING
+    patterns:
+      - pattern: Results.Content($VAL, "text/html")
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cross-site-scripting
+      verification:
+        strategy: integration
+        steps:
+          - Return Results.Content with `<script>` payload
+        expected_outcome: Script may execute if not encoded
+        tooling:
+          unit: none
+          dast: none

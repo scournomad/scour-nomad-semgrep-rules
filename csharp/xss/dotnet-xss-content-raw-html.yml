@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-xss-content-raw-html
+    languages: [csharp]
+    message: Potential XSS. Returning raw HTML content from variable input.
+    severity: WARNING
+    patterns:
+      - pattern: return Content($VAL, "text/html")
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cross-site-scripting
+      verification:
+        strategy: integration
+        steps:
+          - Return Content with `<img src=x onerror=alert(1)>`
+        expected_outcome: Script may execute if not sanitized
+        tooling:
+          unit: none
+          dast: none

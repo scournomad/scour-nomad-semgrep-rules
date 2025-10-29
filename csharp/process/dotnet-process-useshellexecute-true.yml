@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-process-useshellexecute-true
+    languages: [csharp]
+    message: UseShellExecute=true can increase injection risk when combined with untrusted input. Prefer UseShellExecute=false and argument arrays.
+    severity: WARNING
+    patterns:
+      - pattern: new ProcessStartInfo { UseShellExecute = true, ... }
+    metadata:
+      cwe: "CWE-78: OS Command Injection"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.diagnostics.processstartinfo
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate ProcessStartInfo with UseShellExecute=true
+        expected_outcome: Shell is used for command execution
+        tooling:
+          unit: xunit
+          dast: none

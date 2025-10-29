@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-deserialization-soapformatter
+    languages: [csharp]
+    message: SoapFormatter deserialization is unsafe with untrusted data.
+    severity: ERROR
+    pattern-either:
+      - pattern: new SoapFormatter().Deserialize(...)
+      - pattern: $SF.Deserialize(...)
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/standard/serialization/binaryformatter-security-guide
+      verification:
+        strategy: unit
+        steps:
+          - Call Deserialize on arbitrary data
+        expected_outcome: Unsafe API invocation present
+        tooling:
+          unit: xunit
+          dast: none

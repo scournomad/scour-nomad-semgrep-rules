@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-cors-allowanyorigin-warning
+    languages: [csharp]
+    message: CORS allows any origin. Review if this is intended.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $P.AllowAnyOrigin()
+          - pattern: $P.SetIsOriginAllowed(_ => true)
+    metadata:
+      cwe: "CWE-346: Origin Validation Error"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/cors
+      verification:
+        strategy: manual
+        steps:
+          - Review CORS policy scope
+        expected_outcome: Any origin accepted
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-exception-to-client
+    languages: [csharp]
+    message: Returning raw exception details to client leaks sensitive info. Avoid `ex.ToString()` or stack traces in responses.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: return Content($EX.ToString(), ...)
+          - pattern: return Problem($EX.ToString(), ...)
+          - pattern: await Response.WriteAsync($EX.ToString(), ...)
+    metadata:
+      cwe: "CWE-209: Generation of Error Message Containing Sensitive Information"
+      owasp: "A09:2021-Security Logging and Monitoring Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/fundamentals/error-handling
+      verification:
+        strategy: integration
+        steps:
+          - Trigger exception and observe response contains stack trace or exception string
+        expected_outcome: Exception details returned to client
+        tooling:
+          unit: none
+          dast: curl

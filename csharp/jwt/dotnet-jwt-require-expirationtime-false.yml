@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-jwt-require-expirationtime-false
+    languages: [csharp]
+    message: RequireExpirationTime=false weakens token validation. Ensure tokens require exp claim.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          new TokenValidationParameters { $OPTS }
+      - pattern: RequireExpirationTime = false
+    metadata:
+      cwe: "CWE-287: Improper Authentication"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/authentication/jwt
+      verification:
+        strategy: unit
+        steps:
+          - Configure RequireExpirationTime=false and validate token without exp
+        expected_outcome: Token without exp accepted
+        tooling:
+          unit: xunit
+          dast: none

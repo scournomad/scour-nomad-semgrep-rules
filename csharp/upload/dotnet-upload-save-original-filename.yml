@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-upload-save-original-filename
+    languages: [csharp]
+    message: Saving uploads using untrusted original filename can lead to path traversal or overwrites. Sanitize or generate names.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: Path.Combine($DIR, $FILE.FileName)
+          - pattern: $PATH = $FILE.FileName
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Save IFormFile using FileName without sanitization
+        expected_outcome: Dangerous file path construction
+        tooling:
+          unit: xunit
+          dast: none

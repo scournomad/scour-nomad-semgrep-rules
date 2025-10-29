@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-xml-xxe-dtdprocessing-parse
+    languages: [csharp]
+    message: XXE risk. XmlReaderSettings.DtdProcessing set to Parse enables DTD processing.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse, ... }
+          - pattern: $S.DtdProcessing = DtdProcessing.Parse
+    metadata:
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: high
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.xml.xmlreadersettings.dtdprocessing
+      verification:
+        strategy: unit
+        steps:
+          - Create XmlReader with DtdProcessing.Parse; load XML with external entity
+        expected_outcome: External entity resolution attempted
+        tooling:
+          unit: xunit
+          dast: none

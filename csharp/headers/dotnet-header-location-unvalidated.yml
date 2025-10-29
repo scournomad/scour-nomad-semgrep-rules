@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-header-location-unvalidated
+    languages: [csharp]
+    message: Potential open redirect via Location header set from unvalidated input.
+    severity: WARNING
+    patterns:
+      - pattern: Response.Headers["Location"] = $VAL
+    metadata:
+      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+      verification:
+        strategy: integration
+        steps:
+          - Send external URL; inspect Location header
+        expected_outcome: Redirects to external site
+        tooling:
+          unit: none
+          dast: curl

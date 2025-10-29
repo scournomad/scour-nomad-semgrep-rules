@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-crypto-pbkdf2-low-iterations
+    languages: [csharp]
+    message: PBKDF2 with low iteration count. Use high iteration count (e.g., >= 100000) or platform guidance.
+    severity: WARNING
+    patterns:
+      - pattern: new Rfc2898DeriveBytes($P, $S, $N)
+    metavariable-pattern:
+      N:
+        pattern-regex: ^[0-9]{1,4}$
+    metadata:
+      cwe: "CWE-916: Use of Password Hash With Insufficient Computational Effort"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: medium
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+      verification:
+        strategy: unit
+        steps:
+          - Instantiate PBKDF2 with low iteration parameter
+        expected_outcome: Low iteration usage detected
+        tooling:
+          unit: xunit
+          dast: none

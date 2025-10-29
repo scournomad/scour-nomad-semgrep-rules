@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-ssrf-webrequest-create-variable
+    languages: [csharp]
+    message: Potential SSRF. WebRequest.Create invoked with variable URL.
+    severity: WARNING
+    patterns:
+      - pattern: WebRequest.Create($URL)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      verification:
+        strategy: manual
+        steps:
+          - Trace $URL provenance; ensure allowlist
+        expected_outcome: Variable URL must be validated
+        tooling:
+          unit: none
+          dast: none

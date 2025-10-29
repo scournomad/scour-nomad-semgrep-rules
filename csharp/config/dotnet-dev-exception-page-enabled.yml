@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-dev-exception-page-enabled
+    languages: [csharp]
+    message: Developer exception page enabled. Ensure not used in production.
+    severity: WARNING
+    patterns:
+      - pattern: app.UseDeveloperExceptionPage()
+    metadata:
+      cwe: "CWE-209: Generation of Error Message Containing Sensitive Information"
+      owasp: "A09:2021-Security Logging and Monitoring Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/aspnet/core/fundamentals/error-handling
+      verification:
+        strategy: manual
+        steps:
+          - Inspect environment-based configuration
+        expected_outcome: Developer exception page disabled in prod
+        tooling:
+          unit: none
+          dast: none

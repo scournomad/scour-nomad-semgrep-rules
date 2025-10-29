@@ -1,0 +1,21 @@
+rules:
+  - id: dotnet-open-redirect-response-redirect-userinput
+    languages: [csharp]
+    message: Potential open redirect. Response.Redirect called with variable URL; validate domains/paths.
+    severity: WARNING
+    patterns:
+      - pattern: Response.Redirect($URL, ...)
+    metadata:
+      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp: "A01:2021-Broken Access Control"
+      confidence: low
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+      verification:
+        strategy: integration
+        steps:
+          - Provide external URL input; observe redirect Location header
+        expected_outcome: Application redirects to external domain without validation
+        tooling:
+          unit: none
+          dast: curl

@@ -1,0 +1,28 @@
+rules:
+  - id: dotnet-sqli-npgsqlcommand-commandtext-concat
+    languages: [csharp]
+    message: Potential SQL injection. NpgsqlCommand.CommandText built via concatenation. Use parameters.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          NpgsqlCommand $CMD = new NpgsqlCommand(...);
+          ...
+          $CMD.CommandText = $SQL;
+          ...
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: medium
+      references:
+        - https://owasp.org/www-community/attacks/SQL_Injection
+      verification:
+        strategy: integration
+        steps:
+          - Execute with injected payload
+        expected_outcome: Payload appears unescaped in SQL
+        tooling:
+          unit: xunit
+          dast: none

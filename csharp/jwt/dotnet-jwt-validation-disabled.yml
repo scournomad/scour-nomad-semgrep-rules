@@ -1,0 +1,25 @@
+rules:
+  - id: dotnet-jwt-validation-disabled
+    languages: [csharp]
+    message: JWT validation is too permissive (ValidateIssuer/Audience disabled). Enable full token validation.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          new TokenValidationParameters { $OPTS }
+      - pattern-either:
+          - pattern: ValidateIssuer = false
+          - pattern: ValidateAudience = false
+    metadata:
+      cwe: "CWE-287: Improper Authentication"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/authentication/jwt
+      verification:
+        strategy: unit
+        steps:
+          - Configure TokenValidationParameters with ValidateIssuer/Audience false
+        expected_outcome: Tokens from unexpected issuers/audiences are accepted
+        tooling:
+          unit: xunit
+          dast: none

@@ -1,0 +1,24 @@
+rules:
+  - id: dotnet-xml-xxe-xmlresolver
+    languages: [csharp]
+    message: XXE risk. XmlDocument/XmlTextReader with XmlResolver enabled.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: new XmlUrlResolver(...)
+          - pattern: $DOC.XmlResolver = new XmlUrlResolver(...)
+          - pattern: new XmlTextReader($X) { XmlResolver = $R, ... }
+    metadata:
+      cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
+      owasp: "A05:2021-Security Misconfiguration"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/standard/data/xml/preventing-xxe-in-dotnet
+      verification:
+        strategy: unit
+        steps:
+          - Load XML with external entity when XmlResolver is enabled
+        expected_outcome: External entity resolution attempted
+        tooling:
+          unit: xunit
+          dast: none

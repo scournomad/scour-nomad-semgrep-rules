@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-sqli-adonet-string-format
+    languages: [csharp]
+    message: Potential SQL injection. String.Format or interpolation used to build SQL. Use parameters.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: string.Format($FMT, ...)
+          - pattern: $SQL = $INTERP
+    metavariable-pattern:
+      INTERP:
+        pattern-regex: \$"[^"]*\{[^}]+\}[^"]*"
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/framework/data/adonet/parameters
+      verification:
+        strategy: integration
+        steps:
+          - Use formatted SQL with tainted input
+        expected_outcome: Payload appears unescaped in SQL
+        tooling:
+          unit: xunit
+          dast: none

@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-forms-authentication-requiressl-false
+    languages: [csharp]
+    message: FormsAuthentication.RequireSSL=false allows auth cookies over HTTP.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: System.Web.Security.FormsAuthentication.RequireSSL = false
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/previous-versions/aspnet/system.web.security.formsauthentication.requiressl
+      verification:
+        strategy: manual
+        steps:
+          - Inspect legacy ASP.NET apps for RequireSSL setting
+        expected_outcome: Insecure cookie transport allowed
+        tooling:
+          unit: none
+          dast: none

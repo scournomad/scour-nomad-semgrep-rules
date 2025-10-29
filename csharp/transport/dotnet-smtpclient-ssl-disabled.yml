@@ -1,0 +1,23 @@
+rules:
+  - id: dotnet-smtpclient-ssl-disabled
+    languages: [csharp]
+    message: SmtpClient without TLS/SSL. Set EnableSsl=true or use modern libraries.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: new SmtpClient($H, $P) { EnableSsl = false, ... }
+          - pattern: $SMTP.EnableSsl = false
+    metadata:
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      owasp: "A02:2021-Cryptographic Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/dotnet/api/system.net.mail.smtpclient.enablessl
+      verification:
+        strategy: unit
+        steps:
+          - Configure SmtpClient with EnableSsl=false
+        expected_outcome: Email sent without TLS
+        tooling:
+          unit: xunit
+          dast: none

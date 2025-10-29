@@ -1,0 +1,26 @@
+rules:
+  - id: dotnet-cookies-insecure-flags
+    languages: [csharp]
+    message: Cookie set without secure flags. Ensure Secure and HttpOnly are true; use SameSite appropriately.
+    severity: WARNING
+    patterns:
+      - pattern: Response.Cookies.Append($NAME, $VAL, $OPTS)
+      - pattern-inside: |
+          new CookieOptions { $FIELDS }
+    pattern-not: |
+      new CookieOptions { Secure = true, HttpOnly = true, ... }
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      confidence: medium
+      references:
+        - https://learn.microsoft.com/aspnet/core/security/app-secrets#cookies
+      verification:
+        strategy: integration
+        steps:
+          - Set cookie without Secure/HttpOnly
+          - Inspect Set-Cookie header in response
+        expected_outcome: Missing Secure/HttpOnly attributes
+        tooling:
+          unit: none
+          dast: curl

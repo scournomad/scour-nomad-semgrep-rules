@@ -1,0 +1,22 @@
+rules:
+  - id: dotnet-deserialization-javascriptserializer
+    languages: [csharp]
+    message: JavaScriptSerializer deserialization can be unsafe with untrusted data. Prefer System.Text.Json.
+    severity: WARNING
+    pattern-either:
+      - pattern: new JavaScriptSerializer().Deserialize<...>(...)
+      - pattern: $JS.Deserialize<...>(...)
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      confidence: low
+      references:
+        - https://learn.microsoft.com/dotnet/standard/serialization/system-text-json-overview
+      verification:
+        strategy: unit
+        steps:
+          - Deserialize untrusted payload
+        expected_outcome: Use of JavaScriptSerializer present
+        tooling:
+          unit: xunit
+          dast: none

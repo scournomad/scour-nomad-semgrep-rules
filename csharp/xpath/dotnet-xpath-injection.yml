@@ -1,0 +1,33 @@
+rules:
+  - id: dotnet-xpath-injection
+    languages: [csharp]
+    message: Potential XPath injection. XPath query built via concatenation or interpolation.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $X.SelectNodes($Q)
+          - pattern: $X.SelectSingleNode($Q)
+      - pattern-either:
+          - pattern: $Q = $A + $B
+          - pattern: $Q += $X
+          - pattern: $Q = $INTERP
+    metavariable-pattern:
+      INTERP:
+        pattern-regex: \$"[^"]*\{[^}]+\}[^"]*"
+    metadata:
+      cwe: "CWE-643: Improper Neutralization of Data within XPath Expressions ('XPath Injection')"
+      owasp: "A03:2021-Injection"
+      confidence: low
+      references:
+        - https://owasp.org/www-community/attacks/XPATH_Injection
+      verification:
+        strategy: unit
+        inputs:
+          - name: payload
+            value: "' or '1'='1"
+        steps:
+          - Execute XPath with payload concatenated
+        expected_outcome: Query altered by payload
+        tooling:
+          unit: xunit
+          dast: none
