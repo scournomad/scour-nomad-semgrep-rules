@@ -8,9 +8,17 @@ rules:
     metadata:
       cwe: "CWE-200: Exposure of Sensitive Information"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Exposing sensitive headers to browsers can leak secrets or implementation details to untrusted origins."
+      recommendation: "Only expose non-sensitive headers required by clients. Avoid exposing authorization or internal diagnostic headers."
       references:
         - https://learn.microsoft.com/aspnet/core/security/cors
+      tags:
+        - cors
+        - CWE-200
+        - A05:2021
       verification:
         strategy: manual
         steps:

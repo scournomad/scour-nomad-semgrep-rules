@@ -9,9 +9,17 @@ rules:
     metadata:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
-      confidence: high
+      severity: "High"
+      risk_score: null
+      confidence: "High"
+      impact: "DES uses small keys and is vulnerable to brute-force attacks; sensitive data encrypted with DES can be recovered."
+      recommendation: "Replace DES with AES (prefer AES-GCM or AES-CBC with random IV) and use strong key management."
       references:
         - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+      tags:
+        - crypto
+        - CWE-327
+        - A02:2021
       verification:
         strategy: unit
         steps:

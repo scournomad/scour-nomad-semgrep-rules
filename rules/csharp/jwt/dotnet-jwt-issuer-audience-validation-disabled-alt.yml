@@ -13,9 +13,24 @@ rules:
     metadata:
       cwe: "CWE-287: Improper Authentication"
       owasp: "A07:2021-Identification and Authentication Failures"
-      confidence: medium
+      wasc: "WASC-01: Authentication"
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Disabling issuer/audience/signing key validation allows forged or replayed tokens to be accepted, enabling account takeover and privilege escalation."
+      recommendation: "Enable ValidateIssuer, ValidateAudience, and ValidateIssuerSigningKey. Configure expected Issuer, Audience, and trusted signing keys. Enforce token lifetime validation."
       references:
         - https://learn.microsoft.com/aspnet/core/security/authentication/jwt
+        - https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html
+      tags:
+        - jwt
+        - CWE-287
+        - A07:2021
+        - WASC-01
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
       verification:
         strategy: unit
         steps:

@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-209: Generation of Error Message Containing Sensitive Information"
       owasp: "A09:2021-Security Logging and Monitoring Failures"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Developer exception pages may disclose stack traces and sensitive environment info to end users."
+      recommendation: "Enable developer exception page only in development; use generic error handling and logging in production."
       references:
         - https://learn.microsoft.com/aspnet/core/fundamentals/error-handling
+      tags:
+        - config
+        - CWE-209
+        - A09:2021
+        - WASC-13
       verification:
         strategy: manual
         steps:

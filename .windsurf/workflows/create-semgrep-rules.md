@@ -1,23 +1,23 @@
 ---
-description: Create or update Semgrep rules with language/category structure, per-rule files, docs, and verification metadata
+description: Create or update multi-language Semgrep rules with categories, metadata, tests, and verification strategy
 ---
 
 # Goal
 
-Create or update a language-scoped Semgrep ruleset with:
-- Language folder at repo root (e.g., `csharp/`).
-- Category subfolders (e.g., `sql-injection/`, `crypto/`, `transport/`, etc.).
-- One rule per YAML file.
-- A language README (`<lang>/README.md`) listing all rules with descriptions and metadata.
-- Each rule includes verification metadata (steps to confirm findings).
+Create or update a language-scoped Semgrep ruleset that is high-signal, security-focused, and testable across languages. Each rule must minimize false positives, include complete metadata, and ship with tests to gauge effectiveness.
 
 # Structure
 
-- `<lang>/` (e.g., `csharp/`)
-  - `<category>/` (e.g., `sql-injection/`, `crypto/`, `transport/`, `deserialization/`, `process/`, `logging/`, `authz/`, `random/`)
+- `rules/<lang>/`
+  - `<category>/`
     - `<rule-id>.yml`
-  - `README.md` (documentation index of rules)
-- `.semgrep.yml` includes the language directory: `- <lang>/**.yml`
+  - `README.md` (language index of rules)
+- `tests/<lang>/`
+  - `cases/<category>/<rule-id>/pos/*.{ext}` → should MATCH
+  - `cases/<category>/<rule-id>/neg/*.{ext}` → should NOT MATCH
+
+Notes:
+- Categories should mostly match across languages (e.g., `sql-injection/`, `crypto/`, `transport/`, `deserialization/`, `authn/`, `authz/`, `jwt/`, `cookies/`, `headers/`, `cors/`, `csrf/`, `ssrf/`, `redirects/`, `xss/`, `file-io/`, `upload/`, `xml/`, `regex/`, `ldap/`, `xpath/`, `exposure/`, `config/`, `process/`, `zip/`, `secrets/`, `random/`, `logging/`). Language-specific categories are allowed where needed.
 
 # Rule YAML Template
 
@@ -32,60 +32,102 @@ rules:
     metadata:
       cwe: "CWE-xxx: <title>"
       owasp: "Axx:2021-<Category>"
-      confidence: <high|medium|low>
+      wasc: "WASC-xx: <Title>"
+      severity: "<Info|Low|Medium|High|Critical>"
+      risk_score: null
+      confidence: "<Potential|Low|Medium|High|Confirmed>"
+      impact: "<short impact statement>"
+      recommendation: "<clear remediation guidance>"
       references:
         - <https://authoritative.doc>
+      tags:
+        - <category>           # e.g., sql-injection, transport, xss
+        - <CWE-xxx>            # codes only
+        - <Axx:2021>           # OWASP code only
+        - <WASC-xx>            # WASC code only
+        # - <CVE-YYYY-NNNN>    # only if rule targets a specific CVE
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
       verification:
         strategy: <unit|integration|dast|manual>
-        preconditions:
-          - <env or setup requirement>
-        inputs:
-          - name: <param/payload>
-            value: <example>
         steps:
           - <step-by-step actions to confirm>
         expected_outcome: <what confirms the issue>
         tooling:
-          unit: <xunit|nunit|mstest|none>
-          dast: <curl|nuclei|none>
+          unit: <xunit|nunit|pytest|none>
+          dast: <curl|nuclei|zap|none>
 ```
 
-# README Entry Template
+Notes:
+- Do not populate `metadata.cve` unless a rule targets a specific known CVE. Most rules will map to CWE/OWASP/WASC only.
+- Keep Semgrep root `severity` for engine behavior. The descriptive severity in `metadata.severity` follows your canonical scale.
+- Add `metadata.tags` with codes-only: category, CWE, OWASP (e.g., `A03:2021`), WASC, and CVE only when applicable.
 
-For each rule, add a section in `<lang>/README.md`:
+# Guardrails (to minimize false positives)
 
-```markdown
-- **<rule-id>**
-  - **Description**: <what the rule detects>
-  - **Severity/Impact**: <ERROR/WARNING/INFO — brief impact>
-  - **Metadata**: <CWE, OWASP, CVE (if applicable), CVSS (if applicable)>
-  - **Relevance**: <still relevant? versions/frameworks>
-```
+- **Prefer structural patterns** over broad regex. Use `pattern-inside`, `pattern-not`, and precise sinks.
+- **Add safe negatives**: when a compliant configuration exists, add a `pattern-not` to avoid flagging good code.
+- **Only high-confidence rules**: If uncertainty exists, skip or defer the rule.
+- **Keep rules small and focused**: one concern per rule file.
 
-# Steps
+# Tests
 
-1. Create or confirm the language folder exists (e.g., `csharp/`).
-2. Create category folders needed for the rule(s).
-3. For each new rule:
-   - Create `<lang>/<category>/<rule-id>.yml` using the Rule YAML Template.
-   - Ensure `languages: [<lang>]` matches the language.
-   - Populate `metadata` with CWE/OWASP and add `verification` block.
-4. Update `<lang>/README.md` with entries mirroring folders and listing the new rules.
-5. Update `.semgrep.yml` to include the language directory if not already present.
-6. Validate rules locally:
-   - `semgrep --validate --config <lang>/<category>/<rule-id>.yml`
-   - Optionally: `semgrep --config <lang>/**.yml` on a sample codebase.
-7. (Optional) Generate tests from metadata:
-   - Read the `metadata.verification` block.
-   - Emit unit test skeletons under `tests/<lang>/<rule-id>/` (xUnit/NUnit) or DAST probes.
+- Layout per rule under `tests/<lang>/cases/<category>/<rule-id>/{pos,neg}`.
+- POS must produce ≥1 finding. NEG must produce 0 findings.
+- Use minimal, representative snippets. Avoid large fixtures.
+- Optionally author a small runner to:
+  - Discover case folders.
+  - Invoke Semgrep on `pos/` and `neg/`.
+  - Fail on unmet expectations.
+- Ensure Semgrep is installed and on PATH before running tests.
 
-# Examples (C#)
+# Batch Workflow
 
-- Example rule file: `csharp/transport/dotnet-disable-tls-validation.yml`
-- Example docs entry in `csharp/README.md` aligning with categories and rule IDs.
+1. **Plan batch**: choose a balanced set of categories for `<lang>`.
+2. **Add rules**:
+   - Create `rules/<lang>/<category>/<rule-id>.yml` using the template.
+   - Populate `metadata` fully with authoritative, non-speculative values.
+   - Include at least one authoritative reference link.
+3. **Add tests**:
+   - Create `tests/<lang>/cases/<category>/<rule-id>/pos|neg` fixtures.
+   - Follow `metadata.verification` guidance where applicable.
+4. **Validate**:
+   - `semgrep --validate --config rules/<lang>/**.yml`
+   - Run rule tests on `pos/` and `neg/` folders.
+5. **Tune FPs**:
+   - Add `pattern-not` or additional structure to constrain matches.
+   - Re-run tests and iterate.
+6. **Document**:
+   - Update `rules/<lang>/README.md` listing rules and short descriptions.
 
-# Notes
+# Multi-language Notes
 
-- Assign CVE/CVSS only where a rule targets a specific, cataloged vulnerability instance; most API misuse rules map to CWE/OWASP only.
-- Keep files small and focused (<70 rules/file) for performance and reviews.
-- Prefer structural patterns and constrain with `pattern-inside` to reduce false positives.
+- Categories should mostly align across languages but may diverge when platform-specific.
+- Language-specific patterns and APIs should be used to keep precision high.
+- Keep everything security-related; avoid general code quality patterns.
+
+# Additional Guidance Agreed In This Repo
+
+- **CVE usage**: Omit `metadata.cve` unless a rule targets a specific, verifiable CVE.
+- **CVSS**: Keep fields present; fill only when confident. Otherwise, leave as empty strings.
+- **Confidence**: Normalize to one of `"Potential"|"Low"|"Medium"|"High"|"Confirmed"` and quote the value.
+- **Risk score**: Use `risk_score: null` if a quantitative score is not available.
+- **Severity mapping**: Keep Semgrep `severity` at rule root; use `metadata.severity` for the canonical descriptive grade.
+- **Testing layout**: Use `tests/<lang>/cases/.../pos|neg` with minimal fixtures; avoid large projects.
+- **Semgrep availability**: Ensure `semgrep` is installed before running tests; validate YAML syntax via `semgrep --validate`.
+
+# Quick Commands
+
+// turbo
+- Validate rule syntax for a language
+  - semgrep --validate --config rules/<lang>/**.yml
+
+- Run Semgrep against all rules for a language (sample project)
+  - semgrep --config rules/<lang>/**.yml <path-to-sample>
+
+# Examples
+
+- Example rule file: `rules/csharp/transport/dotnet-httpclienthandler-servercertvalidation-bypass.yml`
+- Example tests folder: `tests/csharp/cases/transport/dotnet-httpclienthandler-servercertvalidation-bypass/pos|neg`

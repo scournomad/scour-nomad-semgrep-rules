@@ -10,9 +10,24 @@ rules:
     metadata:
       cwe: "CWE-295: Improper Certificate Validation"
       owasp: "A02:2021-Cryptographic Failures"
-      confidence: high
+      wasc: "WASC-04: Insufficient Transport Layer Protection"
+      severity: "High"
+      risk_score: null
+      confidence: "High"
+      impact: "Disabling server certificate validation enables man-in-the-middle attacks, allowing attackers to intercept or modify traffic and credentials."
+      recommendation: "Do not override certificate validation. Remove custom callbacks in production, pin certificates where appropriate, and enforce TLS validation defaults."
       references:
         - https://learn.microsoft.com/dotnet/api/system.net.http.httpclienthandler.servercertificatecustomvalidationcallback
+        - https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html
+      tags:
+        - transport
+        - CWE-295
+        - A02:2021
+        - WASC-04
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
       verification:
         strategy: unit
         steps:
@@ -21,3 +36,4 @@ rules:
         tooling:
           unit: xunit
           dast: none
+

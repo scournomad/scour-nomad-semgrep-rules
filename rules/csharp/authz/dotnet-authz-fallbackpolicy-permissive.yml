@@ -11,9 +11,18 @@ rules:
     metadata:
       cwe: "CWE-284: Improper Access Control"
       owasp: "A01:2021-Broken Access Control"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "A permissive fallback policy may allow unauthenticated or unauthorized access by default."
+      recommendation: "Configure a restrictive default/fallback policy requiring authenticated users or explicit authorization."
       references:
         - https://learn.microsoft.com/aspnet/core/security/authorization/policies
+      tags:
+        - authz
+        - CWE-284
+        - A01:2021
+        - WASC-01
       verification:
         strategy: manual
         steps:

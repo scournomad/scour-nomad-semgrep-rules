@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
-      confidence: high
+      severity: "High"
+      risk_score: null
+      confidence: "High"
+      impact: "ECB mode leaks patterns in ciphertext, enabling content inference and potential cryptanalysis."
+      recommendation: "Avoid ECB. Use AES-GCM or AES-CBC with a random IV per operation and authenticated encryption where possible."
       references:
         - https://learn.microsoft.com/dotnet/standard/security/cryptographic-services
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html
+      tags:
+        - crypto
+        - CWE-327
+        - A02:2021
       verification:
         strategy: unit
         steps:

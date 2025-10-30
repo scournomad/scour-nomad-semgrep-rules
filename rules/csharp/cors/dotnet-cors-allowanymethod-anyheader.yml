@@ -14,9 +14,17 @@ rules:
     metadata:
       cwe: "CWE-346: Origin Validation Error"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Broadly permitting any methods and headers increases attack surface and can enable unintended cross-origin access."
+      recommendation: "Restrict allowed methods and headers to the minimal set required per origin. Avoid wildcards in production."
       references:
         - https://learn.microsoft.com/aspnet/core/security/cors
+      tags:
+        - cors
+        - CWE-346
+        - A05:2021
       verification:
         strategy: manual
         steps:

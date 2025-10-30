@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-346: Origin Validation Error"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Allowing any origin may expose endpoints to cross-origin access beyond intended domains."
+      recommendation: "Specify explicit trusted origins. Avoid AllowAnyOrigin in production; prefer WithOrigins with known domains."
       references:
         - https://learn.microsoft.com/aspnet/core/security/cors
+      tags:
+        - cors
+        - CWE-346
+        - A05:2021
+        - WASC-15
       verification:
         strategy: manual
         steps:

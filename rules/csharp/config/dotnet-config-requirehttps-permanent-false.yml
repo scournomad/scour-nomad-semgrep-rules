@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-16: Configuration"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Without permanent redirects and HSTS, clients may use HTTP, exposing traffic to downgrade and interception."
+      recommendation: "Enable HSTS (UseHsts) and configure permanent HTTPS redirection in production environments."
       references:
         - https://learn.microsoft.com/aspnet/core/security/enforcing-ssl
+      tags:
+        - config
+        - CWE-16
+        - A05:2021
+        - WASC-04
       verification:
         strategy: manual
         steps:

@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-200: Exposure of Sensitive Information"
       owasp: "A07:2021-Identification and Authentication Failures"
-      confidence: medium
+      severity: "Medium"
+      risk_score: null
+      confidence: "Medium"
+      impact: "HttpOnly=false allows client-side scripts to read cookies, increasing risk of session theft via XSS or code execution."
+      recommendation: "Set HttpOnly=true for authentication/session cookies to prevent script access. Combine with Secure and appropriate SameSite."
       references:
         - https://learn.microsoft.com/aspnet/core/security/cookies
+      tags:
+        - cookies
+        - CWE-200
+        - A07:2021
+        - WASC-13
       verification:
         strategy: integration
         steps:

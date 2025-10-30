@@ -9,9 +9,24 @@ rules:
     metadata:
       cwe: "CWE-611: XML External Entity"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: high
+      wasc: "WASC-43: XML Injection"
+      severity: "High"
+      risk_score: null
+      confidence: "High"
+      impact: "Enabling DTD processing permits XML External Entity (XXE) attacks that can read local files, perform SSRF, or cause denial of service."
+      recommendation: "Disable DTD processing (DtdProcessing = Prohibit or Ignore), and avoid using XmlResolver or set it to null. Prefer safe parser settings for untrusted XML."
       references:
         - https://learn.microsoft.com/dotnet/standard/data/xml/preventing-xxe-in-dotnet
+        - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+      tags:
+        - xml
+        - CWE-611
+        - A05:2021
+        - WASC-43
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
       verification:
         strategy: unit
         steps:

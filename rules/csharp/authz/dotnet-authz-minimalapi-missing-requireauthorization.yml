@@ -9,9 +9,18 @@ rules:
     metadata:
       cwe: "CWE-306: Missing Authentication for Critical Function"
       owasp: "A01:2021-Broken Access Control"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Endpoints without RequireAuthorization() may be unintentionally exposed to unauthenticated users."
+      recommendation: "Apply RequireAuthorization() to endpoints that require authentication or move them behind an authorization policy."
       references:
         - https://learn.microsoft.com/aspnet/core/security/authorization/middleware
+      tags:
+        - authz
+        - CWE-306
+        - A01:2021
+        - WASC-01
       verification:
         strategy: manual
         steps:

@@ -8,9 +8,24 @@ rules:
     metadata:
       cwe: "CWE-79: Cross-site Scripting"
       owasp: "A03:2021-Injection"
-      confidence: low
+      wasc: "WASC-08: Cross-site Scripting"
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unencoded user-controlled content returned as HTML may execute scripts in the victim's browser, enabling session hijacking, defacement, or data theft."
+      recommendation: "Avoid returning variable data with Content-Type text/html. Prefer text/plain or ensure proper HTML encoding/escaping and server-side sanitization."
       references:
         - https://learn.microsoft.com/aspnet/core/security/cross-site-scripting
+        - https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+      tags:
+        - xss
+        - CWE-79
+        - A03:2021
+        - WASC-08
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
       verification:
         strategy: integration
         steps:

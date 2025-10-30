@@ -9,9 +9,18 @@ rules:
     metadata:
       cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
       owasp: "A07:2021-Identification and Authentication Failures"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Auth cookies can be transmitted in cleartext over HTTP, enabling interception and session hijacking."
+      recommendation: "Set FormsAuthentication.RequireSSL = true and enforce HTTPS site-wide. Combine with Secure and HttpOnly flags."
       references:
         - https://learn.microsoft.com/previous-versions/aspnet/system.web.security.formsauthentication.requiressl
+      tags:
+        - cookies
+        - CWE-614
+        - A07:2021
+        - WASC-04
       verification:
         strategy: manual
         steps:

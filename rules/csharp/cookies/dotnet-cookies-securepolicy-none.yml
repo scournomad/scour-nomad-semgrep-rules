@@ -10,9 +10,24 @@ rules:
     metadata:
       cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
       owasp: "A07:2021-Identification and Authentication Failures"
-      confidence: medium
+      wasc: "WASC-04: Insufficient Transport Layer Protection"
+      severity: "Medium"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Cookies without the Secure attribute may be sent over HTTP, exposing session identifiers to interception and session hijacking."
+      recommendation: "Set Cookie.SecurePolicy = CookieSecurePolicy.Always in production and ensure the application enforces HTTPS. Combine with HttpOnly and appropriate SameSite."
       references:
         - https://learn.microsoft.com/aspnet/core/security/authentication/cookie
+        - https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#cookie-based-session-handling
+      tags:
+        - cookies
+        - CWE-614
+        - A07:2021
+        - WASC-04
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
       verification:
         strategy: manual
         steps:
