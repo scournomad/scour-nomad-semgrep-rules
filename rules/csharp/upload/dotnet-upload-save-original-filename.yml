@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Using the original filename can enable traversal or overwrite existing files, leading to data loss or compromise."
+      recommendation: "Sanitize with Path.GetFileName and generate server-side unique names; enforce allowed extensions and directories."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      tags:
+        - upload
+        - CWE-22
+        - A01:2021
+        - WASC-33
       verification:
         strategy: unit
         steps:

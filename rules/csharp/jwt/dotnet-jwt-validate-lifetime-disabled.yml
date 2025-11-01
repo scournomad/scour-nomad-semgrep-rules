@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-287: Improper Authentication"
       owasp: "A07:2021-Identification and Authentication Failures"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Disabling lifetime checks lets expired or replayed tokens be accepted, enabling session abuse."
+      recommendation: "Set ValidateLifetime=true and ensure accurate clock and exp/nbf validation."
       references:
         - https://learn.microsoft.com/aspnet/core/security/authentication/jwt
+      tags:
+        - jwt
+        - CWE-287
+        - A07:2021
+        - WASC-01
       verification:
         strategy: unit
         steps:

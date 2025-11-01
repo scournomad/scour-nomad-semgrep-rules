@@ -9,9 +9,17 @@ rules:
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Deserializing untrusted data with SoapFormatter can trigger gadget chains and potential code execution."
+      recommendation: "Do not use SoapFormatter with untrusted input. Prefer safe formats and restrict allowed types."
       references:
         - https://learn.microsoft.com/dotnet/standard/serialization/binaryformatter-security-guide
+      tags:
+        - deserialization
+        - CWE-502
+        - A08:2021
       verification:
         strategy: unit
         steps:

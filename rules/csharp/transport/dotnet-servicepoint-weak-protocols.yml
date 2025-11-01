@@ -10,9 +10,19 @@ rules:
     metadata:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Enabling weak protocols allows downgrade/weak cipher negotiation and interception."
+      recommendation: "Remove SSL3/TLS1.0/1.1; use system defaults or TLS1.2+ and strong cipher suites."
       references:
         - https://learn.microsoft.com/dotnet/framework/network-programming/tls
+      tags:
+        - transport
+        - crypto
+        - CWE-327
+        - A02:2021
+        - WASC-04
       verification:
         strategy: integration
         preconditions:

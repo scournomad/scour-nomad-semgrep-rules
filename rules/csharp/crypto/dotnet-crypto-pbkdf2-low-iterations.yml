@@ -11,9 +11,18 @@ rules:
     metadata:
       cwe: "CWE-916: Use of Password Hash With Insufficient Computational Effort"
       owasp: "A02:2021-Cryptographic Failures"
-      confidence: medium
+      severity: "Medium"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Low iteration counts make password hashes fast to brute force, reducing resistance to offline attacks."
+      recommendation: "Use platform-recommended iteration counts (or memory-hard KDFs) and configurable parameters; migrate legacy hashes."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+      tags:
+        - crypto
+        - CWE-916
+        - A02:2021
+        - WASC-04
       verification:
         strategy: unit
         steps:

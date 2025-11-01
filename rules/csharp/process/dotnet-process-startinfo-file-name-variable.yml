@@ -11,9 +11,18 @@ rules:
     metadata:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Untrusted executables or names can execute unintended programs or enable injection via path search order."
+      recommendation: "Use absolute paths to known executables; validate $VAL against an allowlist and avoid user-controlled filenames."
       references:
         - https://learn.microsoft.com/dotnet/api/system.diagnostics.processstartinfo.filename
+      tags:
+        - process
+        - CWE-78
+        - A03:2021
+        - WASC-31
       verification:
         strategy: unit
         steps:

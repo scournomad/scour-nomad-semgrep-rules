@@ -17,9 +17,18 @@ rules:
     metadata:
       cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
       owasp: "A01:2021-Broken Access Control"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "User-controlled paths may access files outside intended directories, exposing sensitive data."
+      recommendation: "Normalize and validate paths against an allowlisted root; reject `..` and absolute paths; use sandboxed directories."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      tags:
+        - file-io
+        - CWE-22
+        - A01:2021
+        - WASC-33
       verification:
         strategy: unit
         preconditions:

@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-400: Uncontrolled Resource Consumption"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unbounded uploads can exhaust disk, memory, or I/O, causing denial of service."
+      recommendation: "Validate file size before saving; enforce per-request limits and server-side quotas."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      tags:
+        - upload
+        - CWE-400
+        - A05:2021
+        - WASC-10
       verification:
         strategy: unit
         steps:

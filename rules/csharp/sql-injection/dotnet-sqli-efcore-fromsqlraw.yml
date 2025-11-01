@@ -12,9 +12,18 @@ rules:
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Concatenating SQL for FromSqlRaw allows injection, altering queries, returning unintended data, or damaging integrity."
+      recommendation: "Use FromSqlInterpolated or pass parameters to FromSqlRaw; avoid any string concatenation or interpolation in SQL."
       references:
         - https://learn.microsoft.com/ef/core/querying/raw-sql
+      tags:
+        - sql-injection
+        - CWE-89
+        - A03:2021
+        - WASC-19
       verification:
         strategy: integration
         preconditions:

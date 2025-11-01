@@ -17,9 +17,18 @@ rules:
     metadata:
       cwe: "CWE-643: Improper Neutralization of Data within XPath Expressions ('XPath Injection')"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "High"
+      risk_score: null
+      confidence: "Low"
+      impact: "Concatenated or interpolated XPath queries can be manipulated to access unauthorized XML nodes."
+      recommendation: "Use parameterized XPath APIs or sanitize inputs; avoid string concatenation/interpolation for XPath."
       references:
         - https://owasp.org/www-community/attacks/XPATH_Injection
+      tags:
+        - xpath
+        - CWE-643
+        - A03:2021
+        - WASC-19
       verification:
         strategy: unit
         inputs:

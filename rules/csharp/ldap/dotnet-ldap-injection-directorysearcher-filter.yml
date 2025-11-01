@@ -18,9 +18,18 @@ rules:
     metadata:
       cwe: "CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')"
       owasp: "A03:2021-Injection"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Concatenating or interpolating LDAP filters with untrusted input allows attackers to alter queries and disclose or modify directory data."
+      recommendation: "Use parameterization/escaping for LDAP filters and validate allowlisted characters; avoid building filters from raw input."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html
+      tags:
+        - ldap
+        - CWE-90
+        - A03:2021
+        - WASC-25
       verification:
         strategy: unit
         inputs:

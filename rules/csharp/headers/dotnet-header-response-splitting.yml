@@ -11,9 +11,18 @@ rules:
     metadata:
       cwe: "CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "High"
+      risk_score: null
+      confidence: "Low"
+      impact: "CR/LF injection in headers can split responses, enabling cache poisoning, header injection, or cross-user attacks."
+      recommendation: "Sanitize and validate header values. Reject CR/LF in user-controlled input before assignment to response headers."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Header_Cheat_Sheet.html
+      tags:
+        - headers
+        - CWE-113
+        - A03:2021
+        - WASC-25
       verification:
         strategy: integration
         steps:

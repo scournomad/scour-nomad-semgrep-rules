@@ -14,9 +14,19 @@ rules:
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "High"
+      risk_score: null
+      confidence: "Low"
+      impact: "Building SQL strings via concatenation may allow attackers to alter queries despite parameter objects, leading to data exfiltration or modification."
+      recommendation: "Use parameter placeholders in the SQL string itself (e.g., @name) and pass values via parameters; avoid any string concatenation or interpolation."
       references:
         - https://github.com/DapperLib/Dapper#parameterization
+        - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+      tags:
+        - sql-injection
+        - CWE-89
+        - A03:2021
+        - WASC-19
       verification:
         strategy: integration
         steps:

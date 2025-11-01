@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-113: HTTP Response Splitting"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "High"
+      risk_score: null
+      confidence: "Low"
+      impact: "Untrusted values in Set-Cookie can inject CR/LF, corrupt headers, or set attacker-controlled cookies."
+      recommendation: "Do not build Set-Cookie manually from untrusted input. Use cookie APIs and sanitize to reject CR/LF."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Header_Cheat_Sheet.html
+      tags:
+        - headers
+        - CWE-113
+        - A03:2021
+        - WASC-25
       verification:
         strategy: integration
         steps:

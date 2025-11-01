@@ -8,10 +8,19 @@ rules:
     metadata:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Passing untrusted input to Process.Start can allow command injection or unintended command execution."
+      recommendation: "Avoid passing untrusted strings to Process.Start. Use ProcessStartInfo with UseShellExecute=false and validated argument arrays."
       references:
         - https://learn.microsoft.com/dotnet/api/system.diagnostics.processstartinfo
         - https://cheatsheetseries.owasp.org/cheatsheets/Command_Injection_Defense_Cheat_Sheet.html
+      tags:
+        - process
+        - CWE-78
+        - A03:2021
+        - WASC-31
       verification:
         strategy: unit
         preconditions:

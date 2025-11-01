@@ -12,10 +12,18 @@ rules:
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
-      confidence: high
+      severity: "High"
+      risk_score: null
+      confidence: "High"
+      impact: "Polymorphic type resolution may load dangerous types, enabling gadget chains and RCE in some contexts."
+      recommendation: "Avoid TypeNameHandling Auto/All for untrusted data; restrict to known safe types or use custom converters."
       references:
         - https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_TypeNameHandling.htm
         - https://owasp.org/www-community/vulnerabilities/Deserialization_of_untrusted_data
+      tags:
+        - deserialization
+        - CWE-502
+        - A08:2021
       verification:
         strategy: unit
         steps:

@@ -9,9 +9,17 @@ rules:
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Object reference preservation may expose internal object graphs and enable unexpected traversal when handling untrusted data."
+      recommendation: "Avoid PreserveObjectReferences on untrusted input; constrain known types and validate input strictly."
       references:
         - https://learn.microsoft.com/dotnet/framework/wcf/feature-details/serialization-and-deserialization
+      tags:
+        - deserialization
+        - CWE-502
+        - A08:2021
       verification:
         strategy: manual
         steps:

@@ -11,9 +11,18 @@ rules:
     metadata:
       cwe: "CWE-1333: Inefficient Regular Expression Complexity"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Complex regex without timeouts may cause catastrophic backtracking and CPU exhaustion (ReDoS)."
+      recommendation: "Use overloads that include a timeout or set a global default; simplify patterns to avoid catastrophic backtracking."
       references:
         - https://learn.microsoft.com/dotnet/standard/base-types/best-practices#use-timeout-values
+      tags:
+        - regex
+        - CWE-1333
+        - A05:2021
+        - WASC-10
       verification:
         strategy: unit
         steps:

@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unvalidated source/destination paths can move directories outside intended roots or overwrite critical locations."
+      recommendation: "Validate and canonicalize $SRC and $DST relative to allowed roots; reject traversal and enforce access controls."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      tags:
+        - file-io
+        - CWE-22
+        - A01:2021
+        - WASC-33
       verification:
         strategy: unit
         steps:

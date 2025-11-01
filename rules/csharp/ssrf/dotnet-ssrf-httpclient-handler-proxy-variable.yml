@@ -9,9 +9,18 @@ rules:
     metadata:
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unvalidated proxy settings can tunnel requests to internal networks or sensitive endpoints."
+      recommendation: "Restrict proxies to an allowlist; forbid link-local/reserved ranges and enforce TLS."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      tags:
+        - ssrf
+        - CWE-918
+        - A10:2021
+        - WASC-20
       verification:
         strategy: manual
         steps:

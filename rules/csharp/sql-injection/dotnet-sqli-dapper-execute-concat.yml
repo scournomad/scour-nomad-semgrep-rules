@@ -16,9 +16,18 @@ rules:
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Concatenated SQL can be manipulated by attackers to read or modify database data."
+      recommendation: "Use parameterized queries with Dapper's parameters object; avoid concatenating user input into SQL."
       references:
         - https://github.com/DapperLib/Dapper#parameterization
+      tags:
+        - sql-injection
+        - CWE-89
+        - A03:2021
+        - WASC-19
       verification:
         strategy: integration
         preconditions:

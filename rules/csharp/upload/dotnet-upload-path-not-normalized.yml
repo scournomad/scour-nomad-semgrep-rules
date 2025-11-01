@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
-      confidence: medium
+      severity: "Medium"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Unsanitized filenames may traverse directories or overwrite files, causing data loss or compromise."
+      recommendation: "Normalize with Path.GetFileName and enforce server-side naming and allowed directories."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      tags:
+        - upload
+        - CWE-22
+        - A01:2021
+        - WASC-33
       verification:
         strategy: unit
         steps:

@@ -11,9 +11,18 @@ rules:
     metadata:
       cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
       owasp: "A01:2021-Broken Access Control"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unvalidated write paths can overwrite files outside the intended directory or create files in sensitive locations."
+      recommendation: "Validate and canonicalize $PATH; restrict to an allowed root and reject traversal sequences before writing."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      tags:
+        - file-io
+        - CWE-22
+        - A01:2021
+        - WASC-33
       verification:
         strategy: unit
         inputs:

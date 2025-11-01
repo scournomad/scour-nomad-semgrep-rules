@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-918: SSRF"
       owasp: "A10:2021-SSRF"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unvalidated addresses can target internal services or metadata endpoints via server-side requests."
+      recommendation: "Enforce HTTPS, validate host against an allowlist, and block link-local/reserved IP ranges."
       references:
         - https://learn.microsoft.com/aspnet/core/grpc/
+      tags:
+        - ssrf
+        - CWE-918
+        - A10:2021
+        - WASC-20
       verification:
         strategy: manual
         steps:

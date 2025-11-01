@@ -11,9 +11,17 @@ rules:
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unbounded polymorphic resolution can allow unexpected types to be deserialized, risking gadget-like behaviors."
+      recommendation: "Restrict polymorphism to known-safe types; prefer concrete models. Configure safe resolvers and ignore unknown types."
       references:
         - https://learn.microsoft.com/dotnet/standard/serialization/system-text-json-polymorphism
+      tags:
+        - deserialization
+        - CWE-502
+        - A08:2021
       verification:
         strategy: manual
         steps:

@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unvalidated URLs in server-initiated requests can reach internal services or metadata endpoints."
+      recommendation: "Validate and allowlist outbound destinations; block link-local/reserved IPs and metadata services."
       references:
         - https://restsharp.dev/
+      tags:
+        - ssrf
+        - CWE-918
+        - A10:2021
+        - WASC-20
       verification:
         strategy: manual
         steps:

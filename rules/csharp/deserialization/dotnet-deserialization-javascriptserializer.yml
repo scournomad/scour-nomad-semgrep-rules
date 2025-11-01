@@ -9,9 +9,17 @@ rules:
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Deserializing untrusted data may lead to code execution or data tampering depending on types and binders."
+      recommendation: "Avoid JavaScriptSerializer for untrusted input. Use System.Text.Json with safe settings and strict models."
       references:
         - https://learn.microsoft.com/dotnet/standard/serialization/system-text-json-overview
+      tags:
+        - deserialization
+        - CWE-502
+        - A08:2021
       verification:
         strategy: unit
         steps:

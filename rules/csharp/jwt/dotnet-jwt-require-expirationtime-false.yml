@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-287: Improper Authentication"
       owasp: "A07:2021-Identification and Authentication Failures"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Accepting tokens without an expiration (exp) increases risk of replay and long-lived token abuse."
+      recommendation: "Set RequireExpirationTime=true and enforce lifetime validation to require exp on tokens."
       references:
         - https://learn.microsoft.com/aspnet/core/security/authentication/jwt
+      tags:
+        - jwt
+        - CWE-287
+        - A07:2021
+        - WASC-01
       verification:
         strategy: unit
         steps:

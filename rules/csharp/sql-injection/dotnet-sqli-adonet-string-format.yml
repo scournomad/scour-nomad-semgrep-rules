@@ -13,9 +13,18 @@ rules:
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "High"
+      risk_score: null
+      confidence: "Low"
+      impact: "Building SQL via format strings or interpolation allows attackers to alter queries, exfiltrate or modify data."
+      recommendation: "Use parameterized queries with placeholders and typed parameters; avoid string formatting/interpolation for SQL."
       references:
         - https://learn.microsoft.com/dotnet/framework/data/adonet/parameters
+      tags:
+        - sql-injection
+        - CWE-89
+        - A03:2021
+        - WASC-19
       verification:
         strategy: integration
         steps:

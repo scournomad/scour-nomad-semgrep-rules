@@ -12,9 +12,18 @@ rules:
     metadata:
       cwe: "CWE-359: Exposure of Private Information ('Privacy Violation')"
       owasp: "A09:2021-Security Logging and Monitoring Failures"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Sensitive information in logs can be harvested by attackers or leak via log forwarding/storage, violating privacy and compliance."
+      recommendation: "Redact or avoid logging secrets and PII. Use structured logging with allowlists and scrubbers; restrict log access/retention."
       references:
         - https://owasp.org/www-project-proactive-controls/v3/en/c8-protect-data-everywhere
+      tags:
+        - logging
+        - CWE-359
+        - A09:2021
+        - WASC-13
       verification:
         strategy: unit
         preconditions:

@@ -15,9 +15,18 @@ rules:
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Concatenating SQL enables injection, altering queries and exposing or modifying data."
+      recommendation: "Use parameterized queries and placeholders; avoid concatenation even when using trusted segments."
       references:
         - https://learn.microsoft.com/dotnet/framework/data/adonet/parameters
+      tags:
+        - sql-injection
+        - CWE-89
+        - A03:2021
+        - WASC-19
       verification:
         strategy: integration
         preconditions:

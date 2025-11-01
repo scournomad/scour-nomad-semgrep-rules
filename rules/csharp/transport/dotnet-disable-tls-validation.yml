@@ -9,10 +9,20 @@ rules:
     metadata:
       cwe: "CWE-295: Improper Certificate Validation"
       owasp: "A02:2021-Cryptographic Failures"
-      confidence: high
+      severity: "High"
+      risk_score: null
+      confidence: "High"
+      impact: "Bypassing certificate validation enables MITM, spoofing, and data tampering over TLS."
+      recommendation: "Remove custom callbacks that accept any certificate; validate chains and hostnames or pin as appropriate."
       references:
         - https://learn.microsoft.com/dotnet/api/system.net.http.httpclienthandler.servercertificatecustomvalidationcallback
         - https://owasp.org/Top10/A02_2021-Cryptographic_Failures/
+      tags:
+        - transport
+        - tls
+        - CWE-295
+        - A02:2021
+        - WASC-04
       verification:
         strategy: integration
         preconditions:

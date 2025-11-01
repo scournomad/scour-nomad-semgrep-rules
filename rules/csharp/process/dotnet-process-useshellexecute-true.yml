@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Shell execution expands/metachar-parses untrusted data, increasing risk of command injection."
+      recommendation: "Set UseShellExecute=false and pass arguments as arrays; validate/escape any user-controlled input."
       references:
         - https://learn.microsoft.com/dotnet/api/system.diagnostics.processstartinfo
+      tags:
+        - process
+        - CWE-78
+        - A03:2021
+        - WASC-31
       verification:
         strategy: unit
         steps:

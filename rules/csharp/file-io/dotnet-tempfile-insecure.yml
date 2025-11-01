@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-377: Insecure Temporary File"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Predictable temp files may be read or replaced by other users/processes, exposing or corrupting data."
+      recommendation: "Use secure temp file APIs (e.g., Path.GetTempFileName with restricted perms), random names, and restrict permissions."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html
+      tags:
+        - file-io
+        - CWE-377
+        - A05:2021
+        - WASC-33
       verification:
         strategy: unit
         steps:

@@ -10,9 +10,18 @@ rules:
     metadata:
       cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
       owasp: "A02:2021-Cryptographic Failures"
-      confidence: medium
+      severity: "High"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Disabling TLS sends emails/credentials in cleartext, enabling interception and tampering."
+      recommendation: "Set EnableSsl=true and require TLS; prefer modern libraries that enforce secure transport."
       references:
         - https://learn.microsoft.com/dotnet/api/system.net.mail.smtpclient.enablessl
+      tags:
+        - transport
+        - CWE-319
+        - A02:2021
+        - WASC-04
       verification:
         strategy: unit
         steps:

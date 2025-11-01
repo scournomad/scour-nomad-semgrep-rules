@@ -12,9 +12,18 @@ rules:
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Building the SQL string via concatenation before passing to FromSqlInterpolated undermines parameterization, risking injection."
+      recommendation: "Avoid pre-concatenation. Keep parameters within the interpolated string or use FromSqlRaw with parameters."
       references:
         - https://learn.microsoft.com/ef/core/querying/raw-sql
+      tags:
+        - sql-injection
+        - CWE-89
+        - A03:2021
+        - WASC-19
       verification:
         strategy: manual
         steps:

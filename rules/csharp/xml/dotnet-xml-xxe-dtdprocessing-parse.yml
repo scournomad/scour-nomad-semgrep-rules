@@ -10,9 +10,19 @@ rules:
     metadata:
       cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: high
+      severity: "High"
+      risk_score: null
+      confidence: "High"
+      impact: "Enabling DTD processing can allow XXE attacks leading to file disclosure, SSRF, or denial of service."
+      recommendation: "Disable DTD processing (Prohibit or Ignore) for untrusted XML; use secure parsers and resolvers."
       references:
         - https://learn.microsoft.com/dotnet/api/system.xml.xmlreadersettings.dtdprocessing
+      tags:
+        - xml
+        - xxe
+        - CWE-611
+        - A05:2021
+        - WASC-43
       verification:
         strategy: unit
         steps:

@@ -8,9 +8,17 @@ rules:
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
-      confidence: medium
+      severity: "Medium"
+      risk_score: null
+      confidence: "Medium"
+      impact: "Type metadata in NetDataContractSerializer can allow unexpected types to be instantiated from untrusted input."
+      recommendation: "Avoid NetDataContractSerializer for untrusted input; use DataContractSerializer with known types or safer formats."
       references:
         - https://learn.microsoft.com/dotnet/framework/wcf/feature-details/serialization-and-deserialization
+      tags:
+        - deserialization
+        - CWE-502
+        - A08:2021
       verification:
         strategy: unit
         preconditions:

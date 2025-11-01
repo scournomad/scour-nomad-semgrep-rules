@@ -8,9 +8,18 @@ rules:
     metadata:
       cwe: "CWE-22: Path Traversal"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Unsanitized filenames in Content-Disposition can trigger path traversal on clients or confusing file names, leading to unsafe handling."
+      recommendation: "Sanitize with Path.GetFileName and restrict allowed characters; set a safe default when input is untrusted."
       references:
         - https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html
+      tags:
+        - headers
+        - CWE-22
+        - A05:2021
+        - WASC-33
       verification:
         strategy: manual
         steps:

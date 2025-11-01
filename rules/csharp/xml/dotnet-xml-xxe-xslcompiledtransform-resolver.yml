@@ -8,9 +8,19 @@ rules:
     metadata:
       cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
       owasp: "A05:2021-Security Misconfiguration"
-      confidence: low
+      severity: "Medium"
+      risk_score: null
+      confidence: "Low"
+      impact: "Allowing XmlUrlResolver can fetch external resources during XSLT, causing SSRF or data exfiltration."
+      recommendation: "Avoid XmlUrlResolver for untrusted XSLT; use null resolver or restrict allowed URIs."
       references:
         - https://learn.microsoft.com/dotnet/api/system.xml.xsl.xslcompiledtransform
+      tags:
+        - xml
+        - xxe
+        - CWE-611
+        - A05:2021
+        - WASC-43
       verification:
         strategy: unit
         steps:
