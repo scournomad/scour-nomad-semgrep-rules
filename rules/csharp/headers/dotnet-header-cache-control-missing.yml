@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-524: Use of Cache Containing Sensitive Information"
       owasp: "A06:2021-Vulnerable and Outdated Components"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Sensitive responses without no-store/no-cache directives may be cached by browsers or proxies, exposing private data."
       recommendation: "Set Cache-Control: no-store, no-cache and Pragma: no-cache for sensitive responses, and consider setting appropriate Expires headers."

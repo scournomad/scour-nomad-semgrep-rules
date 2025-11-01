@@ -1,0 +1,37 @@
+rules:
+  - id: jsonwebtoken-verify-no-alg-allowlist
+    languages: [javascript, typescript]
+    message: jwt.verify used without specifying allowed algorithms increases risk of alg confusion.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: jwt.verify($TOK, $KEY)
+          - pattern: jwt.verify($TOK, $KEY, {})
+          - pattern: jwt.verify($TOK, $KEY, { $OPTS, ... })
+    metavariable-pattern:
+      OPTS:
+        pattern-not: algorithms
+    metadata:
+      cwe: "CWE-327: Broken or Risky Crypto Algorithm"
+      owasp: "A02:2021-Cryptographic Failures"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "If algorithm is not constrained, tokens signed with unexpected alg may be accepted."
+      recommendation: "Pass an explicit algorithms allowlist (e.g., algorithms: ['HS256'])."
+      references:
+        - https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback
+      tags:
+        - node
+        - jwt
+        - jsonwebtoken
+        - CWE-327
+        - A02:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect jwt.verify options for algorithms allowlist
+        expected_outcome: Missing algorithms allowlist flagged
+        tooling:
+          unit: none
+          dast: none

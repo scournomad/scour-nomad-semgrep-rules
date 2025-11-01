@@ -16,7 +16,7 @@ rules:
       owasp: "A03:2021-Injection"
       wasc: "WASC-19: SQL Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Attacker-controlled input may alter SQL queries, access or modify data, or execute stacked queries, leading to data exfiltration or corruption."
       recommendation: "Use parameterized queries for all dynamic values (e.g., AddWithValue or typed parameters). Avoid building SQL via string concatenation or string interpolation."

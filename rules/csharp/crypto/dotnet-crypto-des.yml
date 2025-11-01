@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "DES uses small keys and is vulnerable to brute-force attacks; sensitive data encrypted with DES can be recovered."
       recommendation: "Replace DES with AES (prefer AES-GCM or AES-CBC with random IV) and use strong key management."

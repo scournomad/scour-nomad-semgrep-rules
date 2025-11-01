@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-643: XPath Injection"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Concatenated XPath expressions can be altered by user input to access unintended XML nodes."
       recommendation: "Use parameterized APIs or sanitize inputs; avoid concatenating untrusted data into XPath queries."

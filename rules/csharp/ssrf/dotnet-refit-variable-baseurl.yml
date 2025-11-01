@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-918: SSRF"
       owasp: "A10:2021-SSRF"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated base URLs can route server-side requests to internal networks or metadata endpoints."
       recommendation: "Restrict base URLs to an allowlist; reject link-local/reserved IPs and enforce HTTPS."

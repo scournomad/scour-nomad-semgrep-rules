@@ -15,7 +15,7 @@ rules:
       cwe: "CWE-346: Origin Validation Error"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Broadly permitting any methods and headers increases attack surface and can enable unintended cross-origin access."
       recommendation: "Restrict allowed methods and headers to the minimal set required per origin. Avoid wildcards in production."

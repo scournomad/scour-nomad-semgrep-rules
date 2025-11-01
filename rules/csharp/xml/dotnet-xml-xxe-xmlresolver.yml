@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Enabling XmlResolver allows external entity resolution leading to file disclosure, SSRF, or DoS."
       recommendation: "Avoid XmlResolver for untrusted XML; set resolver to null and use secure parsing settings."

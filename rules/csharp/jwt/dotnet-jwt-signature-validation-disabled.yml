@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-347: Improper Verification of Cryptographic Signature"
       owasp: "A07:2021-Identification and Authentication Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Disabling signature validation allows forged or tampered tokens to be accepted, enabling authentication bypass."
       recommendation: "Enable ValidateIssuerSigningKey and RequireSignedTokens; configure valid signing keys and algorithms."

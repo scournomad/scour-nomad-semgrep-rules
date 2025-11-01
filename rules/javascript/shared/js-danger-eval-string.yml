@@ -1,0 +1,34 @@
+rules:
+  - id: js-danger-eval-string
+    languages: [javascript, typescript]
+    message: Use of eval/Function or string-based timers allows arbitrary code execution.
+    severity: ERROR
+    pattern-either:
+      - pattern: eval($X)
+      - pattern: new Function($X)
+      - pattern: setTimeout($X, ...)
+      - pattern: setInterval($X, ...)
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "String-evaluated code can be influenced by attackers to execute arbitrary JavaScript."
+      recommendation: "Avoid eval and string-based timers. Use safe APIs and direct function references."
+      references:
+        - https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!
+      tags:
+        - shared
+        - code-exec
+        - CWE-94
+        - A03:2021
+        - WASC-31
+      verification:
+        strategy: unit
+        steps:
+          - Detect eval/Function/setTimeout string usage
+        expected_outcome: Code execution sink identified
+        tooling:
+          unit: none
+          dast: none

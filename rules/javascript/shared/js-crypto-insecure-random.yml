@@ -1,0 +1,29 @@
+rules:
+  - id: js-crypto-insecure-random
+    languages: [javascript, typescript]
+    message: Math.random() is not cryptographically secure; avoid for secrets/tokens.
+    severity: WARNING
+    pattern: Math.random(...)
+    metadata:
+      cwe: "CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)"
+      owasp: "A02:2021-Cryptographic Failures"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Predictable tokens or secrets allow session hijacking and forgery."
+      recommendation: "Use crypto.getRandomValues() (browser) or crypto.randomBytes() (Node) for secrets."
+      references:
+        - https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+      tags:
+        - shared
+        - crypto
+        - CWE-338
+        - A02:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect whether Math.random drives security decisions
+        expected_outcome: Replace with cryptographically secure PRNG
+        tooling:
+          unit: none
+          dast: none

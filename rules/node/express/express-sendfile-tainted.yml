@@ -1,0 +1,36 @@
+rules:
+  - id: express-sendfile-tainted
+    languages: [javascript, typescript]
+    message: res.sendFile called with variable path can lead to path traversal.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const app = express()
+          ...
+          app.$METHOD($ROUTE, (req, res, next) => { ... })
+      - pattern: res.sendFile($P)
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Untrusted paths can escape the intended directory and expose or overwrite files."
+      recommendation: "Avoid sendFile with user input; resolve against a safe base and validate canonical paths."
+      references:
+        - https://expressjs.com/en/4x/api.html#res.sendFile
+      tags:
+        - node
+        - express
+        - path-traversal
+        - CWE-22
+        - A01:2021
+        - WASC-33
+      verification:
+        strategy: unit
+        steps:
+          - Detect res.sendFile with variable path
+        expected_outcome: Potential traversal sink flagged
+        tooling:
+          unit: none
+          dast: none

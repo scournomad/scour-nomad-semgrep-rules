@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-284: Improper Access Control"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "A permissive fallback policy may allow unauthenticated or unauthorized access by default."
       recommendation: "Configure a restrictive default/fallback policy requiring authenticated users or explicit authorization."

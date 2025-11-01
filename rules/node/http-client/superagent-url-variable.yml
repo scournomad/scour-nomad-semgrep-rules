@@ -1,0 +1,36 @@
+rules:
+  - id: superagent-url-variable
+    languages: [javascript, typescript]
+    message: superagent called with variable URL. Validate/allowlist to avoid SSRF in server contexts.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: require('superagent').get($URL, ...)
+          - pattern: require('superagent').post($URL, ...)
+          - pattern: superagent.get($URL, ...)
+          - pattern: superagent.post($URL, ...)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs can target internal services or metadata endpoints when executed on the server."
+      recommendation: "Allowlist hosts/schemes; enforce HTTPS; block link-local/reserved IPs."
+      references:
+        - https://visionmedia.github.io/superagent/
+      tags:
+        - node
+        - http_client
+        - superagent
+        - ssrf
+        - CWE-918
+        - A10:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace origin of URL and ensure validation/allowlist
+        expected_outcome: Safe destinations enforced
+        tooling:
+          unit: none
+          dast: none

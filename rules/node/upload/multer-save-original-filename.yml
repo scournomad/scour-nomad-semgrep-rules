@@ -1,0 +1,33 @@
+rules:
+  - id: multer-save-original-filename
+    languages: [javascript, typescript]
+    message: Using file.originalname directly may lead to path traversal/overwrite. Sanitize or generate names.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: fs.$CALL($DEST, file.originalname, ...)
+          - pattern: path.join($DIR, file.originalname)
+    metadata:
+      cwe: "CWE-22: Path Traversal"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Untrusted original filename can traverse directories or overwrite files on the server."
+      recommendation: "Use path.basename(file.originalname) and generate unique server-side names; validate extensions."
+      references:
+        - https://github.com/expressjs/multer
+      tags:
+        - node
+        - upload
+        - multer
+        - CWE-22
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect saved filenames based on file.originalname
+        expected_outcome: Dangerous path construction
+        tooling:
+          unit: none
+          dast: none

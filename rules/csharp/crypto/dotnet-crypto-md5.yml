@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "MD5 is cryptographically broken (collisions), enabling tampering and invalid integrity assumptions."
       recommendation: "Replace MD5 with SHA-256 or stronger. For passwords, use a modern password hashing function (e.g., bcrypt, PBKDF2, Argon2)."

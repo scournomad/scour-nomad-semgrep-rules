@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Disabling or bypassing CSRF protection allows cross-site requests to perform state-changing actions using victim credentials."
       recommendation: "Enable antiforgery validation on state-changing, cookie-authenticated endpoints and avoid global bypasses."

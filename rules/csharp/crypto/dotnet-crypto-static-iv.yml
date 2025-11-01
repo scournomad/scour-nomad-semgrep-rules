@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-329: Generation of Predictable IV with CBC Mode"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Predictable/constant IVs enable pattern leakage and may allow attacks against CBC mode confidentiality."
       recommendation: "Generate a fresh, random IV for each encryption operation and store/transmit it alongside the ciphertext."

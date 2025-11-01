@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
       owasp: "A07:2021-Identification and Authentication Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "SameSite=None cookies without Secure may be sent in cross-site contexts over HTTP, enabling interception and session hijacking."
       recommendation: "When SameSite=None is required, set Secure=true and enforce HTTPS. Avoid cross-site cookies unless necessary."

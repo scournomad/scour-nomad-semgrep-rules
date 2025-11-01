@@ -1,0 +1,36 @@
+rules:
+  - id: node-child-process-exec-tainted
+    languages: [javascript, typescript]
+    message: child_process exec/spawn with shell from variable may lead to command injection.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: require('child_process').exec($CMD, ...)
+          - pattern: child_process.exec($CMD, ...)
+          - pattern: require('child_process').execSync($CMD, ...)
+          - pattern: child_process.execSync($CMD, ...)
+          - pattern: child_process.spawn($BIN, $ARGS, { shell: true, ... })
+    metadata:
+      cwe: "CWE-78: OS Command Injection"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Attacker-controlled input can execute arbitrary system commands."
+      recommendation: "Avoid shell execution or strictly validate/escape arguments; use execFile/spawn without shell."
+      references:
+        - https://nodejs.org/api/child_process.html
+      tags:
+        - node
+        - command-injection
+        - CWE-78
+        - A03:2021
+        - WASC-31
+      verification:
+        strategy: unit
+        steps:
+          - Locate exec/execSync with variable command or spawn with shell:true
+        expected_outcome: Potential command injection sink flagged
+        tooling:
+          unit: none
+          dast: none

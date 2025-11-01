@@ -1,0 +1,32 @@
+rules:
+  - id: next-image-untrusted-domains
+    languages: [javascript, typescript]
+    message: next/image configured with untrusted or wildcard domains can allow fetching untrusted images.
+    severity: WARNING
+    patterns:
+      - pattern: module.exports = { images: { domains: $D, ... }, ... }
+      - pattern: export default { images: { domains: $D, ... }, ... }
+    metadata:
+      cwe: "CWE-346: Origin Validation Error"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Permissive image domains can lead to content trust issues or unexpected external requests."
+      recommendation: "Use a strict allowlist of trusted image domains; avoid wildcards."
+      references:
+        - https://nextjs.org/docs/pages/api-reference/components/image#domains
+      tags:
+        - nextjs
+        - config
+        - images
+        - CWE-346
+        - A05:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect next.config.js images.domains
+        expected_outcome: Domains are strictly allowlisted
+        tooling:
+          unit: none
+          dast: none

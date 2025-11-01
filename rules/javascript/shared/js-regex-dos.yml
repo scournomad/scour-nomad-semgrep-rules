@@ -1,0 +1,33 @@
+rules:
+  - id: js-regex-dos
+    languages: [javascript, typescript]
+    message: Regular expression built from untrusted input can cause catastrophic backtracking (ReDoS).
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: new RegExp($PATTERN, ...)
+          - pattern: RegExp($PATTERN, ...)
+    metadata:
+      cwe: "CWE-1333: Inefficient Regular Expression Complexity"
+      owasp: "A06:2021-Vulnerable and Outdated Components"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Untrusted regex patterns or user-controlled quantifiers can lead to high CPU usage and DoS."
+      recommendation: "Avoid building regex from untrusted input; limit pattern complexity or use safe-regex validation."
+      references:
+        - https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS
+      tags:
+        - shared
+        - regex
+        - dos
+        - CWE-1333
+        - A06:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace source of $PATTERN; ensure not user-controlled or validated
+        expected_outcome: Unsafe regex construction flagged
+        tooling:
+          unit: none
+          dast: none

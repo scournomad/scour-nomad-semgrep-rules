@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Piping untrusted input to an interactive shell can execute attacker-controlled commands."
       recommendation: "Do not pipe untrusted input to shells. Validate/escape inputs or avoid shell invocation entirely."

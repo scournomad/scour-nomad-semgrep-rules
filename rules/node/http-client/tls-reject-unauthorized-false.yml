@@ -1,0 +1,34 @@
+rules:
+  - id: tls-reject-unauthorized-false
+    languages: [javascript, typescript]
+    message: TLS certificate validation disabled via NODE_TLS_REJECT_UNAUTHORIZED.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+          - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+          - pattern: process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp: "A02:2021-Cryptographic Failures"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "Disabling TLS verification enables MITM, spoofing, and data tampering."
+      recommendation: "Do not disable certificate verification; fix certificates and validate chains/hostnames."
+      references:
+        - https://nodejs.org/api/process.html#processenv
+      tags:
+        - node
+        - transport
+        - tls
+        - CWE-295
+        - A02:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect NODE_TLS_REJECT_UNAUTHORIZED set to '0'
+        expected_outcome: Insecure TLS behavior flagged
+        tooling:
+          unit: none
+          dast: none

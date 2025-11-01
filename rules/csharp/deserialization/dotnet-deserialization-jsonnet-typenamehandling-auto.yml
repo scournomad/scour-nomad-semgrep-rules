@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "Polymorphic type resolution may load dangerous types, enabling gadget chains and RCE in some contexts."
       recommendation: "Avoid TypeNameHandling Auto/All for untrusted data; restrict to known safe types or use custom converters."

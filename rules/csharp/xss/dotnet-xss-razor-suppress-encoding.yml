@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-79: Cross-site Scripting"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Rendering unencoded user input via Html.Raw can execute attacker-controlled scripts in the browser."
       recommendation: "Avoid Html.Raw for untrusted data; sanitize/encode content or rely on Razor's default HTML encoding."

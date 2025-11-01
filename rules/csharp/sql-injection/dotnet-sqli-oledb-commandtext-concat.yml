@@ -16,7 +16,7 @@ rules:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Concatenated SQL enables injection, allowing data exfiltration or manipulation via OLE DB providers."
       recommendation: "Use parameterized queries with placeholders; avoid concatenating user input into SQL strings."

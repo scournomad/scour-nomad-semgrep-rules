@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Using the original filename can enable traversal or overwrite existing files, leading to data loss or compromise."
       recommendation: "Sanitize with Path.GetFileName and generate server-side unique names; enforce allowed extensions and directories."

@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Enabling weak protocols allows downgrade/weak cipher negotiation and interception."
       recommendation: "Remove SSL3/TLS1.0/1.1; use system defaults or TLS1.2+ and strong cipher suites."

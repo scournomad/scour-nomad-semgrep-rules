@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated paths can allow deletion of unintended directories outside the allowed root."
       recommendation: "Validate and canonicalize $PATH relative to an allowed root; reject traversal sequences and ensure access controls."

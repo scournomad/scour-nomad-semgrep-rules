@@ -1,0 +1,33 @@
+rules:
+  - id: react-dangerouslysetinnerhtml
+    languages: [javascript, typescript]
+    message: dangerouslySetInnerHTML used with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: < $C dangerouslySetInnerHTML={{ __html: $HTML }} />
+          - pattern: element.props.dangerouslySetInnerHTML = { __html: $HTML }
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Rendering untrusted HTML can execute attacker-controlled scripts in the browser."
+      recommendation: "Avoid dangerouslySetInnerHTML for untrusted content; sanitize input or use safe rendering."
+      references:
+        - https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html
+      tags:
+        - react
+        - xss
+        - CWE-79
+        - A03:2021
+        - WASC-08
+      verification:
+        strategy: integration
+        steps:
+          - Render component with variable __html content
+        expected_outcome: Script payload could execute
+        tooling:
+          unit: none
+          dast: none

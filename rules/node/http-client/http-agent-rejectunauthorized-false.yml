@@ -1,0 +1,33 @@
+rules:
+  - id: http-agent-rejectunauthorized-false
+    languages: [javascript, typescript]
+    message: HTTPS agent configured with rejectUnauthorized=false disables TLS verification.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: new https.Agent({ rejectUnauthorized: false, ... })
+          - pattern: new http.Agent({ rejectUnauthorized: false, ... })
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp: "A02:2021-Cryptographic Failures"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "Disabling certificate verification enables MITM, spoofing, and data tampering."
+      recommendation: "Do not disable TLS verification; use valid certificates and verify chains/hostnames."
+      references:
+        - https://nodejs.org/api/https.html#new-httpsagentoptions
+      tags:
+        - node
+        - transport
+        - tls
+        - CWE-295
+        - A02:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect Agent with rejectUnauthorized:false
+        expected_outcome: Insecure TLS behavior flagged
+        tooling:
+          unit: none
+          dast: none

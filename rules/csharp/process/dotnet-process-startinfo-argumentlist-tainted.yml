@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated command arguments can change program behavior or enable injection into spawned processes."
       recommendation: "Validate and sanitize all arguments added to ArgumentList; use allowlists and avoid passing untrusted input."

@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Rendering unencoded user input via Html.Raw can execute attacker-controlled scripts."
       recommendation: "Avoid Html.Raw for untrusted data; sanitize/encode content or use Razor's default encoding."

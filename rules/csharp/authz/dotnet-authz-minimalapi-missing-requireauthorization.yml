@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-306: Missing Authentication for Critical Function"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Endpoints without RequireAuthorization() may be unintentionally exposed to unauthenticated users."
       recommendation: "Apply RequireAuthorization() to endpoints that require authentication or move them behind an authorization policy."

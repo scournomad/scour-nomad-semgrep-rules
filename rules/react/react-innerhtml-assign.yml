@@ -1,0 +1,33 @@
+rules:
+  - id: react-innerhtml-assign
+    languages: [javascript, typescript]
+    message: Assigning to innerHTML with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $EL.innerHTML = $HTML
+          - pattern: document.$Q($S).innerHTML = $HTML
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Setting innerHTML with untrusted content can execute attacker-controlled scripts."
+      recommendation: "Avoid innerHTML for untrusted data; use textContent or sanitize before insertion."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Element/innerHTML
+      tags:
+        - react
+        - xss
+        - dom
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Set innerHTML from variable content
+        expected_outcome: Script payload could execute
+        tooling:
+          unit: none
+          dast: none

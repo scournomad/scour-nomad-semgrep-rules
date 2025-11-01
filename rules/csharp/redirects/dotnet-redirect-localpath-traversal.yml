@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-601: Open Redirect"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Redirects built from unvalidated paths may allow traversal to unintended locations or confusing client behavior."
       recommendation: "Validate $PATH against allowed application routes; reject traversal sequences and ensure paths are relative to site root."

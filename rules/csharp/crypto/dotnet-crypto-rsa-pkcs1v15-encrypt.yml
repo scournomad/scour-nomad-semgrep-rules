@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "PKCS#1 v1.5 padding is legacy and can be vulnerable to padding oracle style attacks; confidentiality may be at risk."
       recommendation: "Use OAEP padding (e.g., RSAEncryptionPadding.OaepSHA256) for RSA encryption."

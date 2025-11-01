@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-287: Improper Authentication"
       owasp: "A07:2021-Identification and Authentication Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Overly permissive clock skew may allow expired or replayed tokens to be accepted beyond the intended validity window."
       recommendation: "Limit ClockSkew to a minimal value (e.g., 0–5 minutes) per operational needs; prefer strict validation in production."

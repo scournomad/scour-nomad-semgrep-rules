@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Malicious ZIP entries may write outside the intended directory, overwriting sensitive files."
       recommendation: "Validate each entry's FullName for traversal; canonicalize paths and enforce destination root."

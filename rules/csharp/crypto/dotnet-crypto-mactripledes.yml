@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "Deprecated MAC algorithms may be weak or unsupported, leading to integrity bypass and incompatibility."
       recommendation: "Use HMAC with SHA-256 or stronger from System.Security.Cryptography."

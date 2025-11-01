@@ -1,0 +1,38 @@
+rules:
+  - id: undici-url-variable
+    languages: [javascript, typescript]
+    message: undici fetch/request called with variable URL. Validate/allowlist to avoid SSRF in server contexts.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: import { fetch } from 'undici'
+          - pattern: import { request } from 'undici'
+      - pattern-either:
+          - pattern: fetch($URL, ...)
+          - pattern: request($URL, ...)
+          - pattern: request({ origin: $ORIGIN, path: $PATH, ... })
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs can target internal services or metadata endpoints when executed on the server."
+      recommendation: "Allowlist hosts/schemes; enforce HTTPS; block link-local/reserved IPs and normalize input."
+      references:
+        - https://undici.nodejs.org/#/
+      tags:
+        - node
+        - http_client
+        - undici
+        - ssrf
+        - CWE-918
+        - A10:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace origin of URL/origin/path values and ensure validation/allowlist
+        expected_outcome: Safe destinations enforced
+        tooling:
+          unit: none
+          dast: none

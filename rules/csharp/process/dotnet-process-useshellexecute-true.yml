@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Shell execution expands/metachar-parses untrusted data, increasing risk of command injection."
       recommendation: "Set UseShellExecute=false and pass arguments as arrays; validate/escape any user-controlled input."

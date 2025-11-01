@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated source/destination paths can move directories outside intended roots or overwrite critical locations."
       recommendation: "Validate and canonicalize $SRC and $DST relative to allowed roots; reject traversal and enforce access controls."

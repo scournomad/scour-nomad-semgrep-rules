@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "BinaryFormatter can enable code execution or object injection when deserializing untrusted data."
       recommendation: "Do not use BinaryFormatter. Use System.Text.Json or safe serializers with strict typing and known types only."

@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Passing untrusted input to Process.Start can allow command injection or unintended command execution."
       recommendation: "Avoid passing untrusted strings to Process.Start. Use ProcessStartInfo with UseShellExecute=false and validated argument arrays."

@@ -1,0 +1,36 @@
+rules:
+  - id: got-url-variable
+    languages: [javascript, typescript]
+    message: got called with variable URL. Validate/allowlist to avoid SSRF in server contexts.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: got($URL, ...)
+          - pattern: got.get($URL, ...)
+          - pattern: got.post($URL, ...)
+          - pattern: got.extend({ prefixUrl: $BASE, ... })
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs can target internal services or metadata endpoints when executed on the server."
+      recommendation: "Restrict URL/prefixUrl to allowlisted hosts; enforce HTTPS; block link-local/reserved IPs."
+      references:
+        - https://github.com/sindresorhus/got
+      tags:
+        - node
+        - http_client
+        - got
+        - ssrf
+        - CWE-918
+        - A10:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace origin of URL/prefixUrl
+        expected_outcome: Destinations are validated/allowlisted
+        tooling:
+          unit: none
+          dast: none

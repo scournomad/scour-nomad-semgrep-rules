@@ -18,7 +18,7 @@ rules:
       cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "User-controlled paths may access files outside intended directories, exposing sensitive data."
       recommendation: "Normalize and validate paths against an allowlisted root; reject `..` and absolute paths; use sandboxed directories."

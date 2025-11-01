@@ -1,0 +1,40 @@
+rules:
+  - id: httpclient-ssrf-variable-url
+    languages: [javascript, typescript]
+    message: HTTP request made to variable URL. Validate/allowlist to avoid SSRF in server contexts.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: fetch($URL, ...)
+          - pattern: $HTTP.request($OPTS)
+          - pattern: $HTTP.get($OPTS)
+          - pattern: new URL($U)
+    metavariable-pattern:
+      HTTP:
+        pattern-either:
+          - pattern: http
+          - pattern: https
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs can target internal services or cloud metadata endpoints when executed on the server."
+      recommendation: "Allowlist hosts/schemes; enforce HTTPS; block link-local/reserved IPs in server-side code."
+      references:
+        - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+      tags:
+        - shared
+        - http_client
+        - ssrf
+        - CWE-918
+        - A10:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace source of URL and ensure validation/allowlist
+        expected_outcome: Safe destinations enforced
+        tooling:
+          unit: none
+          dast: none

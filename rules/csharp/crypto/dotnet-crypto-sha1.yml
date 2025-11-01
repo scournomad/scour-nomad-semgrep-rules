@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "SHA-1 is vulnerable to collision attacks, undermining integrity checks and signatures."
       recommendation: "Replace SHA-1 with SHA-256 or stronger (e.g., SHA-256/SHA-384/SHA-512). Re-issue signatures with modern algorithms."

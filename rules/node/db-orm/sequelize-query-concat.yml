@@ -1,0 +1,41 @@
+rules:
+  - id: sequelize-query-concat
+    languages: [javascript, typescript]
+    message: Sequelize raw query constructed via string concatenation or interpolation can lead to SQL injection.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: sequelize.query($SQL, ...)
+          - pattern: $DB.query($SQL, ...)
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+          - pattern: $SQL = $INTERP
+    metavariable-pattern:
+      INTERP:
+        pattern-regex: `[^`]*\$\{[^}]+\}[^`]*`
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Concatenated or interpolated SQL can be manipulated to alter queries."
+      recommendation: "Use parameter binding (replacements/bind) and avoid concatenating untrusted input."
+      references:
+        - https://sequelize.org/docs/v6/core-concepts/raw-queries/
+      tags:
+        - node
+        - orm
+        - sequelize
+        - sql-injection
+        - CWE-89
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Build SQL string with user input and pass to sequelize.query
+        expected_outcome: Payload appears unescaped in SQL
+        tooling:
+          unit: none
+          dast: none

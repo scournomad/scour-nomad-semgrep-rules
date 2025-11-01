@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unbounded polymorphic resolution can allow unexpected types to be deserialized, risking gadget-like behaviors."
       recommendation: "Restrict polymorphism to known-safe types; prefer concrete models. Configure safe resolvers and ignore unknown types."

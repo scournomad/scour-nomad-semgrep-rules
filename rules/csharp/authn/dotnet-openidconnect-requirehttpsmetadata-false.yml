@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Fetching OpenID Connect metadata over HTTP allows interception and manipulation, risking token validation bypass."
       recommendation: "Set RequireHttpsMetadata=true in production and ensure identity provider endpoints are HTTPS-only."

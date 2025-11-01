@@ -1,0 +1,31 @@
+rules:
+  - id: jsonwebtoken-decode-instead-of-verify
+    languages: [javascript, typescript]
+    message: jwt.decode returns unverified data and must not be used for auth decisions.
+    severity: WARNING
+    patterns:
+      - pattern: jwt.decode($TOK, ...)
+    metadata:
+      cwe: "CWE-345: Insufficient Verification of Data Authenticity"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Using decoded (unverified) token data can let attackers forge claims and bypass checks."
+      recommendation: "Use jwt.verify with an algorithms allowlist to validate signature and claims before use."
+      references:
+        - https://github.com/auth0/node-jsonwebtoken#jwtdecode
+      tags:
+        - node
+        - jwt
+        - jsonwebtoken
+        - CWE-345
+        - A07:2021
+      verification:
+        strategy: manual
+        steps:
+          - Search for logic relying on jwt.decode output
+        expected_outcome: Unverified token data flagged
+        tooling:
+          unit: none
+          dast: none

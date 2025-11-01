@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated URLs may let attackers pivot server-side to internal services or metadata endpoints."
       recommendation: "Validate and allowlist outbound destinations. Block link-local/reserved IP ranges and sensitive endpoints."

@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-209: Generation of Error Message Containing Sensitive Information"
       owasp: "A09:2021-Security Logging and Monitoring Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Developer exception pages may disclose stack traces and sensitive environment info to end users."
       recommendation: "Enable developer exception page only in development; use generic error handling and logging in production."

@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Concatenated raw SQL enables injection, altering queries and causing data exposure or modification."
       recommendation: "Use parameter placeholders in ExecuteSqlRaw and pass parameters separately; avoid any string concatenation or interpolation."

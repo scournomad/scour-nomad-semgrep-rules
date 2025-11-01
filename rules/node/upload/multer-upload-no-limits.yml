@@ -1,0 +1,31 @@
+rules:
+  - id: multer-upload-no-limits
+    languages: [javascript, typescript]
+    message: Multer configured without file size/type limits. Enforce limits to prevent abuse.
+    severity: WARNING
+    patterns:
+      - pattern: multer($CFG)
+    metadata:
+      cwe: "CWE-400: Uncontrolled Resource Consumption"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unbounded uploads can exhaust disk/memory and enable DoS."
+      recommendation: "Configure limits (fileSize, files) and fileFilter to restrict types and sizes."
+      references:
+        - https://github.com/expressjs/multer#limits
+      tags:
+        - node
+        - upload
+        - multer
+        - CWE-400
+        - A05:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect multer() config for limits/fileFilter
+        expected_outcome: Missing or weak limits flagged
+        tooling:
+          unit: none
+          dast: none

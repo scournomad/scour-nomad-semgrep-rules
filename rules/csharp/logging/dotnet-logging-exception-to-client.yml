@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-209: Information Exposure Through an Error Message"
       owasp: "A09:2021-Security Logging and Monitoring Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Detailed exceptions may expose stack traces, file paths, queries, or secrets, aiding attackers."
       recommendation: "Return generic error messages to clients and log detailed exceptions server-side only."

@@ -11,7 +11,7 @@ rules:
       owasp: "A05:2021-Security Misconfiguration"
       wasc: "WASC-43: XML Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "Enabling DTD processing permits XML External Entity (XXE) attacks that can read local files, perform SSRF, or cause denial of service."
       recommendation: "Disable DTD processing (DtdProcessing = Prohibit or Ignore), and avoid using XmlResolver or set it to null. Prefer safe parser settings for untrusted XML."

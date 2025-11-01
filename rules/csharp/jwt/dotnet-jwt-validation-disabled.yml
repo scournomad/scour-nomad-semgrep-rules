@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-287: Improper Authentication"
       owasp: "A07:2021-Identification and Authentication Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Disabling issuer/audience validation allows tokens from unexpected issuers/audiences to be accepted, enabling account takeover."
       recommendation: "Enable ValidateIssuer and ValidateAudience and configure expected Issuer/Audience values."

@@ -1,0 +1,25 @@
+rules:
+  - id: js-config-placeholder
+    languages: [javascript, typescript]
+    message: Placeholder rule to satisfy configuration structure.
+    severity: INFO
+    patterns:
+      - pattern: THIS_PLACEHOLDER_SHOULD_NOT_APPEAR()
+    metadata:
+      cwe: "CWE-000"
+      owasp: "A00:2021-Placeholder"
+      severity: "Info"
+      risk_score: ""
+      confidence: "High"
+      impact: "None"
+      recommendation: "No action needed."
+      tags:
+        - placeholder
+      verification:
+        strategy: unit
+        steps:
+          - N/A
+        expected_outcome: No matches in real codebases
+        tooling:
+          unit: none
+          dast: none

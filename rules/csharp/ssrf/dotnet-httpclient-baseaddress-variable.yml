@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-918: SSRF"
       owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated base addresses may let the server-side client reach internal services or metadata endpoints."
       recommendation: "Validate and allowlist BaseAddress; block link-local/reserved IPs and sensitive endpoints."

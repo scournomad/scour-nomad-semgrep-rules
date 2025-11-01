@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Setting the Location header from unvalidated input may redirect users to attacker-controlled sites (phishing/token theft)."
       recommendation: "Validate Location targets against an allowlist of local paths or trusted domains; avoid using untrusted input directly."

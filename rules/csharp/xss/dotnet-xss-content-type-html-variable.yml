@@ -10,7 +10,7 @@ rules:
       owasp: "A03:2021-Injection"
       wasc: "WASC-08: Cross-site Scripting"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unencoded user-controlled content returned as HTML may execute scripts in the victim's browser, enabling session hijacking, defacement, or data theft."
       recommendation: "Avoid returning variable data with Content-Type text/html. Prefer text/plain or ensure proper HTML encoding/escaping and server-side sanitization."

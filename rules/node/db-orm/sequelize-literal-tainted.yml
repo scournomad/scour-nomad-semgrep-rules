@@ -1,0 +1,35 @@
+rules:
+  - id: sequelize-literal-tainted
+    languages: [javascript, typescript]
+    message: sequelize.literal used with variable string may enable SQL injection.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          $DB = new Sequelize(...)
+          ...
+          sequelize.literal($X)
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Untrusted input in raw SQL fragments can manipulate queries."
+      recommendation: "Avoid sequelize.literal with untrusted input; use parameterized queries or QueryInterface bindings."
+      references:
+        - https://sequelize.org/docs/v6/core-concepts/raw-queries/
+      tags:
+        - node
+        - orm
+        - sequelize
+        - sql-injection
+        - CWE-89
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect sequelize.literal with variable content
+        expected_outcome: Potential injection sink flagged
+        tooling:
+          unit: none
+          dast: none

@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-1333: Inefficient Regular Expression Complexity"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Complex regex without timeouts may cause catastrophic backtracking and CPU exhaustion (ReDoS)."
       recommendation: "Use overloads that include a timeout or set a global default; simplify patterns to avoid catastrophic backtracking."

@@ -1,0 +1,41 @@
+rules:
+  - id: mongoose-tainted-query
+    languages: [javascript, typescript]
+    message: Mongoose query object built from untrusted input may allow NoSQL injection.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $MODEL.find($Q)
+          - pattern: $MODEL.findOne($Q)
+          - pattern: $MODEL.update($Q, ...)
+          - pattern: $MODEL.updateOne($Q, ...)
+          - pattern: $MODEL.deleteMany($Q)
+      - pattern-either:
+          - pattern: $Q = $A
+          - pattern: $Q[$K] = $V
+          - pattern: "{ $op: $V, ... }"
+    metadata:
+      cwe: "CWE-943: Improper Neutralization of Special Elements in Data Query Logic"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Untrusted operators/values in query filters (e.g., $where/$regex) can bypass intended constraints."
+      recommendation: "Whitelist allowed operators/fields; validate/sanitize inputs; avoid passing raw user objects to queries."
+      references:
+        - https://owasp.org/www-community/attacks/NoSQL_Injection
+      tags:
+        - node
+        - orm
+        - mongoose
+        - nosql-injection
+        - CWE-943
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace source of filter object; ensure validation/allowed operators
+        expected_outcome: Unsafe user-sourced filters flagged
+        tooling:
+          unit: none
+          dast: none

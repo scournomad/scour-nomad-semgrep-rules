@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-287: Improper Authentication"
       owasp: "A07:2021-Identification and Authentication Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Accepting tokens without an expiration (exp) increases risk of replay and long-lived token abuse."
       recommendation: "Set RequireExpirationTime=true and enforce lifetime validation to require exp on tokens."

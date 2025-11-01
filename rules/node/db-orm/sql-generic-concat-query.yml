@@ -1,0 +1,41 @@
+rules:
+  - id: sql-generic-concat-query
+    languages: [javascript, typescript]
+    message: SQL query constructed via string concatenation or interpolation can lead to injection.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $CONN.query($SQL, ...)
+          - pattern: $CONN.execute($SQL, ...)
+      - pattern-either:
+          - pattern: $SQL = $A + $B
+          - pattern: $SQL += $X
+          - pattern: $SQL = $INTERP
+    metavariable-pattern:
+      INTERP:
+        pattern-regex: `[^`]*\$\{[^}]+\}[^`]*`
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Concatenated or interpolated SQL can be manipulated to alter queries."
+      recommendation: "Use parameterized queries/placeholders and avoid concatenating untrusted input."
+      references:
+        - https://owasp.org/www-community/attacks/SQL_Injection
+      tags:
+        - node
+        - orm
+        - sql
+        - sql-injection
+        - CWE-89
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Build SQL string using user input and pass to query/execute
+        expected_outcome: Payload appears unescaped in SQL
+        tooling:
+          unit: none
+          dast: none

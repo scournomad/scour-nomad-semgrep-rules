@@ -1,0 +1,43 @@
+rules:
+  - id: next-server-fetch-variable-url
+    languages: [javascript, typescript]
+    message: Server-side Next.js code fetching variable URLs. Validate/allowlist to avoid SSRF.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          export async function getServerSideProps(...) {
+            ...
+            fetch($URL, ...)
+            ...
+          }
+      - pattern-inside: |
+          export async function GET(...) {
+            ...
+            fetch($URL, ...)
+            ...
+          }
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs in SSR/server handlers can reach internal services or metadata endpoints."
+      recommendation: "Allowlist hosts/schemes; enforce HTTPS; block link-local/reserved IPs."
+      references:
+        - https://nextjs.org/docs/pages/building-your-application/data-fetching/get-server-side-props
+      tags:
+        - nextjs
+        - ssr
+        - http_client
+        - ssrf
+        - CWE-918
+        - A10:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace URL sources in server functions and ensure validation
+        expected_outcome: Only trusted destinations are allowed
+        tooling:
+          unit: none
+          dast: none

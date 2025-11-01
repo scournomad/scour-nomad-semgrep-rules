@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-1333: Inefficient Regular Expression Complexity"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Complex or catastrophic backtracking patterns without timeouts can cause CPU exhaustion (ReDoS)."
       recommendation: "Use Regex constructors that include a timeout. Simplify patterns to avoid catastrophic backtracking."

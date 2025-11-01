@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
       owasp: "A07:2021-Identification and Authentication Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Auth cookies set over HTTP can be intercepted, enabling session hijacking."
       recommendation: "Serve login and cookie issuance over HTTPS and ensure cookies are marked Secure and HttpOnly."

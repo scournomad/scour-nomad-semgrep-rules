@@ -1,0 +1,32 @@
+rules:
+  - id: next-api-cors-wildcard
+    languages: [javascript, typescript]
+    message: Next.js API route sets Access-Control-Allow-Origin to '*'. This can overexpose APIs.
+    severity: WARNING
+    patterns:
+      - pattern: res.setHeader('Access-Control-Allow-Origin', '*')
+      - pattern: res.setHeader("Access-Control-Allow-Origin", "*")
+    metadata:
+      cwe: "CWE-346: Origin Validation Error"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Any origin can access APIs, enabling CSRF-like abuse and token leakage in some contexts."
+      recommendation: "Set a strict allowlist of trusted origins; avoid wildcard for authenticated endpoints."
+      references:
+        - https://nextjs.org/docs/pages/building-your-application/routing/api-routes
+      tags:
+        - nextjs
+        - cors
+        - headers
+        - CWE-346
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect API routes for permissive CORS headers
+        expected_outcome: Wildcard origin flagged
+        tooling:
+          unit: none
+          dast: none

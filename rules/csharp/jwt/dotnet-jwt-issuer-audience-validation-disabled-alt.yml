@@ -15,7 +15,7 @@ rules:
       owasp: "A07:2021-Identification and Authentication Failures"
       wasc: "WASC-01: Authentication"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Disabling issuer/audience/signing key validation allows forged or replayed tokens to be accepted, enabling account takeover and privilege escalation."
       recommendation: "Enable ValidateIssuer, ValidateAudience, and ValidateIssuerSigningKey. Configure expected Issuer, Audience, and trusted signing keys. Enforce token lifetime validation."

@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Unsanitized filenames may traverse directories or overwrite files, causing data loss or compromise."
       recommendation: "Normalize with Path.GetFileName and enforce server-side naming and allowed directories."

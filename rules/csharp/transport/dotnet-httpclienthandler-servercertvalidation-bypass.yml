@@ -12,7 +12,7 @@ rules:
       owasp: "A02:2021-Cryptographic Failures"
       wasc: "WASC-04: Insufficient Transport Layer Protection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "High"
       impact: "Disabling server certificate validation enables man-in-the-middle attacks, allowing attackers to intercept or modify traffic and credentials."
       recommendation: "Do not override certificate validation. Remove custom callbacks in production, pin certificates where appropriate, and enforce TLS validation defaults."

@@ -15,7 +15,7 @@ rules:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "If the SelectCommand is built from untrusted input, CommandBuilder generates commands based on tainted SQL, risking injection."
       recommendation: "Do not build SelectCommand via concatenation; parameterize queries and validate inputs before using CommandBuilder."

@@ -1,0 +1,34 @@
+rules:
+  - id: prisma-queryraw-unsafe
+    languages: [javascript, typescript]
+    message: Prisma $queryRawUnsafe/$executeRawUnsafe executes raw SQL unsafely and can lead to SQL injection.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: prisma.$queryRawUnsafe($SQL, ...)
+          - pattern: prisma.$executeRawUnsafe($SQL, ...)
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "Unsafely executing raw SQL lets attackers inject arbitrary queries."
+      recommendation: "Use $queryRaw/$executeRaw with parameter placeholders (e.g., Prisma.sql, tagged templates)."
+      references:
+        - https://www.prisma.io/docs/orm/prisma-client/queries/raw-database-access
+      tags:
+        - node
+        - orm
+        - prisma
+        - sql-injection
+        - CWE-89
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect use of $queryRawUnsafe/$executeRawUnsafe
+        expected_outcome: Unsafe raw execution flagged
+        tooling:
+          unit: none
+          dast: none

@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-326: Inadequate Encryption Strength"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Insufficient RSA key length reduces resistance to brute force and modern cryptanalysis, risking data exposure."
       recommendation: "Use RSA keys of 2048 bits or greater (prefer 3072/4096 for long-term). Consider elliptic-curve alternatives."

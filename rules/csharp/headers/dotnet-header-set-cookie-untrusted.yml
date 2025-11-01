@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-113: HTTP Response Splitting"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Untrusted values in Set-Cookie can inject CR/LF, corrupt headers, or set attacker-controlled cookies."
       recommendation: "Do not build Set-Cookie manually from untrusted input. Use cookie APIs and sanitize to reject CR/LF."

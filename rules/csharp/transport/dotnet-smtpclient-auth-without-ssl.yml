@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Authenticating without TLS exposes credentials and emails to interception and tampering."
       recommendation: "Enable TLS (EnableSsl=true) or use modern mail libraries that enforce secure transport."

@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Unsafe deserialization may trigger gadget chains resulting in code execution or data tampering."
       recommendation: "Avoid LosFormatter with untrusted data; use safer serializers and validate/whitelist types."

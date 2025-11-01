@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-611: Improper Restriction of XML External Entity Reference"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Allowing XmlUrlResolver can fetch external resources during XSLT, causing SSRF or data exfiltration."
       recommendation: "Avoid XmlUrlResolver for untrusted XSLT; use null resolver or restrict allowed URIs."

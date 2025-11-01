@@ -15,7 +15,7 @@ rules:
       owasp: "A07:2021-Identification and Authentication Failures"
       wasc: "WASC-04: Insufficient Transport Layer Protection"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Missing Secure/HttpOnly/SameSite hardening increases risk of cookie theft via network interception, client-side access, or cross-site request scenarios."
       recommendation: "Set Cookie.SecurePolicy = Always, Cookie.HttpOnly = true, and an appropriate SameSite value (e.g., Strict/Lax). Enforce HTTPS in production."

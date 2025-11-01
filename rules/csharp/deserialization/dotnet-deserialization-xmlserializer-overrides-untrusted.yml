@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Untrusted overrides can manipulate serialization behavior to include unexpected types or structures."
       recommendation: "Do not construct XmlAttributeOverrides from untrusted input; restrict to vetted overrides and known types."

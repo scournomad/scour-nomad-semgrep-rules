@@ -18,6 +18,7 @@ Create or update a language-scoped Semgrep ruleset that is high-signal, security
 
 Notes:
 - Categories should mostly match across languages (e.g., `sql-injection/`, `crypto/`, `transport/`, `deserialization/`, `authn/`, `authz/`, `jwt/`, `cookies/`, `headers/`, `cors/`, `csrf/`, `ssrf/`, `redirects/`, `xss/`, `file-io/`, `upload/`, `xml/`, `regex/`, `ldap/`, `xpath/`, `exposure/`, `config/`, `process/`, `zip/`, `secrets/`, `random/`, `logging/`). Language-specific categories are allowed where needed.
+ - Semgrep YAML does not support `null` values. Never use `null` in rule files. Prefer empty strings `""` when a value is intentionally blank (e.g., `risk_score: ""`, `cvss.base: ""`).
 
 # Rule YAML Template
 
@@ -34,7 +35,7 @@ rules:
       owasp: "Axx:2021-<Category>"
       wasc: "WASC-xx: <Title>"
       severity: "<Info|Low|Medium|High|Critical>"
-      risk_score: null
+      risk_score: ""  # Do not use null; Semgrep YAML forbids null values
       confidence: "<Potential|Low|Medium|High|Confirmed>"
       impact: "<short impact statement>"
       recommendation: "<clear remediation guidance>"
@@ -112,8 +113,9 @@ Notes:
 
 - **CVE usage**: Omit `metadata.cve` unless a rule targets a specific, verifiable CVE.
 - **CVSS**: Keep fields present; fill only when confident. Otherwise, leave as empty strings.
+- **No nulls**: Do not use `null` anywhere in Semgrep rule YAML. Use empty strings `""` for intentionally blank values.
 - **Confidence**: Normalize to one of `"Potential"|"Low"|"Medium"|"High"|"Confirmed"` and quote the value.
-- **Risk score**: Use `risk_score: null` if a quantitative score is not available.
+- **Risk score**: Use `risk_score: ""` if a quantitative score is not available.
 - **Severity mapping**: Keep Semgrep `severity` at rule root; use `metadata.severity` for the canonical descriptive grade.
 - **Testing layout**: Use `tests/<lang>/cases/.../pos|neg` with minimal fixtures; avoid large projects.
 - **Semgrep availability**: Ensure `semgrep` is installed before running tests; validate YAML syntax via `semgrep --validate`.

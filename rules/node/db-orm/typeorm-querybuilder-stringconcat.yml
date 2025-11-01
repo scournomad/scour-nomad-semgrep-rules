@@ -1,0 +1,47 @@
+rules:
+  - id: typeorm-querybuilder-stringconcat
+    languages: [javascript, typescript]
+    message: TypeORM QueryBuilder where/andWhere built via string concatenation or interpolation can lead to SQL injection.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          $QB = $CONN.createQueryBuilder(...)
+          ...
+          $QB.$WHERE($COND)
+      - pattern-either:
+          - pattern: $COND = $A + $B
+          - pattern: $COND += $X
+          - pattern: $COND = $INTERP
+    metavariable-pattern:
+      WHERE:
+        pattern-either:
+          - pattern: where
+          - pattern: andWhere
+          - pattern: orWhere
+      INTERP:
+        pattern-regex: `[^`]*\$\{[^}]+\}[^`]*`
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Concatenated or interpolated SQL conditions can be manipulated by attackers."
+      recommendation: "Use parameters (e.g., .where('col = :v', { v })) and avoid concatenating untrusted input."
+      references:
+        - https://typeorm.io/#/select-query-builder
+      tags:
+        - node
+        - orm
+        - typeorm
+        - sql-injection
+        - CWE-89
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Build where string using user input
+        expected_outcome: Condition string contains unescaped payload
+        tooling:
+          unit: none
+          dast: none

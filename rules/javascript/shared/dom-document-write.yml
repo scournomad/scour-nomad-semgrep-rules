@@ -1,0 +1,31 @@
+rules:
+  - id: dom-document-write
+    languages: [javascript, typescript]
+    message: document.write with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern: document.write($HTML)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Writing untrusted HTML into the document can execute attacker-controlled scripts."
+      recommendation: "Avoid document.write; use textContent or safe templating/sanitization."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Document/write
+      tags:
+        - shared
+        - dom
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Call document.write with variable string
+        expected_outcome: Potential script execution flagged
+        tooling:
+          unit: none
+          dast: none

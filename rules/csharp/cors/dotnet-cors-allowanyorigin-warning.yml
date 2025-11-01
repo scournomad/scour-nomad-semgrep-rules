@@ -11,7 +11,7 @@ rules:
       cwe: "CWE-346: Origin Validation Error"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Allowing any origin may expose endpoints to cross-origin access beyond intended domains."
       recommendation: "Specify explicit trusted origins. Avoid AllowAnyOrigin in production; prefer WithOrigins with known domains."

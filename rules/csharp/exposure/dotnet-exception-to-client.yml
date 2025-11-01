@@ -12,7 +12,7 @@ rules:
       cwe: "CWE-209: Generation of Error Message Containing Sensitive Information"
       owasp: "A09:2021-Security Logging and Monitoring Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Stack traces and exception strings may expose sensitive system details, aiding exploitation and leaking data."
       recommendation: "Return generic error messages to clients; log detailed exceptions server-side. Configure centralized error handling."

@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-16: Configuration"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Without permanent redirects and HSTS, clients may use HTTP, exposing traffic to downgrade and interception."
       recommendation: "Enable HSTS (UseHsts) and configure permanent HTTPS redirection in production environments."

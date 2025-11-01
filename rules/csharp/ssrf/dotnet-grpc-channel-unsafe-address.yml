@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-918: SSRF"
       owasp: "A10:2021-SSRF"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated addresses can target internal services or metadata endpoints via server-side requests."
       recommendation: "Enforce HTTPS, validate host against an allowlist, and block link-local/reserved IP ranges."

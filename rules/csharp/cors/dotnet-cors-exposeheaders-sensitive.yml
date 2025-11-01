@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-200: Exposure of Sensitive Information"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Exposing sensitive headers to browsers can leak secrets or implementation details to untrusted origins."
       recommendation: "Only expose non-sensitive headers required by clients. Avoid exposing authorization or internal diagnostic headers."

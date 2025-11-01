@@ -1,0 +1,33 @@
+rules:
+  - id: express-cookie-flags-missing
+    languages: [javascript, typescript]
+    message: Cookie set without secure flags (httpOnly/secure/sameSite). Strengthen cookie options.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: res.cookie($NAME, $VAL)
+          - pattern: res.cookie($NAME, $VAL, { ... })
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Missing httpOnly/secure/sameSite increases risk of theft, CSRF, and exposure over non-TLS."
+      recommendation: "Set httpOnly:true, secure:true (in HTTPS), and sameSite:'Strict' or 'Lax' when appropriate."
+      references:
+        - https://expressjs.com/en/5x/api.html#res.cookie
+      tags:
+        - node
+        - express
+        - cookies
+        - CWE-614
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect cookie options for httpOnly/secure/sameSite
+        expected_outcome: Missing or weak flags flagged
+        tooling:
+          unit: none
+          dast: none

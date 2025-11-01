@@ -1,0 +1,33 @@
+rules:
+  - id: serialize-javascript-unsafe
+    languages: [javascript, typescript]
+    message: serialize-javascript output embedded in HTML can cause XSS if not safely handled.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: serialize($OBJ, ...)
+          - pattern: require('serialize-javascript')($OBJ, ...)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Embedding serialized objects into HTML without proper escaping can enable XSS."
+      recommendation: "Avoid injecting serialized data into `<script>` without escaping; use safe JSON.stringify with proper encoding."
+      references:
+        - https://github.com/yahoo/serialize-javascript
+      tags:
+        - shared
+        - xss
+        - serialization
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect use of serialized output in HTML responses/templates
+        expected_outcome: Data is safely encoded or not embedded directly
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,31 @@
+rules:
+  - id: express-cors-wildcard
+    languages: [javascript, typescript]
+    message: CORS configured with wildcard origin. This can expose APIs to any origin.
+    severity: WARNING
+    patterns:
+      - pattern: cors({ origin: '*', ... })
+    metadata:
+      cwe: "CWE-346: Origin Validation Error"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Any origin can access APIs, enabling CSRF-like abuse in some contexts and token leakage."
+      recommendation: "Use an allowlist of trusted origins and restrict credentials appropriately."
+      references:
+        - https://expressjs.com/en/resources/middleware/cors.html
+      tags:
+        - node
+        - express
+        - cors
+        - CWE-346
+        - A01:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect cors({ origin: '*' }) usage
+        expected_outcome: Wildcard origin flagged
+        tooling:
+          unit: none
+          dast: none

@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-79: Cross-site Scripting"
       owasp: "A03:2021-Injection"
       severity: "High"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Returning unencoded HTML from Minimal APIs can execute attacker-controlled scripts in clients."
       recommendation: "Prefer text/plain or HTML-encode/sanitize content before returning as text/html."

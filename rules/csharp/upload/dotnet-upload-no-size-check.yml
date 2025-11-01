@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-400: Uncontrolled Resource Consumption"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unbounded uploads can exhaust disk, memory, or I/O, causing denial of service."
       recommendation: "Validate file size before saving; enforce per-request limits and server-side quotas."

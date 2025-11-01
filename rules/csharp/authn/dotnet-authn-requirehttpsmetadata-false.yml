@@ -10,7 +10,7 @@ rules:
       cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Fetching OpenID/JWT metadata over HTTP can be intercepted or tampered with, enabling token forgery or config spoofing."
       recommendation: "Set RequireHttpsMetadata=true in production and ensure authority endpoints use HTTPS only."

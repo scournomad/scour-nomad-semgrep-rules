@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-16: Configuration"
       owasp: "A05:2021-Security Misconfiguration"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Low"
       impact: "Unvalidated Content-Type may cause unsafe content handling or rendering behavior on clients."
       recommendation: "Restrict Content-Type to a predefined allowlist; validate $VAL against known-safe media types."

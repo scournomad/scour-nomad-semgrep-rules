@@ -13,7 +13,7 @@ rules:
       cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
       owasp: "A07:2021-Identification and Authentication Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "Missing Secure/HttpOnly increases risk of credential theft via network interception or client-side access."
       recommendation: "Set Secure=true and HttpOnly=true for authentication/session cookies. Use SameSite appropriately (Lax/Strict). Enforce HTTPS."

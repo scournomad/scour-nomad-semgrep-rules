@@ -1,0 +1,36 @@
+rules:
+  - id: axios-url-variable
+    languages: [javascript, typescript]
+    message: Axios called with variable URL/baseURL. Validate/allowlist to avoid SSRF in server contexts.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: axios.get($URL, ...)
+          - pattern: axios.post($URL, ...)
+          - pattern: axios($CFG)
+          - pattern: axios.create({ baseURL: $BASE, ... })
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs can target internal services or metadata endpoints when executed on the server."
+      recommendation: "Restrict baseURL/URL to allowlisted hosts; enforce HTTPS; block link-local/reserved IPs."
+      references:
+        - https://axios-http.com/docs/instance
+      tags:
+        - node
+        - http_client
+        - axios
+        - ssrf
+        - CWE-918
+        - A10:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace origin of URL/baseURL
+        expected_outcome: Destinations are validated/allowlisted
+        tooling:
+          unit: none
+          dast: none

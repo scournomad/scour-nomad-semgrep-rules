@@ -1,0 +1,33 @@
+rules:
+  - id: js-yaml-unsafe-load
+    languages: [javascript, typescript]
+    message: yaml.load used on variable input. Ensure safe schema and validation to avoid unsafe deserialization/DoS.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: yaml.load($SRC, ...)
+          - pattern: require('js-yaml').load($SRC, ...)
+    metadata:
+      cwe: "CWE-502: Deserialization of Untrusted Data"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Parsing attacker-controlled YAML can cause DoS or unsafe coercions if schemas are permissive."
+      recommendation: "Validate inputs; prefer strict schemas; avoid loading untrusted YAML or sanitize before parsing."
+      references:
+        - https://github.com/nodeca/js-yaml
+      tags:
+        - shared
+        - deserialize
+        - yaml
+        - CWE-502
+        - A08:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace source of YAML string; ensure validation and strict schema
+        expected_outcome: Unsafe YAML loading flagged
+        tooling:
+          unit: none
+          dast: none

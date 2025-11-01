@@ -9,7 +9,7 @@ rules:
       cwe: "CWE-327: Use of a Broken or Risky Cryptographic Algorithm"
       owasp: "A02:2021-Cryptographic Failures"
       severity: "Medium"
-      risk_score: null
+      risk_score: ""
       confidence: "Medium"
       impact: "MD5-based MACs are weaker than modern alternatives and may not provide adequate integrity protection."
       recommendation: "Use HMACSHA256 or stronger (e.g., HMACSHA384/HMACSHA512)."
