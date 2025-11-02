@@ -5,10 +5,10 @@ rules:
     severity: ERROR
     patterns:
       - pattern-inside: |
-          var $E = XPathExpression.Compile($Q)
+          var $E = XPathExpression.Compile($Q);
       - pattern-either:
-          - pattern: $Q = $A + $B
-          - pattern: $Q += $X
+          - pattern: $Q = $A + $B;
+          - pattern: $Q += $X;
     metadata:
       cwe: "CWE-643: XPath Injection"
       owasp: "A03:2021-Injection"

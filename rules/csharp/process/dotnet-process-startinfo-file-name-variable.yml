@@ -7,7 +7,7 @@ rules:
       - pattern-inside: |
           var $PSI = new ProcessStartInfo { $OPTS };
           ...
-          $PSI.FileName = $VAL
+          $PSI.FileName = $VAL;
     metadata:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"

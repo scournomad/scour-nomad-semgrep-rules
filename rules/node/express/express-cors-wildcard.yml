@@ -4,7 +4,8 @@ rules:
     message: CORS configured with wildcard origin. This can expose APIs to any origin.
     severity: WARNING
     patterns:
-      - pattern: cors({ origin: '*', ... })
+      - pattern: |
+          cors({ origin: '*', ... })
     metadata:
       cwe: "CWE-346: Origin Validation Error"
       owasp: "A01:2021-Broken Access Control"
@@ -24,7 +25,7 @@ rules:
       verification:
         strategy: unit
         steps:
-          - Detect cors({ origin: '*' }) usage
+          - Detect cors origin star
         expected_outcome: Wildcard origin flagged
         tooling:
           unit: none

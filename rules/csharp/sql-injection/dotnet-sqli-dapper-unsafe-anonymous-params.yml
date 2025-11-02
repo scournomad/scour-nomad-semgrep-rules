@@ -4,13 +4,30 @@ rules:
     message: Potential SQL injection. Dapper query built via concat before passing anonymous params object.
     severity: WARNING
     patterns:
-      - pattern-inside: |
-          var $sql = $S;
-          ...
-          $DB.Query($sql, new { $P })
       - pattern-either:
-          - pattern: $S = $A + $B
-          - pattern: $S += $X
+        - pattern: $Q = $A + $B;
+        - pattern: $Q += $X;
+        - pattern: $VAR $Q = $A + $B;
+
+        # interpolation: assign to Q via interpolated string
+        - pattern: $Q = $"...{$X}...";
+        - pattern: $VAR $Q = $"...{$X}...";
+
+        # string.Format variants
+        - pattern: $Q = string.Format($FMT, ...);
+        - pattern: $VAR $Q = string.Format($FMT, ...);
+
+        # string.Concat variants
+        - pattern: $Q = string.Concat(...);
+        - pattern: $VAR $Q = string.Concat(...);
+
+        # optional: FormattableString (less common)
+        - pattern: $Q = FormattableStringFactory.Create($FMT, ...);
+        - pattern: $VAR $Q = FormattableStringFactory.Create($FMT, ...);
+      - pattern-either:
+        - pattern: $CONN.Query($Q, $PARAMS)
+        - pattern: $CONN.Query<...>($Q, $PARAMS)
+
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"

@@ -5,8 +5,10 @@ rules:
     severity: ERROR
     patterns:
       - pattern-either:
-          - pattern: new https.Agent({ rejectUnauthorized: false, ... })
-          - pattern: new http.Agent({ rejectUnauthorized: false, ... })
+          - pattern: |
+              new https.Agent({ rejectUnauthorized: false, ... })
+          - pattern: |
+              new http.Agent({ rejectUnauthorized: false, ... })
     metadata:
       cwe: "CWE-295: Improper Certificate Validation"
       owasp: "A02:2021-Cryptographic Failures"

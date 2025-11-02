@@ -4,7 +4,8 @@ rules:
     message: Razor encoding suppressed; ensure variable content is safe.
     severity: WARNING
     patterns:
-      - pattern: @Html.Raw($VAL)
+      - pattern: |
+          @Html.Raw($VAL)
     metadata:
       cwe: "CWE-79: Cross-site Scripting"
       owasp: "A03:2021-Injection"

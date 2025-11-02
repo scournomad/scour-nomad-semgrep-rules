@@ -8,7 +8,8 @@ rules:
           - pattern: axios.get($URL, ...)
           - pattern: axios.post($URL, ...)
           - pattern: axios($CFG)
-          - pattern: axios.create({ baseURL: $BASE, ... })
+          - pattern: |
+              axios.create({ baseURL: $BASE, ... })
     metadata:
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       owasp: "A10:2021-Server-Side Request Forgery (SSRF)"

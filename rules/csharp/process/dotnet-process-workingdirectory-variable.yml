@@ -7,7 +7,7 @@ rules:
       - pattern-inside: |
           var $PSI = new ProcessStartInfo { $OPTS };
           ...
-          $PSI.WorkingDirectory = $DIR
+          $PSI.WorkingDirectory = $DIR;
     metadata:
       cwe: "CWE-22: Path Traversal"
       owasp: "A01:2021-Broken Access Control"

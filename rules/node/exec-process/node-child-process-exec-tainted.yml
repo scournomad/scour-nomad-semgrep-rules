@@ -9,7 +9,8 @@ rules:
           - pattern: child_process.exec($CMD, ...)
           - pattern: require('child_process').execSync($CMD, ...)
           - pattern: child_process.execSync($CMD, ...)
-          - pattern: child_process.spawn($BIN, $ARGS, { shell: true, ... })
+          - pattern: |
+              child_process.spawn($BIN, $ARGS, { shell: true, ... })
     metadata:
       cwe: "CWE-78: OS Command Injection"
       owasp: "A03:2021-Injection"

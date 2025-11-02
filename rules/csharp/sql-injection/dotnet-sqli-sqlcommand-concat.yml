@@ -5,12 +5,12 @@ rules:
     severity: ERROR
     patterns:
       - pattern-inside: |
-          new SqlCommand($QUERY, $CONN)
+          new SqlCommand($QUERY, $CONN);
       - pattern-either:
-          - pattern: string $S = $A + $B
-          - pattern: $QUERY = $A + $B
-          - pattern: $QUERY += $X
-      - pattern: new SqlCommand($QUERY, ...)
+          - pattern: string $S = $A + $B;
+          - pattern: $QUERY = $A + $B;
+          - pattern: $QUERY += $X;
+      - pattern: new SqlCommand($QUERY, ...);
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"

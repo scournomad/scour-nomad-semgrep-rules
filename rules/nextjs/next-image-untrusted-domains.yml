@@ -4,8 +4,10 @@ rules:
     message: next/image configured with untrusted or wildcard domains can allow fetching untrusted images.
     severity: WARNING
     patterns:
-      - pattern: module.exports = { images: { domains: $D, ... }, ... }
-      - pattern: export default { images: { domains: $D, ... }, ... }
+      - pattern: |
+          module.exports = { images: { domains: $D, ... }, ... }
+      - pattern: |
+          export default { images: { domains: $D, ... }, ... }
     metadata:
       cwe: "CWE-346: Origin Validation Error"
       owasp: "A05:2021-Security Misconfiguration"

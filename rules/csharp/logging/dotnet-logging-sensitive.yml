@@ -4,11 +4,39 @@ rules:
     message: Potential logging of secrets/PII. Avoid logging credentials, tokens, or personal data.
     severity: WARNING
     pattern-either:
-      - pattern: $LOG.Log$(... $SENSITIVE ..., ...)
-      - pattern: Console.WriteLine(... $SENSITIVE ...)
+      - pattern: $LOG.LogTrace(..., $SENSITIVE, ...);
+      - pattern: $LOG.LogDebug(..., $SENSITIVE, ...);
+      - pattern: $LOG.LogInformation(..., $SENSITIVE, ...);
+      - pattern: $LOG.LogWarning(..., $SENSITIVE, ...);
+      - pattern: $LOG.LogError(..., $SENSITIVE, ...);
+      - pattern: $LOG.LogCritical(..., $SENSITIVE, ...);
+      - pattern: $LOG.Log(LogLevel.$LEVEL, ..., $SENSITIVE, ...);
+      - pattern: Console.WriteLine(..., $SENSITIVE, ...);
+      - pattern: Log.Information(..., $SENSITIVE, ...);
+      - pattern: Log.Warning(..., $SENSITIVE, ...);
+      - pattern: Log.Error(..., $SENSITIVE, ...);
+      - pattern: Log.Fatal(..., $SENSITIVE, ...);
+      - pattern: Log.Debug(..., $SENSITIVE, ...);
+      - pattern: Debug.WriteLine(..., $SENSITIVE, ...);
+      - pattern: Debug.Write(..., $SENSITIVE, ...);
+      - pattern: Debug.Print(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Debug.WriteLine(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Debug.Write(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Debug.Print(..., $SENSITIVE, ...);
+      - pattern: Trace.WriteLine(..., $SENSITIVE, ...);
+      - pattern: Trace.Write(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Trace.WriteLine(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Trace.Write(..., $SENSITIVE, ...);
+      - pattern: Trace.TraceInformation(..., $SENSITIVE, ...);
+      - pattern: Trace.TraceWarning(..., $SENSITIVE, ...);
+      - pattern: Trace.TraceError(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Trace.TraceInformation(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Trace.TraceWarning(..., $SENSITIVE, ...);
+      - pattern: System.Diagnostics.Trace.TraceError(..., $SENSITIVE, ...);
+      - pattern: Console.Error.WriteLine(..., $SENSITIVE, ...);
     metavariable-pattern:
       SENSITIVE:
-        pattern-regex: (?i)(password|secret|apikey|api_key|token|ssn|creditcard|credit_card|cvv)
+        pattern-regex: (?i)(password|passphrase|passwd|pwd|secret|secrets|api[_-]?key|access[_-]?key|client[_-]?secret|private[_-]?key|ssh[_-]?key|aws[_-]?secret[_-]?access[_-]?key|aws[_-]?access[_-]?key[_-]?id|token|bearer|jwt|id[_-]?token|access[_-]?token|refresh[_-]?token|oauth[_-]?(token|secret)|credential[s]?|auth(entication|orization)?|ssn|sin|national[_-]?id|credit[_-]?card|card[_-]?number|cvv|cvc|pin|otp|iban|swift|bank[_-]?account|routing[_-]?number)
     metadata:
       cwe: "CWE-359: Exposure of Private Information ('Privacy Violation')"
       owasp: "A09:2021-Security Logging and Monitoring Failures"

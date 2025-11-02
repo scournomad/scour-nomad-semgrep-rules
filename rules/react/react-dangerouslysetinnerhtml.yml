@@ -5,8 +5,8 @@ rules:
     severity: ERROR
     patterns:
       - pattern-either:
-          - pattern: < $C dangerouslySetInnerHTML={{ __html: $HTML }} />
-          - pattern: element.props.dangerouslySetInnerHTML = { __html: $HTML }
+          - pattern: "<$C dangerouslySetInnerHTML={{ __html: $HTML }} />"
+          - pattern: "element.props.dangerouslySetInnerHTML = { __html: $HTML }"
     metadata:
       cwe: "CWE-79: Cross-site Scripting"
       owasp: "A03:2021-Injection"

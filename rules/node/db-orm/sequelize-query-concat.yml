@@ -13,7 +13,8 @@ rules:
           - pattern: $SQL = $INTERP
     metavariable-pattern:
       INTERP:
-        pattern-regex: `[^`]*\$\{[^}]+\}[^`]*`
+        pattern-regex: |
+          `[^`]*\$\{[^}]+\}[^`]*`
     metadata:
       cwe: "CWE-89: SQL Injection"
       owasp: "A03:2021-Injection"

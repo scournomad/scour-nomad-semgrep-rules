@@ -9,7 +9,8 @@ rules:
           - pattern: request($URL, ...)
           - pattern: request.get($URL, ...)
           - pattern: request.post($URL, ...)
-          - pattern: request({ url: $URL, ... })
+          - pattern: |
+              request({ url: $URL, ... })
     metadata:
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       owasp: "A10:2021-Server-Side Request Forgery (SSRF)"

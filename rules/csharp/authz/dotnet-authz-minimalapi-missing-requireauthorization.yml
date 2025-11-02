@@ -4,8 +4,17 @@ rules:
     message: Minimal API endpoint without `RequireAuthorization()` may expose endpoints unintentionally.
     severity: WARNING
     patterns:
-      - pattern: $EP.Map$ROUTE($PATH, $HANDLER)
-      - pattern-not: $EP.Map$ROUTE($PATH, $HANDLER).RequireAuthorization(...)
+      - pattern-either:
+          - pattern: $EP.MapGet($PATH, $HANDLER)
+          - pattern: $EP.MapPost($PATH, $HANDLER)
+          - pattern: $EP.MapPut($PATH, $HANDLER)
+          - pattern: $EP.MapDelete($PATH, $HANDLER)
+          - pattern: $EP.MapPatch($PATH, $HANDLER)
+      - pattern-not: $EP.MapGet($PATH, $HANDLER).RequireAuthorization(...)
+      - pattern-not: $EP.MapPost($PATH, $HANDLER).RequireAuthorization(...)
+      - pattern-not: $EP.MapPut($PATH, $HANDLER).RequireAuthorization(...)
+      - pattern-not: $EP.MapDelete($PATH, $HANDLER).RequireAuthorization(...)
+      - pattern-not: $EP.MapPatch($PATH, $HANDLER).RequireAuthorization(...)
     metadata:
       cwe: "CWE-306: Missing Authentication for Critical Function"
       owasp: "A01:2021-Broken Access Control"

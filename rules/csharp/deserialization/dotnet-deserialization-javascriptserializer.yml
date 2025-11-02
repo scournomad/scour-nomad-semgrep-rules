@@ -4,8 +4,8 @@ rules:
     message: JavaScriptSerializer deserialization can be unsafe with untrusted data. Prefer System.Text.Json.
     severity: WARNING
     pattern-either:
-      - pattern: new JavaScriptSerializer().Deserialize<...>(...)
-      - pattern: $JS.Deserialize<...>(...)
+      - pattern: new JavaScriptSerializer().Deserialize($INPUT)
+      - pattern: $JS.Deserialize($INPUT)
     metadata:
       cwe: "CWE-502: Deserialization of Untrusted Data"
       owasp: "A08:2021-Software and Data Integrity Failures"
