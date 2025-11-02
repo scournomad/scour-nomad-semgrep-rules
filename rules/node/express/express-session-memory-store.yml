@@ -1,0 +1,33 @@
+rules:
+  - id: express-session-memory-store
+    languages: [javascript, typescript]
+    message: express-session MemoryStore used in production leads to data loss and security issues.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $S = require('express-session')({ store: new $ST.MemoryStore(), ... })
+          - pattern: $S = session({ store: new $ST.MemoryStore(), ... })
+    metadata:
+      cwe: "CWE-922: Insecure Storage of Sensitive Information"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "In-memory session store is not suitable for production; sessions can be lost and do not scale."
+      recommendation: "Use a persistent/shared session store (Redis, DB) in production environments."
+      references:
+        - https://www.npmjs.com/package/express-session
+      tags:
+        - node
+        - express
+        - session
+        - CWE-922
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect session store configuration for MemoryStore usage
+        expected_outcome: MemoryStore flagged in production context
+        tooling:
+          unit: none
+          dast: none

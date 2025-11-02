@@ -1,0 +1,36 @@
+rules:
+  - id: bent-url-variable
+    languages: [javascript, typescript]
+    message: bent called with variable URL. Validate/allowlist to avoid SSRF in server contexts.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: bent($M, $URL, ...)
+          - pattern: bent($URL, ...)
+          - pattern: bent('GET', $URL, ...)
+          - pattern: bent('POST', $URL, ...)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs can target internal services or metadata endpoints when executed on the server."
+      recommendation: "Allowlist hosts/schemes; enforce HTTPS; block link-local/reserved IPs and normalize input."
+      references:
+        - https://github.com/mikeal/bent
+      tags:
+        - node
+        - http_client
+        - bent
+        - ssrf
+        - CWE-918
+        - A10:2021
+      verification:
+        strategy: manual
+        steps:
+          - Trace origin of URL and ensure validation/allowlist
+        expected_outcome: Safe destinations enforced
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,28 @@
+rules:
+  - id: referrer-policy-missing
+    languages: [javascript, typescript]
+    message: Referrer-Policy header missing or too permissive.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: res.setHeader('Referrer-Policy', $VAL)
+          - pattern: res.set('Referrer-Policy', $VAL)
+    metavariable-pattern:
+      VAL:
+        pattern-regex: (?i)no-referrer-when-downgrade|unsafe-url|^\s*$
+    metadata:
+      cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Permissive referrer policy may leak sensitive URLs to third-party origins."
+      recommendation: "Use 'strict-origin-when-cross-origin' or 'no-referrer'."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Headers/Referrer-Policy
+      tags:
+        - node
+        - headers
+        - referrer-policy
+        - CWE-200
+        - A05:2021

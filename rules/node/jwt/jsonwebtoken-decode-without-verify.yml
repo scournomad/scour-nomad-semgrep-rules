@@ -1,0 +1,38 @@
+rules:
+  - id: jsonwebtoken-decode-without-verify
+    languages: [javascript, typescript]
+    message: jwt.decode used without verification; token trust may be misplaced.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: jwt.decode($TOK)
+          - pattern: require('jsonwebtoken').decode($TOK)
+    metadata:
+      cwe: "CWE-345: Insufficient Verification of Data Authenticity"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      wasc: "WASC-01: Authentication"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Decoding without verification trusts unverified claims."
+      recommendation: "Use jwt.verify with a secret/public key and validate claims (iss, aud, exp, nbf)."
+      references:
+        - https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback
+      tags:
+        - jwt
+        - authn
+        - CWE-345
+        - A07:2021
+        - WASC-01
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
+      verification:
+        strategy: unit
+        steps:
+          - Flag usages of jwt.decode without a corresponding jwt.verify
+        expected_outcome: Unverified decode flagged
+        tooling:
+          unit: none
+          dast: none

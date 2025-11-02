@@ -1,0 +1,40 @@
+rules:
+  - id: dom-script-src-data-url
+    languages: [javascript, typescript]
+    message: Setting script src to a data: URL can execute untrusted code.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const $SCR = document.createElement('script')
+          ...
+      - pattern-either:
+          - pattern: $SCR.src = $VAL
+          - pattern: $SCR.setAttribute('src', $VAL)
+          - pattern: $SCR.setAttribute("src", $VAL)
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]data:.*
+    metadata:
+      cwe: "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp: "A06:2021-Vulnerable and Outdated Components"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "Scripts loaded from data: URLs can execute arbitrary attacker-controlled code."
+      recommendation: "Avoid data: URLs for script src; load only from trusted, integrity-checked origins."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/script
+      tags:
+        - shared
+        - dom
+        - code-exec
+        - CWE-829
+        - A06:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect data: assigned to script src
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

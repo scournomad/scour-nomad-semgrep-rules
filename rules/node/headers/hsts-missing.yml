@@ -1,0 +1,28 @@
+rules:
+  - id: hsts-missing
+    languages: [javascript, typescript]
+    message: Strict-Transport-Security (HSTS) header missing or too weak.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: res.setHeader('Strict-Transport-Security', $VAL)
+          - pattern: res.set('Strict-Transport-Security', $VAL)
+    metavariable-pattern:
+      VAL:
+        pattern-regex: (?i)max-age\s*=\s*(\d{1,4})(?!\d)  # very low max-age
+    metadata:
+      cwe: "CWE-319: Cleartext Transmission of Sensitive Information"
+      owasp: "A02:2021-Cryptographic Failures"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Weak or missing HSTS allows downgrade to HTTP and cookie/session theft."
+      recommendation: "Set HSTS to at least 15552000 (180 days) and include includeSubDomains where appropriate."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Headers/Strict-Transport-Security
+      tags:
+        - node
+        - headers
+        - hsts
+        - CWE-319
+        - A02:2021

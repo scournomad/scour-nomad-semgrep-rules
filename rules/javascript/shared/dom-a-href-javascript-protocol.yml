@@ -1,0 +1,41 @@
+rules:
+  - id: dom-a-href-javascript-protocol
+    languages: [javascript, typescript]
+    message: Setting anchor href to a javascript: URL executes code on click.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $A.href = $VAL
+          - pattern: $A.setAttribute('href', $VAL)
+          - pattern: $A.setAttribute("href", $VAL)
+      - pattern-inside: |
+          const $A = document.createElement('a')
+          ...
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]javascript:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "javascript: URLs execute arbitrary code in the page context."
+      recommendation: "Do not use javascript: URLs. Use safe event handlers and regular navigation."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs#javascript_uris
+      tags:
+        - shared
+        - dom
+        - navigation
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect assignments of javascript: to anchor href
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

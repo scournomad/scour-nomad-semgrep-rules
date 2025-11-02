@@ -1,0 +1,28 @@
+rules:
+  - id: express-session-cookie-flags-missing
+    languages: [javascript, typescript]
+    message: express-session cookie missing security flags (secure/httpOnly/sameSite or too short maxAge).
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: session({ cookie: { ... }, ... })
+          - pattern: require('express-session')({ cookie: { ... }, ... })
+    pattern-not: |
+      session({ cookie: { secure: true, httpOnly: true, sameSite: $SS, ... }, ... })
+    metadata:
+      cwe: "CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Missing cookie flags increases risk of theft or CSRF."
+      recommendation: "Set secure, httpOnly, sameSite, and appropriate maxAge for session cookies."
+      references:
+        - https://www.npmjs.com/package/express-session#cookies
+      tags:
+        - node
+        - express
+        - session
+        - cookies
+        - CWE-614
+        - A01:2021

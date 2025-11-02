@@ -1,0 +1,34 @@
+rules:
+  - id: prototype-pollution-proto-key-literal
+    languages: [javascript, typescript]
+    message: Object literal contains __proto__/prototype/constructor keys which can pollute prototypes when merged.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: "{ '__proto__': $V, ... }"
+          - pattern: "{ '__proto__': { ... } }"
+          - pattern: "{ 'prototype': $V, ... }"
+          - pattern: "{ 'constructor': $V, ... }"
+    metadata:
+      cwe: "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      owasp: "A06:2021-Vulnerable and Outdated Components"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Merging objects with prototype-related keys can inject properties into other objects."
+      recommendation: "Drop dangerous keys before merging or use safe merge utilities that block prototype keys."
+      references:
+        - https://portswigger.net/web-security/prototype-pollution
+      tags:
+        - shared
+        - prototype-pollution
+        - CWE-915
+        - A06:2021
+      verification:
+        strategy: manual
+        steps:
+          - Find merges involving objects containing __proto__/prototype/constructor keys
+        expected_outcome: Dangerous keys flagged
+        tooling:
+          unit: none
+          dast: none

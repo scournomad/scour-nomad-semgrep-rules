@@ -1,0 +1,41 @@
+rules:
+  - id: dom-location-data-url
+    languages: [javascript, typescript]
+    message: Navigating window/location to a data: URL can load attacker-controlled HTML/JS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: window.location = $VAL
+          - pattern: location = $VAL
+          - pattern: window.location.href = $VAL
+          - pattern: location.href = $VAL
+          - pattern: window.location.assign($VAL)
+          - pattern: window.location.replace($VAL)
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]data:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "data: URLs can render HTML/JS in the page context, enabling arbitrary script execution."
+      recommendation: "Avoid navigation to data: URLs; restrict to trusted HTTPS origins."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
+      tags:
+        - shared
+        - dom
+        - navigation
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect navigation APIs with data: URL values
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

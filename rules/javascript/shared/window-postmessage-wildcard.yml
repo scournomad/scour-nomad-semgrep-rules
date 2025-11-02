@@ -1,0 +1,33 @@
+rules:
+  - id: window-postmessage-wildcard
+    languages: [javascript, typescript]
+    message: Using window.postMessage with wildcard or variable origin may allow data exfiltration.
+    severity: WARNING
+    patterns:
+      - pattern: window.postMessage($MSG, $ORIGIN, ...)
+    metavariable-pattern:
+      ORIGIN:
+        pattern-regex: ^\s*['\"]\*['\"]\s*$|^\s*[$].*
+    metadata:
+      cwe: "CWE-940: Improper Verification of Source of a Communication Channel"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Messages may be received by untrusted origins, enabling data leaks or attacks."
+      recommendation: "Specify exact trusted origin, validate target window, and verify event.origin on receive."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Window/postMessage#security_concerns
+      tags:
+        - shared
+        - messaging
+        - CWE-940
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure postMessage uses strict trusted origin
+        expected_outcome: No wildcard/variable origins without validation
+        tooling:
+          unit: none
+          dast: none

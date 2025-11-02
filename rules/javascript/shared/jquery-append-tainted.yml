@@ -1,0 +1,35 @@
+rules:
+  - id: jquery-append-tainted
+    languages: [javascript, typescript]
+    message: jQuery append()/prepend() with variable HTML can cause XSS.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $(...).append($HTML)
+          - pattern: jQuery(...).append($HTML)
+          - pattern: $(...).prepend($HTML)
+          - pattern: jQuery(...).prepend($HTML)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Appending HTML may execute scripts or event handlers."
+      recommendation: "Avoid appending untrusted HTML; sanitize or construct DOM safely."
+      references:
+        - https://api.jquery.com/append/
+      tags:
+        - shared
+        - jquery
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect append/prepend called with variable content
+        expected_outcome: Potential XSS sink identified
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,29 @@
+rules:
+  - id: undici-redirects-agent-misconfig
+    languages: [javascript, typescript]
+    message: undici configured with permissive redirects/agent/proxy may enable SSRF or internal access.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: request($URL, $OPTS)
+          - pattern: fetch($URL, $OPTS)
+      - metavariable-pattern:
+          OPTS:
+            pattern-regex: (?s)(maxRedirections\s*:\s*\d{2,}|dispatcher\s*:\s*new|agent\s*:\s*\{|proxy\s*:\s*)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Excessive redirects or custom agent/proxy can reach internal services."
+      recommendation: "Limit redirects, validate destinations, and carefully control agent/proxy."
+      references:
+        - https://undici.nodejs.org/#/docs/api/UndiciAgent
+      tags:
+        - node
+        - http_client
+        - undici
+        - ssrf
+        - CWE-918
+        - A10:2021

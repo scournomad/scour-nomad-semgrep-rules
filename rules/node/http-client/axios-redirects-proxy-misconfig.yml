@@ -1,0 +1,29 @@
+rules:
+  - id: axios-redirects-proxy-misconfig
+    languages: [javascript, typescript]
+    message: axios with permissive redirect/proxy/agent config may enable SSRF or bypasses.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: axios($CFG)
+          - pattern: axios.$METHOD($URL, $CFG)
+      - metavariable-pattern:
+          CFG:
+            pattern-regex: (?s)(maxRedirects\s*:\s*\d{2,}|proxy\s*:\s*\{|httpAgent\s*:\s*new|httpsAgent\s*:\s*new)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Excessive redirects or custom proxy/agents can reach internal services if not validated."
+      recommendation: "Constrain redirects, validate proxies/agents, and validate destination URLs."
+      references:
+        - https://axios-http.com/docs/req_config
+      tags:
+        - node
+        - http_client
+        - axios
+        - ssrf
+        - CWE-918
+        - A10:2021

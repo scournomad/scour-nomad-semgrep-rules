@@ -1,0 +1,29 @@
+rules:
+  - id: node-fetch-redirects-agent-misconfig
+    languages: [javascript, typescript]
+    message: node-fetch configured with permissive redirects/agent may enable SSRF or internal access.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: fetch($URL, $OPTS)
+          - pattern: nodeFetch($URL, $OPTS)
+      - metavariable-pattern:
+          OPTS:
+            pattern-regex: (?s)(redirect\s*:\s*'follow'|follow\s*:\s*\d{2,}|agent\s*:\s*new|dispatcher\s*:\s*new)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Redirects and custom agents/dispatchers can be abused to access internal services."
+      recommendation: "Constrain redirects and validate destinations; avoid permissive or custom agents unless necessary."
+      references:
+        - https://github.com/node-fetch/node-fetch#options
+      tags:
+        - node
+        - http_client
+        - node-fetch
+        - ssrf
+        - CWE-918
+        - A10:2021

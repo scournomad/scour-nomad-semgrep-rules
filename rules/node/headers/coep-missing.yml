@@ -1,0 +1,28 @@
+rules:
+  - id: coep-missing
+    languages: [javascript, typescript]
+    message: Cross-Origin-Embedder-Policy (COEP) header missing.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: res.setHeader('Cross-Origin-Embedder-Policy', $VAL)
+          - pattern: res.set('Cross-Origin-Embedder-Policy', $VAL)
+    metavariable-pattern:
+      VAL:
+        pattern-regex: (?i)^\s*$
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Missing COEP weakens cross-origin isolation and can enable side-channel issues."
+      recommendation: "Set COEP to 'require-corp' when appropriate."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy
+      tags:
+        - node
+        - headers
+        - coep
+        - CWE-693
+        - A05:2021

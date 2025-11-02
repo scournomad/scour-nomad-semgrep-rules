@@ -1,0 +1,33 @@
+rules:
+  - id: knex-raw-concat
+    languages: [javascript, typescript]
+    message: knex raw/whereRaw constructed from concatenation or interpolation; risk of SQL injection.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: knex.raw($A + $B, ...)
+          - pattern: $DB.raw($A + $B, ...)
+          - pattern: $QB.whereRaw($A + $B, ...)
+          - pattern: knex.raw($SQL, ...)
+          - pattern: $DB.raw($SQL, ...)
+          - pattern: $QB.whereRaw($SQL, ...)
+      - metavariable-pattern:
+          SQL:
+            pattern-regex: "`[^`]*\$\{[^}]+\}[^`]*`"
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Raw queries with string construction may allow attackers to alter SQL."
+      recommendation: "Use parameter binding/placeholders; avoid string concatenation or template interpolation in SQL."
+      references:
+        - https://knexjs.org/guide/raw.html
+      tags:
+        - node
+        - db
+        - knex
+        - sql-injection
+        - CWE-89
+        - A03:2021

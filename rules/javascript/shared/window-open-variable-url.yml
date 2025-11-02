@@ -1,0 +1,30 @@
+rules:
+  - id: window-open-variable-url
+    languages: [javascript, typescript]
+    message: window.open called with variable URL can enable open redirects or phishing.
+    severity: WARNING
+    patterns:
+      - pattern: window.open($URL, ...)
+    metadata:
+      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Users may be redirected to attacker-controlled sites."
+      recommendation: "Allowlist destinations or avoid variable URLs in window.open."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Window/open
+      tags:
+        - shared
+        - redirect
+        - CWE-601
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Check source of URL passed to window.open
+        expected_outcome: Only trusted URLs allowed
+        tooling:
+          unit: none
+          dast: none

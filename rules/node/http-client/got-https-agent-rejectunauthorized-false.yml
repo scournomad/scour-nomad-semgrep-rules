@@ -1,0 +1,25 @@
+rules:
+  - id: got-https-agent-rejectunauthorized-false
+    languages: [javascript, typescript]
+    message: got with agent that disables TLS verification (rejectUnauthorized:false).
+    severity: ERROR
+    patterns:
+      - pattern: got($URL, { https: { rejectUnauthorized: false, ... }, ... })
+      - pattern: got.$METHOD($URL, { https: { rejectUnauthorized: false, ... }, ... })
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp: "A02:2021-Cryptographic Failures"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Disabling TLS verification permits MITM and spoofed endpoints."
+      recommendation: "Do not disable rejectUnauthorized; configure proper CA or pinning."
+      references:
+        - https://github.com/sindresorhus/got#https
+      tags:
+        - node
+        - http_client
+        - got
+        - tls
+        - CWE-295
+        - A02:2021

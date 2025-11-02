@@ -1,0 +1,37 @@
+rules:
+  - id: dom-createelement-script-inline
+    languages: [javascript, typescript]
+    message: Setting inline script content via text/innerHTML enables arbitrary code execution.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: document.createElement('script')
+          - pattern: document.createElement("script")
+      - pattern-either:
+          - pattern: $SCRIPT.text = $CODE
+          - pattern: $SCRIPT.textContent = $CODE
+          - pattern: $SCRIPT.innerHTML = $CODE
+    metadata:
+      cwe: "CWE-94: Improper Control of Generation of Code ('Code Injection')"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Inline script text executes with page privileges."
+      recommendation: "Avoid dynamically constructing inline script content."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/script#avoiding_inline_script
+      tags:
+        - shared
+        - dom
+        - code-exec
+        - CWE-94
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect inline script assignments
+        expected_outcome: Code execution sink identified
+        tooling:
+          unit: none
+          dast: none

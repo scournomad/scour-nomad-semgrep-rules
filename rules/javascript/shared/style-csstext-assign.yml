@@ -1,0 +1,31 @@
+rules:
+  - id: style-csstext-assign
+    languages: [javascript, typescript]
+    message: Assigning to element.style.cssText with variable content can lead to style injection.
+    severity: WARNING
+    patterns:
+      - pattern: $EL.style.cssText = $CSS
+    metadata:
+      cwe: "CWE-93: Improper Neutralization of CRLF Sequences in HTTP Headers ('CRLF Injection')"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Injected CSS may be abused for UI redress or data exfiltration via CSS features."
+      recommendation: "Avoid cssText with untrusted input; set specific style properties instead."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/CSSStyleDeclaration/cssText
+      tags:
+        - shared
+        - css
+        - injection
+        - CWE-93
+        - A05:2021
+      verification:
+        strategy: manual
+        steps:
+          - Check that cssText assignments originate from trusted sources
+        expected_outcome: No untrusted CSS injection
+        tooling:
+          unit: none
+          dast: none

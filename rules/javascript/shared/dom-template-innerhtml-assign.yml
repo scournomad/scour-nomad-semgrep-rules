@@ -1,0 +1,35 @@
+rules:
+  - id: dom-template-innerhtml-assign
+    languages: [javascript, typescript]
+    message: Assigning to <template>.innerHTML with variable content parses untrusted HTML.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const $T = document.createElement('template')
+          ...
+      - pattern: $T.innerHTML = $HTML
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "HTML assigned to a template element is parsed and can be later injected into the DOM, enabling XSS."
+      recommendation: "Avoid assigning untrusted HTML to template.innerHTML; sanitize or build DOM safely."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/template
+      tags:
+        - shared
+        - dom
+        - xss
+        - template
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect assignments to template.innerHTML
+        expected_outcome: Potential XSS sink identified
+        tooling:
+          unit: none
+          dast: none

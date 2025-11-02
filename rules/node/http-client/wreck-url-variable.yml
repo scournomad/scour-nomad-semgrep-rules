@@ -1,0 +1,41 @@
+rules:
+  - id: wreck-url-variable
+    languages: [javascript, typescript]
+    message: \@hapi/wreck called with variable URL. Validate/allowlist to avoid SSRF in server contexts.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: wreck.get($URL, ...)
+          - pattern: wreck.post($URL, ...)
+          - pattern: require('@hapi/wreck').get($URL, ...)
+          - pattern: require('@hapi/wreck').post($URL, ...)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      wasc: "WASC-15: Application Misconfiguration"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unvalidated URLs can hit internal services or metadata endpoints."
+      recommendation: "Allowlist hosts/schemes; enforce HTTPS; block link-local/reserved IPs and normalize input."
+      references:
+        - https://github.com/hapijs/wreck
+      tags:
+        - node
+        - http_client
+        - ssrf
+        - CWE-918
+        - A10:2021
+        - WASC-15
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
+      verification:
+        strategy: manual
+        steps:
+          - Trace URL provenance and verify allowlist enforcement
+        expected_outcome: SSRF risk flagged when validation missing
+        tooling:
+          unit: none
+          dast: none

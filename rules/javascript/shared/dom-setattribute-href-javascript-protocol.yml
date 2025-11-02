@@ -1,0 +1,37 @@
+rules:
+  - id: dom-setattribute-href-javascript-protocol
+    languages: [javascript, typescript]
+    message: Setting href to a javascript: URL executes code when navigated.
+    severity: ERROR
+    patterns:
+      - pattern: $EL.setAttribute($ATTR, $VAL)
+    metavariable-pattern:
+      ATTR:
+        pattern-regex: (?i)^href$
+      VAL:
+        pattern-regex: ^\s*['\"]javascript:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "javascript: URLs execute arbitrary code in the page context."
+      recommendation: "Avoid javascript: URLs. Use safe navigation patterns."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs#javascript_uris
+      tags:
+        - shared
+        - dom
+        - navigation
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect setAttribute('href', 'javascript:...')
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

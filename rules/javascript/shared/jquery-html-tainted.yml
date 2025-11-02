@@ -1,0 +1,33 @@
+rules:
+  - id: jquery-html-tainted
+    languages: [javascript, typescript]
+    message: jQuery html() with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $(...).html($HTML)
+          - pattern: jQuery(...).html($HTML)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Rendering untrusted HTML can execute scripts."
+      recommendation: "Avoid html() with untrusted input; prefer text() or sanitize."
+      references:
+        - https://api.jquery.com/html/
+      tags:
+        - shared
+        - jquery
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect calls to html() with variable argument
+        expected_outcome: XSS sink identified
+        tooling:
+          unit: none
+          dast: none

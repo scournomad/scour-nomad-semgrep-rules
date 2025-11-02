@@ -1,0 +1,38 @@
+rules:
+  - id: dom-iframe-srcdoc-assign
+    languages: [javascript, typescript]
+    message: Assigning to iframe.srcdoc with variable HTML can execute scripts within the frame.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const $IFR = document.createElement('iframe')
+          ...
+      - pattern-either:
+          - pattern: $IFR.srcdoc = $HTML
+          - pattern: $IFR.setAttribute('srcdoc', $HTML)
+          - pattern: $IFR.setAttribute("srcdoc", $HTML)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "HTML assigned to srcdoc is parsed and executed within the iframe."
+      recommendation: "Avoid untrusted HTML in srcdoc; sanitize or use text-based rendering."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/iframe#attr-srcdoc
+      tags:
+        - shared
+        - dom
+        - iframe
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect assignments to iframe srcdoc
+        expected_outcome: XSS sink identified
+        tooling:
+          unit: none
+          dast: none

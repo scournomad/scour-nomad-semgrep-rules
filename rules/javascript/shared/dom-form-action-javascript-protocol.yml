@@ -1,0 +1,41 @@
+rules:
+  - id: dom-form-action-javascript-protocol
+    languages: [javascript, typescript]
+    message: Setting form action to a javascript: URL can execute code on submit.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const $F = document.createElement('form')
+          ...
+      - pattern-either:
+          - pattern: $F.action = $VAL
+          - pattern: $F.setAttribute('action', $VAL)
+          - pattern: $F.setAttribute("action", $VAL)
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]javascript:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "Submitting a form to a javascript: URL can execute arbitrary code."
+      recommendation: "Never use javascript: in form actions. Submit to trusted HTTPS endpoints."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/form#attr-action
+      tags:
+        - shared
+        - dom
+        - navigation
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect javascript: assigned to form action
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,25 @@
+rules:
+  - id: ejs-render-tainted
+    languages: [javascript, typescript]
+    message: ejs.render called with variable template string; untrusted templates can lead to XSS/RCE depending on options.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: ejs.render($TPL, ...)
+          - pattern: require('ejs').render($TPL, ...)
+    metadata:
+      cwe: "CWE-94: Code Injection"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Rendering untrusted templates can execute code or produce dangerous HTML."
+      recommendation: "Do not render untrusted templates; prefer static templates and escape untrusted data."
+      references:
+        - https://ejs.co/#docs
+      tags:
+        - node
+        - templating
+        - ejs
+        - CWE-94
+        - A03:2021

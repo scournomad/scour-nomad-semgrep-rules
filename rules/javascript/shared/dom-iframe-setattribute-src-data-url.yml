@@ -1,0 +1,37 @@
+rules:
+  - id: dom-iframe-setattribute-src-data-url
+    languages: [javascript, typescript]
+    message: Setting iframe src to a data: URL can execute untrusted HTML/JS in the frame.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $IFR.setAttribute('src', $VAL)
+          - pattern: $IFR.setAttribute("src", $VAL)
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]data:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "data: URLs can embed HTML/JS that runs within the iframe context."
+      recommendation: "Avoid data: URLs for iframe src; use trusted HTTPS origins."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
+      tags:
+        - shared
+        - dom
+        - iframe
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect iframe src set via setAttribute to data:
+        expected_outcome: Potential XSS sink identified
+        tooling:
+          unit: none
+          dast: none

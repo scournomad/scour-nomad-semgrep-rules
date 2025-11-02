@@ -1,0 +1,28 @@
+rules:
+  - id: permissions-policy-permissive
+    languages: [javascript, typescript]
+    message: Permissions-Policy contains wildcard or overly broad allowances.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: res.setHeader('Permissions-Policy', $VAL)
+          - pattern: res.set('Permissions-Policy', $VAL)
+    metavariable-pattern:
+      VAL:
+        pattern-regex: (?i)\*=\*|camera=\(|geolocation=\(|microphone=\(|payment=\(|accelerometer=\(|gyroscope=\(
+    metadata:
+      cwe: "CWE-276: Incorrect Default Permissions"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Over-broad permissions risk exposing device sensors or privacy-sensitive APIs."
+      recommendation: "Limit Permissions-Policy to trusted origins and disable unneeded features."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Headers/Permissions-Policy
+      tags:
+        - node
+        - headers
+        - permissions-policy
+        - CWE-276
+        - A05:2021

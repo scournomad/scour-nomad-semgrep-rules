@@ -1,0 +1,25 @@
+rules:
+  - id: axios-httpsagent-rejectunauthorized-false
+    languages: [javascript, typescript]
+    message: axios with httpsAgent that disables TLS verification (rejectUnauthorized:false).
+    severity: ERROR
+    patterns:
+      - pattern: axios({ httpsAgent: new https.Agent({ rejectUnauthorized: false, ... }), ... })
+      - pattern: axios.$METHOD($URL, { httpsAgent: new https.Agent({ rejectUnauthorized: false, ... }), ... })
+    metadata:
+      cwe: "CWE-295: Improper Certificate Validation"
+      owasp: "A02:2021-Cryptographic Failures"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Disabling TLS verification permits MITM and spoofed endpoints."
+      recommendation: "Use trusted CAs and do not disable certificate verification."
+      references:
+        - https://axios-http.com/docs/req_config
+      tags:
+        - node
+        - http_client
+        - axios
+        - tls
+        - CWE-295
+        - A02:2021

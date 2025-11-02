@@ -1,0 +1,41 @@
+rules:
+  - id: dom-iframe-src-javascript-protocol
+    languages: [javascript, typescript]
+    message: Setting iframe src to a javascript: URL executes code in the frame.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const $IFR = document.createElement('iframe')
+          ...
+      - pattern-either:
+          - pattern: $IFR.src = $VAL
+          - pattern: $IFR.setAttribute('src', $VAL)
+          - pattern: $IFR.setAttribute("src", $VAL)
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]javascript:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "javascript: URLs execute in the context of the iframe, which may interact with the parent/window."
+      recommendation: "Do not assign javascript: to iframe src. Use safe URLs only."
+      references:
+        - https://developer.mozilla.org/docs/Web/Security/Same-origin_policy#iframes
+      tags:
+        - shared
+        - dom
+        - iframe
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect javascript: assignments to iframe src
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

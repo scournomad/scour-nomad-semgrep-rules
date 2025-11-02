@@ -1,0 +1,34 @@
+rules:
+  - id: dom-setattribute-event-handler
+    languages: [javascript, typescript]
+    message: Setting event handler attributes (e.g., onclick) with variable content can cause XSS.
+    severity: WARNING
+    patterns:
+      - pattern: $EL.setAttribute($ATTR, $VAL)
+    metavariable-pattern:
+      ATTR:
+        pattern-regex: (?i)^on[a-zA-Z]+$
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Event handler attributes execute as code in the browser."
+      recommendation: "Avoid setting on* attributes; use addEventListener with explicit handlers."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Global_attributes#event_handlers
+      tags:
+        - shared
+        - dom
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect setAttribute with on* attribute names
+        expected_outcome: Potential XSS sink identified
+        tooling:
+          unit: none
+          dast: none

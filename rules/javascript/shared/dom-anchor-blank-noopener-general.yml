@@ -1,0 +1,42 @@
+rules:
+  - id: dom-anchor-blank-noopener-general
+    languages: [javascript, typescript]
+    message: Setting target="_blank" without rel=noopener (or noreferrer) allows reverse tabnabbing.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $E.setAttribute('target', '_blank')
+          - pattern: $E.setAttribute("target", "_blank")
+          - pattern: $E.target = '_blank'
+          - pattern: $E.target = "_blank"
+    pattern-not-either:
+      - pattern: $E.setAttribute('rel', $REL)
+      - pattern: $E.setAttribute("rel", $REL)
+      - pattern: $E.rel = $REL
+    metavariable-pattern:
+      REL:
+        pattern-regex: (?i)\bnoopener\b|\bnoreferrer\b
+    metadata:
+      cwe: "CWE-1022: Use of Weak Authentication"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "High"
+      impact: "The opened page can access window.opener and redirect the original page (tabnabbing)."
+      recommendation: "Add rel='noopener' (preferably 'noreferrer') whenever using target='_blank'."
+      references:
+        - https://web.dev/external-anchors-use-rel-noopener/
+      tags:
+        - shared
+        - navigation
+        - tabnabbing
+        - CWE-1022
+        - A01:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect target _blank usage without rel containing noopener/noreferrer
+        expected_outcome: Potential tabnabbing risk identified
+        tooling:
+          unit: none
+          dast: none

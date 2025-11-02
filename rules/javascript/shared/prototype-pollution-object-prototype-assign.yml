@@ -1,0 +1,32 @@
+rules:
+  - id: prototype-pollution-object-prototype-assign
+    languages: [javascript, typescript]
+    message: Assigning properties to Object.prototype can enable prototype pollution.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: Object.assign(Object.prototype, $SRC)
+          - pattern: _.merge(Object.prototype, $SRC)
+    metadata:
+      cwe: "CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes"
+      owasp: "A06:2021-Vulnerable and Outdated Components"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Modifying Object.prototype affects all objects and can be abused to escalate privileges or break invariants."
+      recommendation: "Never write to Object.prototype; merge into plain objects and validate keys."
+      references:
+        - https://portswigger.net/web-security/prototype-pollution
+      tags:
+        - shared
+        - prototype-pollution
+        - CWE-915
+        - A06:2021
+      verification:
+        strategy: manual
+        steps:
+          - Search for prototype writes and confirm untrusted merges
+        expected_outcome: Prototype writes flagged
+        tooling:
+          unit: none
+          dast: none

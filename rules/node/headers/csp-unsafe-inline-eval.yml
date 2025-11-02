@@ -1,0 +1,40 @@
+rules:
+  - id: csp-unsafe-inline-eval
+    languages: [javascript, typescript]
+    message: Content-Security-Policy contains 'unsafe-inline' or 'unsafe-eval'.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              res.setHeader('Content-Security-Policy', $POL)
+          - pattern: |
+              helmet.contentSecurityPolicy({ directives: $DIRS, ... })
+    metavariable-pattern:
+      POL:
+        pattern-regex: (?i)(unsafe-inline|unsafe-eval)
+      DIRS:
+        pattern-regex: (?i)(unsafe-inline|unsafe-eval)
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Permissive CSP weakens XSS defenses and script injection protections."
+      recommendation: "Avoid 'unsafe-inline' and 'unsafe-eval'; use nonces/hashes and remove eval usage."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy
+      tags:
+        - node
+        - headers
+        - csp
+        - CWE-693
+        - A05:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect CSP header or helmet configuration
+        expected_outcome: Unsafe directives flagged
+        tooling:
+          unit: none
+          dast: none

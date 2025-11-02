@@ -1,0 +1,33 @@
+rules:
+  - id: react-insertadjacenthtml
+    languages: [javascript, typescript]
+    message: insertAdjacentHTML with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $EL.insertAdjacentHTML($POS, $HTML)
+          - pattern: document.$Q($S).insertAdjacentHTML($POS, $HTML)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Inserting untrusted HTML into the DOM can execute attacker-controlled scripts."
+      recommendation: "Avoid insertAdjacentHTML for untrusted data; sanitize or use text nodes instead."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Element/insertAdjacentHTML
+      tags:
+        - react
+        - xss
+        - dom
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Call insertAdjacentHTML with variable HTML
+        expected_outcome: Potential script execution flagged
+        tooling:
+          unit: none
+          dast: none

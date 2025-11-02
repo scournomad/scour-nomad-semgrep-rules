@@ -1,0 +1,31 @@
+rules:
+  - id: dom-innerhtml-assign
+    languages: [javascript, typescript]
+    message: Assigning to innerHTML with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern: $EL.innerHTML = $HTML
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Rendering untrusted HTML can execute attacker-controlled scripts."
+      recommendation: "Avoid innerHTML with untrusted content; sanitize or use textContent."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Element/innerHTML#security_considerations
+      tags:
+        - shared
+        - dom
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect assignments to innerHTML
+        expected_outcome: Potential XSS sink identified
+        tooling:
+          unit: none
+          dast: none

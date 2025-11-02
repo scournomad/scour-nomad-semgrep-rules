@@ -1,0 +1,35 @@
+rules:
+  - id: lodash-merge-prototype-pollution
+    languages: [javascript, typescript]
+    message: lodash merge/mergeWith with untrusted source may allow prototype pollution.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: _.merge($OBJ, $SRC, ...)
+          - pattern: _.mergeWith($OBJ, $SRC, ...)
+          - pattern: lodash.merge($OBJ, $SRC, ...)
+          - pattern: lodash.mergewith($OBJ, $SRC, ...)
+    metadata:
+      cwe: "CWE-1321: Prototype Pollution"
+      owasp: "A08:2021-Software and Data Integrity Failures"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Merging untrusted objects may modify Object.prototype and impact application logic."
+      recommendation: "Validate keys, block __proto__/constructor/prototype, and use safe merge utilities."
+      references:
+        - https://cwe.mitre.org/data/definitions/1321.html
+      tags:
+        - shared
+        - prototype-pollution
+        - lodash
+        - CWE-1321
+        - A08:2021
+      verification:
+        strategy: manual
+        steps:
+          - Review sources and key filtering prior to merge
+        expected_outcome: Dangerous keys blocked
+        tooling:
+          unit: none
+          dast: none

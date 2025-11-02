@@ -1,0 +1,30 @@
+rules:
+  - id: got-redirects-proxy-misconfig
+    languages: [javascript, typescript]
+    message: got configured with permissive redirects/proxy/agent may enable SSRF or internal access.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: got($URL, $OPTS)
+          - pattern: got.$METHOD($URL, $OPTS)
+          - pattern: got.extend($OPTS)
+      - metavariable-pattern:
+          OPTS:
+            pattern-regex: (?s)(maxRedirects\s*:\s*\d{2,}|agent\s*:\s*\{|hooks\s*:\s*\{|proxy\s*:\s*)
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021-Server-Side Request Forgery (SSRF)"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Excessive redirects or custom agents/proxy can reach internal services without validation."
+      recommendation: "Limit redirects; validate destinations; carefully control agents/proxies."
+      references:
+        - https://github.com/sindresorhus/got#options
+      tags:
+        - node
+        - http_client
+        - got
+        - ssrf
+        - CWE-918
+        - A10:2021

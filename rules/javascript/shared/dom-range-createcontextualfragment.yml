@@ -1,0 +1,31 @@
+rules:
+  - id: dom-range-createcontextualfragment
+    languages: [javascript, typescript]
+    message: Range.createContextualFragment with variable HTML can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern: $R.createContextualFragment($HTML)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Inserting untrusted HTML fragments can execute attacker-controlled scripts."
+      recommendation: "Avoid createContextualFragment for untrusted HTML; sanitize or create text nodes instead."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Range/createContextualFragment
+      tags:
+        - shared
+        - dom
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Create fragment from variable HTML and insert
+        expected_outcome: Potential script execution flagged
+        tooling:
+          unit: none
+          dast: none

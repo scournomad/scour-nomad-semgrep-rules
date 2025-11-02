@@ -1,0 +1,33 @@
+rules:
+  - id: dom-domparser-parsefromstring-html
+    languages: [javascript, typescript]
+    message: DOMParser.parseFromString with 'text/html' can introduce XSS from untrusted strings.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: new DOMParser().parseFromString($HTML, "text/html")
+          - pattern: $P.parseFromString($HTML, "text/html")
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Parsing untrusted HTML into DOM may execute scripts when inserted into the page."
+      recommendation: "Avoid parsing untrusted HTML; sanitize or parse as 'text/plain' when possible."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/DOMParser/parseFromString
+      tags:
+        - shared
+        - dom
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: integration
+        steps:
+          - Parse HTML from variable and attach to DOM
+        expected_outcome: Potential script execution flagged
+        tooling:
+          unit: none
+          dast: none

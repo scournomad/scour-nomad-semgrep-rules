@@ -1,0 +1,34 @@
+rules:
+  - id: dom-script-src-dynamic
+    languages: [javascript, typescript]
+    message: Creating script elements with dynamic src can load untrusted code.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: document.createElement('script')
+          - pattern: document.createElement("script")
+      - pattern: $SCRIPT.src = $SRC
+    metadata:
+      cwe: "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp: "A06:2021-Vulnerable and Outdated Components"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Loading scripts from untrusted/dynamic sources can execute attacker-controlled code."
+      recommendation: "Use allowlisted origins and integrity checks; avoid dynamic URLs."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/script
+      tags:
+        - shared
+        - dom
+        - code-exec
+        - CWE-829
+        - A06:2021
+      verification:
+        strategy: manual
+        steps:
+          - Check origin of dynamic script src value
+        expected_outcome: Only trusted sources allowed
+        tooling:
+          unit: none
+          dast: none

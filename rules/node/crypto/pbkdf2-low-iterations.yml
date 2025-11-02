@@ -1,0 +1,41 @@
+rules:
+  - id: pbkdf2-low-iterations
+    languages: [javascript, typescript]
+    message: crypto.pbkdf2 used with low iteration count; weak password hashing.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: crypto.pbkdf2($P, $S, $N, $KLEN, $ALG, ...)
+          - pattern: require('crypto').pbkdf2($P, $S, $N, $KLEN, $ALG, ...)
+      - metavariable-pattern:
+          N:
+            pattern-regex: ^\s*[1-9]\d{0,3}\s*$
+    metadata:
+      cwe: "CWE-916: Use of Password Hash With Insufficient Computational Effort"
+      owasp: "A07:2021-Identification and Authentication Failures"
+      wasc: "WASC-02: Authorization"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Low iteration counts make brute-force attacks feasible."
+      recommendation: "Use a high iteration count (e.g., >= 100k) or modern KDFs like scrypt/Argon2."
+      references:
+        - https://nodejs.org/api/crypto.html#cryptopbkdf2password-salt-iterations-keylen-digest-callback
+      tags:
+        - crypto
+        - password
+        - CWE-916
+        - A07:2021
+        - WASC-02
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
+      verification:
+        strategy: unit
+        steps:
+          - Detect pbkdf2 calls with iteration counts < 10000
+        expected_outcome: Weak KDF iteration flagged
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,66 @@
+rules:
+  - id: window-postmessage-data-to-innerhtml
+    languages: [javascript, typescript]
+    message: message event data is inserted into innerHTML without validating event.origin.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              window.addEventListener('message', function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener("message", function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener('message', ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener("message", ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener('message', function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener("message", function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener('message', ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener("message", ($EV) => {
+                ...
+              })
+      - pattern: $EL.innerHTML = $EV.data
+      - pattern-not: $EV.origin
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "Unvalidated cross-origin message data is rendered as HTML, enabling XSS."
+      recommendation: "Validate event.origin against a strict allowlist and avoid inserting event.data into innerHTML; sanitize or use textContent."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Window/postMessage#security_concerns
+      tags:
+        - shared
+        - messaging
+        - postmessage
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect handlers inserting event.data into innerHTML without origin checks
+        expected_outcome: XSS sink identified
+        tooling:
+          unit: none
+          dast: none

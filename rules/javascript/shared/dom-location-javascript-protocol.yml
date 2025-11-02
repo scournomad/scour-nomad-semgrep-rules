@@ -1,0 +1,41 @@
+rules:
+  - id: dom-location-javascript-protocol
+    languages: [javascript, typescript]
+    message: Assigning javascript: URL to window/location causes arbitrary code execution.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: window.location = $VAL
+          - pattern: location = $VAL
+          - pattern: window.location.href = $VAL
+          - pattern: location.href = $VAL
+          - pattern: window.location.assign($VAL)
+          - pattern: window.location.replace($VAL)
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]javascript:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "javascript: URLs execute code in the page context."
+      recommendation: "Never navigate to javascript: URLs. Use safe destinations only."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs#javascript_uris
+      tags:
+        - shared
+        - dom
+        - navigation
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect javascript: assigned to location APIs
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

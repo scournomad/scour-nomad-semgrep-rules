@@ -1,0 +1,28 @@
+rules:
+  - id: corp-missing
+    languages: [javascript, typescript]
+    message: Cross-Origin-Resource-Policy (CORP) header missing.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: res.setHeader('Cross-Origin-Resource-Policy', $VAL)
+          - pattern: res.set('Cross-Origin-Resource-Policy', $VAL)
+    metavariable-pattern:
+      VAL:
+        pattern-regex: (?i)^\s*$
+    metadata:
+      cwe: "CWE-693: Protection Mechanism Failure"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Missing CORP allows cross-origin resource embedding that may be unintended."
+      recommendation: "Set CORP to a restrictive value like 'same-origin' where feasible."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Headers/Cross-Origin-Resource-Policy
+      tags:
+        - node
+        - headers
+        - corp
+        - CWE-693
+        - A05:2021

@@ -1,0 +1,73 @@
+rules:
+  - id: window-postmessage-receiver-origin-weak-validation
+    languages: [javascript, typescript]
+    message: message event handler references event.origin but does not strictly validate it against a literal or allowlist.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              window.addEventListener('message', function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener("message", function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener('message', ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener("message", ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener('message', function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener("message", function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener('message', ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener("message", ($EV) => {
+                ...
+              })
+      - pattern: $EV.origin
+      - pattern-not-either:
+          - pattern: if ($EV.origin === $LIT) { ... }
+          - pattern: if ($EV.origin !== $LIT) { ... }
+          - pattern: if ($ALLOWLIST.includes($EV.origin)) { ... }
+          - pattern: if (!$ALLOWLIST.includes($EV.origin)) { ... }
+          - pattern: if ($SET.has($EV.origin)) { ... }
+          - pattern: if (!$SET.has($EV.origin)) { ... }
+          - pattern: if ($EV.origin.match($RE)) { ... }
+          - pattern: if ($RE.test($EV.origin)) { ... }
+    metadata:
+      cwe: "CWE-940: Improper Verification of Source of a Communication Channel"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Handler uses event.origin but does not enforce a strict equality or allowlist check, allowing untrusted origins."
+      recommendation: "Compare event.origin against a strict allowlist using equality or membership checks before trusting event.data."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Window/postMessage#security_concerns
+      tags:
+        - shared
+        - messaging
+        - postmessage
+        - CWE-940
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure event.origin is compared against a literal or allowlist and rejects others
+        expected_outcome: Messages from untrusted origins are ignored
+        tooling:
+          unit: none
+          dast: none

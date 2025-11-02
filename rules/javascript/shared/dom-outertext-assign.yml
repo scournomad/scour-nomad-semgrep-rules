@@ -1,0 +1,30 @@
+rules:
+  - id: dom-outertext-assign
+    languages: [javascript, typescript]
+    message: Assigning to outerText can cause DOM modifications and potential XSS if misused.
+    severity: WARNING
+    patterns:
+      - pattern: $EL.outerText = $TXT
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Improper handling of dynamic text in the DOM can lead to injection if later interpreted as HTML."
+      recommendation: "Prefer textContent for plain text; ensure no further HTML interpretation occurs."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/HTMLElement/outerText
+      tags:
+        - shared
+        - dom
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Review usage context to ensure no HTML interpretation
+        expected_outcome: Safe text handling
+        tooling:
+          unit: none
+          dast: none

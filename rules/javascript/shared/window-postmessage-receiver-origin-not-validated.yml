@@ -1,0 +1,64 @@
+rules:
+  - id: window-postmessage-receiver-origin-not-validated
+    languages: [javascript, typescript]
+    message: message event handler does not reference event.origin; validate event.origin to restrict trusted senders.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              window.addEventListener('message', function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener("message", function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener('message', ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              window.addEventListener("message", ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener('message', function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener("message", function($EV) {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener('message', ($EV) => {
+                ...
+              })
+          - pattern-inside: |
+              addEventListener("message", ($EV) => {
+                ...
+              })
+      - pattern-not: $EV.origin
+    metadata:
+      cwe: "CWE-940: Improper Verification of Source of a Communication Channel"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Without validating event.origin, untrusted origins can send messages consumed by the application."
+      recommendation: "Verify event.origin (and optionally event.source) against a strict allowlist before trusting event.data."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Window/postMessage#security_concerns
+      tags:
+        - shared
+        - messaging
+        - postmessage
+        - CWE-940
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure handlers verify event.origin against trusted origins before processing data
+        expected_outcome: Messages from untrusted origins are ignored
+        tooling:
+          unit: none
+          dast: none

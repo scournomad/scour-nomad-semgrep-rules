@@ -1,0 +1,33 @@
+rules:
+  - id: prisma-unsafe-raw
+    languages: [javascript, typescript]
+    message: Prisma unsafe raw query APIs or raw with string construction; risk of SQL injection.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $DB.$queryRawUnsafe($SQL, ...)
+          - pattern: $DB.$executeRawUnsafe($SQL, ...)
+          - pattern: $DB.$queryRaw($A + $B, ...)
+          - pattern: $DB.$executeRaw($A + $B, ...)
+          - pattern: $DB.$queryRaw($SQL, ...)
+          - pattern: $DB.$executeRaw($SQL, ...)
+      - metavariable-pattern:
+          SQL:
+            pattern-regex: "`[^`]*\$\{[^}]+\}[^`]*`"
+    metadata:
+      cwe: "CWE-89: SQL Injection"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unsafe/raw queries constructed from strings can allow attackers to alter SQL."
+      recommendation: "Use parameter binding and avoid string concatenation or template interpolation in raw queries."
+      references:
+        - https://www.prisma.io/docs/orm/reference/prisma-client-reference#raw-queries
+      tags:
+        - node
+        - db
+        - prisma
+        - sql-injection
+        - CWE-89
+        - A03:2021

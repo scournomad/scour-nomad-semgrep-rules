@@ -1,0 +1,40 @@
+rules:
+  - id: execfile-concat
+    languages: [javascript, typescript]
+    message: child_process.execFile/execFileSync with concatenated args can lead to injection.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: child_process.execFile($BIN, [$A + $B, ...], ...)
+          - pattern: child_process.execFileSync($BIN, [$A + $B, ...], ...)
+          - pattern: require('child_process').execFile($BIN, [$A + $B, ...], ...)
+          - pattern: require('child_process').execFileSync($BIN, [$A + $B, ...], ...)
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command"
+      owasp: "A03:2021-Injection"
+      wasc: "WASC-31: Command Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Concatenated arguments may include untrusted input leading to command injection."
+      recommendation: "Avoid string concatenation; pass arguments as separate validated items."
+      references:
+        - https://nodejs.org/api/child_process.html#child_processexecfilefile-args-options-callback
+      tags:
+        - process
+        - command
+        - CWE-78
+        - A03:2021
+        - WASC-31
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
+      verification:
+        strategy: unit
+        steps:
+          - Detect execFile with concatenated argument array entries
+        expected_outcome: Potential injection flagged
+        tooling:
+          unit: none
+          dast: none

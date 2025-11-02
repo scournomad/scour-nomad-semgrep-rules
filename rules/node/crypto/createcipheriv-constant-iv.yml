@@ -1,0 +1,40 @@
+rules:
+  - id: createcipheriv-constant-iv
+    languages: [javascript, typescript]
+    message: crypto.createCipheriv used with constant or zero IV. This weakens encryption.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: crypto.createCipheriv($ALG, $KEY, $IV)
+          - pattern: require('crypto').createCipheriv($ALG, $KEY, $IV)
+      - metavariable-pattern:
+          IV:
+            pattern-regex: (?s)^(['"][^'"]+['"]|Buffer\.alloc\(\s*\d+\s*,\s*0\s*\)|new Buffer\(\s*\d+\s*\))$
+    metadata:
+      cwe: "CWE-329: Generation of Predictable IV with CBC Mode"
+      owasp: "A02:2021-Cryptographic Failures"
+      wasc: "WASC-13: Information Leakage"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Predictable or constant IVs can allow attackers to infer relationships between plaintexts."
+      recommendation: "Use a cryptographically random IV per encryption, e.g., crypto.randomBytes(ivLen)."
+      references:
+        - https://nodejs.org/api/crypto.html#cryptocreatecipherivalgorithm-key-iv-options
+      tags:
+        - crypto
+        - CWE-329
+        - A02:2021
+        - WASC-13
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
+      verification:
+        strategy: unit
+        steps:
+          - Detect createCipheriv with string literal IV or zeroed Buffer
+        expected_outcome: Rule flags constant IV usage
+        tooling:
+          unit: none
+          dast: none

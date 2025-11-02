@@ -1,0 +1,48 @@
+rules:
+  - id: dom-meta-refresh-javascript-protocol
+    languages: [javascript, typescript]
+    message: Creating a meta refresh with a javascript: URL can execute code.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          const $META = document.createElement('meta')
+          ...
+      - pattern-either:
+          - pattern: $META.httpEquiv = $HE
+          - pattern: $META.setAttribute('http-equiv', $HE)
+          - pattern: $META.setAttribute("http-equiv", $HE)
+      - metavariable-pattern:
+          HE:
+            pattern-regex: (?i)^refresh$
+      - pattern-either:
+          - pattern: $META.content = $CV
+          - pattern: $META.setAttribute('content', $CV)
+          - pattern: $META.setAttribute("content", $CV)
+      - metavariable-pattern:
+          CV:
+            pattern-regex: (?i)url\s*=\s*javascript:.*
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "Meta refresh to javascript: executes arbitrary code upon navigation."
+      recommendation: "Avoid javascript: in meta refresh; use safe URLs or client-side navigation."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/meta#attr-http-equiv
+      tags:
+        - shared
+        - dom
+        - navigation
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect meta refresh content with url=javascript:...
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

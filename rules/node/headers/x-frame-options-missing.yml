@@ -1,0 +1,28 @@
+rules:
+  - id: x-frame-options-missing
+    languages: [javascript, typescript]
+    message: X-Frame-Options header missing or set to ALLOWALL/invalid value.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: res.setHeader('X-Frame-Options', $VAL)
+          - pattern: res.set('X-Frame-Options', $VAL)
+    metavariable-pattern:
+      VAL:
+        pattern-regex: (?i)ALLOWALL|SAMEORIGIN|DENY|^\s*$
+    metadata:
+      cwe: "CWE-451: User Interface (UI) Misrepresentation of Critical Information"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Missing or weak X-Frame-Options allows clickjacking."
+      recommendation: "Set X-Frame-Options to 'DENY' or 'SAMEORIGIN' (or use frame-ancestors in CSP)."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Headers/X-Frame-Options
+      tags:
+        - node
+        - headers
+        - xfo
+        - CWE-451
+        - A05:2021

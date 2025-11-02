@@ -1,0 +1,37 @@
+rules:
+  - id: dom-object-setattribute-data-data-url
+    languages: [javascript, typescript]
+    message: Setting <object> data to a data: URL can execute untrusted active content.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $OBJ.setAttribute('data', $VAL)
+          - pattern: $OBJ.setAttribute("data", $VAL)
+      - metavariable-pattern:
+          VAL:
+            pattern-regex: ^\s*['\"]data:.*
+    metadata:
+      cwe: "CWE-829: Inclusion of Functionality from Untrusted Control Sphere"
+      owasp: "A06:2021-Vulnerable and Outdated Components"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "data: URLs in <object> can load active content (e.g., SVG with scripts)."
+      recommendation: "Avoid data: URLs for <object> data; prefer trusted HTTPS origins and correct types."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/object
+      tags:
+        - shared
+        - dom
+        - object
+        - code-exec
+        - CWE-829
+        - A06:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect setAttribute('data', 'data:...') on <object>
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

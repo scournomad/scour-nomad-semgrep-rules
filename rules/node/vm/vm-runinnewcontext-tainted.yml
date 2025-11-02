@@ -1,0 +1,38 @@
+rules:
+  - id: vm-runinnewcontext-tainted
+    languages: [javascript, typescript]
+    message: vm.runInNewContext invoked on variable code; can lead to sandbox escape/RCE if untrusted.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: vm.runInNewContext($CODE, ...)
+          - pattern: require('vm').runInNewContext($CODE, ...)
+    metadata:
+      cwe: "CWE-94: Code Injection"
+      owasp: "A03:2021-Injection"
+      wasc: "WASC-31: Command Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Evaluating untrusted code can execute arbitrary commands if sandboxing is weak."
+      recommendation: "Do not evaluate untrusted code; prefer safe interpreters or strict sandboxes with no sensitive bindings."
+      references:
+        - https://nodejs.org/api/vm.html#vm_script_runinnewcontext_contextifiedobject_options
+      tags:
+        - vm
+        - code-exec
+        - CWE-94
+        - A03:2021
+        - WASC-31
+      cvss:
+        base: ""
+        vector: ""
+        grade: ""
+      verification:
+        strategy: unit
+        steps:
+          - Flag vm.runInNewContext with variable code argument
+        expected_outcome: Potential code execution flagged
+        tooling:
+          unit: none
+          dast: none

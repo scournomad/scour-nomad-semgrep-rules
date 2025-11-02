@@ -1,0 +1,39 @@
+rules:
+  - id: window-open-noopener-missing
+    languages: [javascript, typescript]
+    message: window.open without 'noopener' allows reverse tabnabbing (new page can control opener).
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: window.open($URL, '_blank')
+          - pattern: window.open($URL, '_blank', $FEATURES)
+    pattern-not: |
+      window.open($URL, '_blank', $FEATURES)
+      ...
+    metavariable-pattern:
+      FEATURES:
+        pattern-regex: (?i)noopener|noreferrer
+    metadata:
+      cwe: "CWE-1022: Use of Weak Authentication"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "High"
+      impact: "Opened page can access window.opener and redirect the original page (tabnabbing)."
+      recommendation: "Include 'noopener' (and preferably 'noreferrer') in the features argument or set rel=noopener."
+      references:
+        - https://web.dev/external-anchors-use-rel-noopener/
+      tags:
+        - shared
+        - navigation
+        - tabnabbing
+        - CWE-1022
+        - A01:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect window.open with _blank and missing noopener/noreferrer in features
+        expected_outcome: Potential tabnabbing risk identified
+        tooling:
+          unit: none
+          dast: none
