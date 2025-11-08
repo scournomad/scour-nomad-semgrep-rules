@@ -1,0 +1,42 @@
+rules:
+  - id: express-redirect-variable-url
+    languages: [javascript, typescript]
+    message: res.redirect called with variable URL. Validate/allowlist to prevent open redirects.
+    severity: WARNING
+    patterns:
+      - pattern-inside: |
+          app.$METHOD($ROUTE, (req, res, $NEXT) => {
+            ...
+          })
+      - pattern-either:
+          - pattern: res.redirect($URL)
+          - pattern: res.redirect($STATUS, $URL)
+    pattern-not-either:
+      - pattern: res.redirect('...')
+      - pattern: res.redirect("...")
+      - pattern: res.redirect($STATUS, '...')
+      - pattern: res.redirect($STATUS, "...")
+    metadata:
+      cwe: "CWE-601: URL Redirection to Untrusted Site ('Open Redirect')"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Unvalidated redirects can send users to attacker-controlled sites."
+      recommendation: "Allowlist redirect destinations or use relative paths; avoid accepting arbitrary URLs."
+      references:
+        - https://expressjs.com/en/api.html#res.redirect
+      tags:
+        - node
+        - express
+        - redirect
+        - CWE-601
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure URL is validated/allowlisted or relative
+        expected_outcome: No open redirects
+        tooling:
+          unit: none
+          dast: none

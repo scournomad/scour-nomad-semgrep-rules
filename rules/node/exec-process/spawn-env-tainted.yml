@@ -1,0 +1,44 @@
+rules:
+  - id: node-child-process-spawn-env-tainted
+    languages: [javascript, typescript]
+    message: child_process.spawn/execFile with tainted environment variables may lead to command behavior changes or leaks.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: child_process.spawn($CMD, $ARGS, { env: $ENV, ... })
+          - pattern: spawn($CMD, $ARGS, { env: $ENV, ... })
+          - pattern: child_process.execFile($CMD, $ARGS, { env: $ENV, ... })
+          - pattern: execFile($CMD, $ARGS, { env: $ENV, ... })
+      - pattern-either:
+          - pattern: req.params.$X
+          - pattern: req.query.$X
+          - pattern: req.body.$X
+          - pattern: req.headers.$X
+      - metavariable-pattern:
+          X:
+            pattern: $ENV
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp: "A03:2021-Injection"
+      severity: "Low"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Attacker-controlled environment variables can alter command behavior, search paths, or leak secrets."
+      recommendation: "Do not populate env from untrusted input; whitelist and sanitize specific keys when necessary."
+      references:
+        - https://nodejs.org/api/child_process.html
+      tags:
+        - node
+        - process
+        - injection
+        - express
+        - CWE-78
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure env passed to process execution is not derived from untrusted input
+        expected_outcome: No tainted env injection
+        tooling:
+          unit: none
+          dast: none

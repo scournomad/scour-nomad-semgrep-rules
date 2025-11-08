@@ -1,0 +1,36 @@
+rules:
+  - id: handlebars-triple-stash-tainted
+    languages: [javascript, typescript]
+    message: Handlebars triple-stash {{{ }}} renders unescaped HTML; with tainted values it can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: Handlebars.compile($TPL)($CTX)
+          - pattern: handlebars.compile($TPL)($CTX)
+          - pattern: $T.render($TPL, $CTX)
+      - pattern-regex: (?s)\{\{\{[^}]+\}\}\}
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unescaped HTML in templates can execute attacker-controlled scripts in the browser."
+      recommendation: "Avoid triple-stash; prefer escaped output or sanitize input before rendering."
+      references:
+        - https://handlebarsjs.com/guide/expressions.html#html-escaping
+      tags:
+        - node
+        - template
+        - handlebars
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect templates using {{{ }}} with user-influenced values
+        expected_outcome: Potential XSS via unescaped output
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,58 @@
+rules:
+  - id: fs-unlink-rm-rename-tainted-path
+    languages: [javascript, typescript]
+    message: fs.unlink/rm/rename called with request-derived path. Validate/normalize to prevent path traversal and arbitrary file operations.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              app.$METHOD($ROUTE, (req, res, $NEXT) => {
+                ...
+              })
+          - pattern-inside: |
+              router.$METHOD($ROUTE, (req, res, $NEXT) => {
+                ...
+              })
+      - pattern-either:
+          - pattern: fs.unlink($P, ...)
+          - pattern: fs.unlinkSync($P, ...)
+          - pattern: fs.rm($P, ...)
+          - pattern: fs.rmSync($P, ...)
+          - pattern: fs.rename($P, $Q, ...)
+          - pattern: fs.renameSync($P, $Q, ...)
+      - pattern-either:
+          - pattern: req.params.$X
+          - pattern: req.query.$X
+          - pattern: req.body.$X
+          - pattern: req.headers.$X
+          - pattern: path.join($BASE, $X)
+      - metavariable-pattern:
+          X:
+            pattern-either:
+              - pattern: $P
+              - pattern: $Q
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Attacker-controlled paths can delete, move, or overwrite arbitrary files on the server."
+      recommendation: "Normalize and validate paths against an allowlisted base; reject '..' sequences and absolute paths."
+      references:
+        - https://nodejs.org/api/fs.html
+      tags:
+        - node
+        - fs
+        - path_traversal
+        - express
+        - CWE-22
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure user input cannot influence filesystem modification paths without strict validation
+        expected_outcome: Untrusted paths are rejected
+        tooling:
+          unit: none
+          dast: none

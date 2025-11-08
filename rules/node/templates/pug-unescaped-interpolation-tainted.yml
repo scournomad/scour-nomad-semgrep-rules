@@ -1,0 +1,37 @@
+rules:
+  - id: pug-unescaped-interpolation-tainted
+    languages: [javascript, typescript]
+    message: Pug/Jade unescaped interpolation (!{expr}) renders raw HTML; with tainted values it can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: pug.render($TPL, $CTX)
+          - pattern: pug.compile($TPL)($CTX)
+          - pattern: jade.render($TPL, $CTX)
+          - pattern: jade.compile($TPL)($CTX)
+      - pattern-regex: (?s)!\{[^}]+\}
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Unescaped HTML in templates can execute attacker-controlled scripts in the browser."
+      recommendation: "Avoid unescaped interpolation; prefer escaped output or sanitize inputs."
+      references:
+        - https://pugjs.org/language/interpolation.html
+      tags:
+        - node
+        - template
+        - pug
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Inspect templates using !{ } with user-influenced values
+        expected_outcome: Potential XSS via unescaped output
+        tooling:
+          unit: none
+          dast: none

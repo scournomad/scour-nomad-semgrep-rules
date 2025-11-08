@@ -1,0 +1,55 @@
+rules:
+  - id: node-child-process-execfile-tainted-args
+    languages: [javascript, typescript]
+    message: child_process.execFile/execFileSync called with request-derived command/args. Validate to prevent command injection.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              app.$METHOD($ROUTE, (req, res, $NEXT) => {
+                ...
+              })
+          - pattern-inside: |
+              router.$METHOD($ROUTE, (req, res, $NEXT) => {
+                ...
+              })
+      - pattern-either:
+          - pattern: child_process.execFile($CMD, $ARGS, ...)
+          - pattern: execFile($CMD, $ARGS, ...)
+          - pattern: child_process.execFileSync($CMD, $ARGS, ...)
+          - pattern: execFileSync($CMD, $ARGS, ...)
+      - pattern-either:
+          - pattern: req.params.$X
+          - pattern: req.query.$X
+          - pattern: req.body.$X
+          - pattern: req.headers.$X
+      - metavariable-pattern:
+          X:
+            pattern-either:
+              - pattern: $CMD
+              - pattern: $ARGS
+    metadata:
+      cwe: "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Attacker-controlled command/arguments may execute arbitrary OS commands."
+      recommendation: "Avoid passing untrusted input to process execution; use allowlists and fixed commands; sanitize args or avoid shell features."
+      references:
+        - https://nodejs.org/api/child_process.html#child_processexecfilefile-args-options-callback
+      tags:
+        - node
+        - process
+        - injection
+        - express
+        - CWE-78
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure no request-derived values reach execFile without strict validation
+        expected_outcome: Command injection prevented
+        tooling:
+          unit: none
+          dast: none

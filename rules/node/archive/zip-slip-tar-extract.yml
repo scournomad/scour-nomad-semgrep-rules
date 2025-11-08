@@ -1,0 +1,41 @@
+rules:
+  - id: zip-slip-tar-extract
+    languages: [javascript, typescript]
+    message: tar extraction writing entry paths directly may allow Zip Slip (path traversal).
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: tar.extract($OPTS)
+          - pattern: tar.x($OPTS)
+      - pattern-inside: |
+          const $OUT = path.join($DEST, $ENTRY.path)
+          ...
+          fs.writeFileSync($OUT, ...)
+      - pattern-either:
+          - pattern: import tar from 'tar'
+          - pattern: const tar = require('tar')
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Archive entries with `..` or absolute paths can write outside the intended directory."
+      recommendation: "Normalize and validate entry paths; reject absolute paths and `..` segments before writing to disk."
+      references:
+        - https://snyk.io/research/zip-slip-vulnerability
+      tags:
+        - node
+        - archive
+        - path_traversal
+        - tar
+        - CWE-22
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure tar extraction code sanitizes entry paths before writes
+        expected_outcome: No writes outside destination directory
+        tooling:
+          unit: none
+          dast: none

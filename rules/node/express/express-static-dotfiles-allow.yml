@@ -1,0 +1,32 @@
+rules:
+  - id: express-static-dotfiles-allow
+    languages: [javascript, typescript]
+    message: express.static configured with dotfiles: 'allow' may expose hidden files.
+    severity: WARNING
+    patterns:
+      - pattern: express.static($DIR, { ..., dotfiles: 'allow', ... })
+    metadata:
+      cwe: "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Low"
+      risk_score: ""
+      confidence: "High"
+      impact: "Hidden dotfiles (e.g., .env, .git) may be served, exposing secrets or internals."
+      recommendation: "Avoid dotfiles: 'allow'; use 'ignore' or serve from a directory that excludes sensitive files."
+      references:
+        - https://expressjs.com/en/resources/middleware/serve-static.html
+      tags:
+        - node
+        - express
+        - static
+        - misconfiguration
+        - CWE-200
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Check that static middleware does not serve dotfiles
+        expected_outcome: Hidden files are not accessible
+        tooling:
+          unit: none
+          dast: none

@@ -1,0 +1,38 @@
+rules:
+  - id: jsonwebtoken-verify-ignore-expiration
+    languages: [javascript, typescript]
+    message: jsonwebtoken.verify called with ignoreExpiration=true weakens token validation.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: jwt.verify($TOKEN, $SECRET, { ignoreExpiration: true, ... })
+          - pattern: jsonwebtoken.verify($TOKEN, $SECRET, { ignoreExpiration: true, ... })
+      - pattern-either:
+          - pattern: import jwt from 'jsonwebtoken'
+          - pattern: const jwt = require('jsonwebtoken')
+          - pattern: import * as jwt from 'jsonwebtoken'
+          - pattern: import jsonwebtoken from 'jsonwebtoken'
+    metadata:
+      cwe: "CWE-287: Improper Authentication"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "High"
+      impact: "Expired tokens may be accepted, enabling unauthorized access."
+      recommendation: "Do not set ignoreExpiration to true. Ensure expiration is validated or explicitly re-authenticate."
+      references:
+        - https://github.com/auth0/node-jsonwebtoken
+      tags:
+        - node
+        - jwt
+        - authn
+        - CWE-287
+        - A01:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect verify calls with ignoreExpiration: true
+        expected_outcome: Weak JWT verification flagged
+        tooling:
+          unit: none
+          dast: none

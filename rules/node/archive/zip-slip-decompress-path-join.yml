@@ -1,0 +1,41 @@
+rules:
+  - id: zip-slip-decompress-path-join
+    languages: [javascript, typescript]
+    message: decompress entry path joined directly into filesystem path may allow Zip Slip (path traversal).
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $OUT = path.join($DEST, $FILE.path)
+              ...
+              fs.writeFileSync($OUT, $DATA)
+          - pattern: |
+              fs.writeFileSync(path.join($DEST, $FILE.path), $DATA)
+      - pattern-either:
+          - pattern: import decompress from 'decompress'
+          - pattern: const decompress = require('decompress')
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "Low"
+      impact: "Archive entries with `..` or absolute paths can write outside the intended directory."
+      recommendation: "Normalize and validate entry paths; reject absolute paths and `..` segments before writing to disk."
+      references:
+        - https://snyk.io/research/zip-slip-vulnerability
+      tags:
+        - node
+        - archive
+        - path_traversal
+        - decompress
+        - CWE-22
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure decompressed file paths are sanitized before filesystem writes
+        expected_outcome: No writes outside destination directory
+        tooling:
+          unit: none
+          dast: none

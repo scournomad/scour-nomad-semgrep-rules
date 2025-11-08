@@ -1,0 +1,44 @@
+rules:
+  - id: express-res-download-tainted-path
+    languages: [javascript, typescript]
+    message: res.download called with request-derived path. Validate to prevent path traversal.
+    severity: ERROR
+    patterns:
+      - pattern-inside: |
+          app.$METHOD($ROUTE, (req, res, $NEXT) => {
+            ...
+          })
+      - pattern: res.download($P, ...)
+      - pattern-either:
+          - pattern: req.params.$X
+          - pattern: req.query.$X
+          - pattern: req.body.$X
+          - pattern: req.headers.$X
+          - pattern: path.join($BASE, $X)
+      - metavariable-pattern:
+          X:
+            pattern: $P
+    metadata:
+      cwe: "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Attacker-controlled download paths can exfiltrate arbitrary files."
+      recommendation: "Normalize and validate paths against an allowlisted base; reject '..' sequences and absolute paths."
+      references:
+        - https://expressjs.com/en/api.html#res.download
+      tags:
+        - node
+        - express
+        - path_traversal
+        - CWE-22
+        - A01:2021
+      verification:
+        strategy: manual
+        steps:
+          - Ensure untrusted input cannot control res.download path
+        expected_outcome: No path traversal
+        tooling:
+          unit: none
+          dast: none
