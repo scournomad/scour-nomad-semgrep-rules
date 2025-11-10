@@ -1,0 +1,33 @@
+rules:
+  - id: react-ref-innerhtml-assign
+    languages: [javascript, typescript]
+    message: Setting innerHTML via a React ref with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $REF.current.innerHTML = $HTML
+          - pattern: $REF.innerHTML = $HTML
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Rendering untrusted HTML with refs bypasses React's HTML escaping."
+      recommendation: "Avoid assigning to innerHTML via refs; sanitize content or use safe rendering."
+      references:
+        - https://react.dev/learn/referencing-values-with-refs
+      tags:
+        - react
+        - refs
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect ref innerHTML assignments
+        expected_outcome: XSS sink identified
+        tooling:
+          unit: none
+          dast: none

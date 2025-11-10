@@ -1,0 +1,33 @@
+rules:
+  - id: react-ref-insertadjacenthtml
+    languages: [javascript, typescript]
+    message: Using insertAdjacentHTML via a React ref with variable content can cause XSS.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $REF.current.insertAdjacentHTML($POS, $HTML)
+          - pattern: $REF.insertAdjacentHTML($POS, $HTML)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "Medium"
+      impact: "Rendering untrusted HTML bypasses React's escaping and can execute scripts."
+      recommendation: "Avoid insertAdjacentHTML via refs; sanitize content or use React rendering."
+      references:
+        - https://developer.mozilla.org/docs/Web/API/Element/insertAdjacentHTML
+      tags:
+        - react
+        - refs
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect ref.insertAdjacentHTML calls with variable content
+        expected_outcome: XSS sink identified
+        tooling:
+          unit: none
+          dast: none

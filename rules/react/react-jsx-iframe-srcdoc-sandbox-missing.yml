@@ -1,0 +1,38 @@
+rules:
+  - id: react-jsx-iframe-srcdoc-sandbox-missing
+    languages: [javascript, typescript]
+    message: JSX iframe with srcDoc set but missing sandbox attribute increases XSS risk.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: "<iframe srcDoc={$HTML} .../>"
+          - pattern: '<iframe srcDoc={$HTML} .../>'
+    pattern-not-either:
+      - pattern: "<iframe ... sandbox=... srcDoc={$HTML} .../>"
+      - pattern: '<iframe ... sandbox=... srcDoc={$HTML} .../>'
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A05:2021-Security Misconfiguration"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "High"
+      impact: "Untrusted HTML in srcDoc can execute scripts; missing sandbox removes iframe isolation."
+      recommendation: "Add a restrictive sandbox attribute when using srcDoc and only allow required capabilities."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/iframe#security_considerations
+      tags:
+        - react
+        - jsx
+        - iframe
+        - sandbox
+        - xss
+        - CWE-79
+        - A05:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect JSX iframe with srcDoc but no sandbox attribute
+        expected_outcome: Missing sandbox flagged
+        tooling:
+          unit: none
+          dast: none

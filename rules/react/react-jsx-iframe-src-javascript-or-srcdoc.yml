@@ -1,0 +1,36 @@
+rules:
+  - id: react-jsx-iframe-src-javascript-or-srcdoc
+    languages: [javascript, typescript]
+    message: JSX iframe with javascript: src or srcDoc with variable HTML can execute untrusted scripts.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: "<iframe src='javascript:$ANY' .../>"
+          - pattern: '<iframe src="javascript:$ANY" .../>'
+          - pattern: "<iframe srcDoc={$HTML} .../>"
+          - pattern: '<iframe srcDoc={$HTML} .../>'
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "javascript: or untrusted srcDoc executes in the iframe context and may interact with the parent."
+      recommendation: "Avoid javascript: in iframe src and avoid untrusted srcDoc; use trusted HTTPS origins and sanitize content."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTML/Element/iframe#security_considerations
+      tags:
+        - react
+        - jsx
+        - iframe
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect JSX iframe with javascript: src or variable srcDoc
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

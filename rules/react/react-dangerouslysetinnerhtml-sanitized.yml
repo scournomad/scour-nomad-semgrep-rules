@@ -1,0 +1,37 @@
+rules:
+  - id: react-dangerouslysetinnerhtml-sanitized
+    languages: [javascript, typescript]
+    message: dangerouslySetInnerHTML used with a sanitizer detected; risk reduced but still review configuration and context.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: "<$C dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize($HTML, ...) }} />"
+          - pattern: "<$C dangerouslySetInnerHTML={{ __html: sanitizeHtml($HTML, ...) }} />"
+          - pattern: "<$C dangerouslySetInnerHTML={{ __html: filterXSS($HTML, ...) }} />"
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "High"
+      impact: "Sanitization reduces XSS risk, but misconfiguration or bypasses may still allow exploitation."
+      recommendation: "Prefer safe rendering; if using dangerouslySetInnerHTML, ensure robust sanitization (DOMPurify with strict config/Trusted Types) and validate sources."
+      references:
+        - https://github.com/cure53/DOMPurify
+        - https://github.com/apostrophecms/sanitize-html
+        - https://github.com/leizongmin/js-xss
+      tags:
+        - react
+        - jsx
+        - sanitizer-aware
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Confirm sanitizer configuration (e.g., allowed tags/attributes/URI schemes) is strict and appropriate
+        expected_outcome: Sanitized content renders safely without script execution
+        tooling:
+          unit: none
+          dast: none

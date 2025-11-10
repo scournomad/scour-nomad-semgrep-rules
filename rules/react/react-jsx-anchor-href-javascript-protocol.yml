@@ -1,0 +1,34 @@
+rules:
+  - id: react-jsx-anchor-href-javascript-protocol
+    languages: [javascript, typescript]
+    message: JSX anchor href set to a javascript: URL executes code on click.
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: "<a href='javascript:$ANY' ...>...</a>"
+          - pattern: '<a href="javascript:$ANY" ...>...</a>'
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "High"
+      risk_score: ""
+      confidence: "High"
+      impact: "javascript: URLs execute arbitrary code in the page context."
+      recommendation: "Do not use javascript: URLs in JSX anchors. Use safe event handlers and regular navigation."
+      references:
+        - https://developer.mozilla.org/docs/Web/HTTP/Basics_of_HTTP/Data_URIs#javascript_uris
+      tags:
+        - react
+        - jsx
+        - navigation
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect <a href="javascript:..."> usage in JSX
+        expected_outcome: Code execution vector identified
+        tooling:
+          unit: none
+          dast: none

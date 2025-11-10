@@ -1,0 +1,40 @@
+rules:
+  - id: react-jsx-link-blank-noopener-missing
+    languages: [javascript, typescript]
+    message: React Router <Link> with target="_blank" missing rel=noopener (or noreferrer) allows reverse tabnabbing.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: "<Link target='_blank' ...>...</Link>"
+          - pattern: '<Link target="_blank" ...>...</Link>'
+    pattern-not-either:
+      - pattern: "<Link ... rel='noopener' ...>...</Link>"
+      - pattern: '<Link ... rel="noopener" ...>...</Link>'
+      - pattern: "<Link ... rel='noreferrer' ...>...</Link>"
+      - pattern: '<Link ... rel="noreferrer" ...>...</Link>'
+    metadata:
+      cwe: "CWE-1022: Use of Weak Authentication"
+      owasp: "A01:2021-Broken Access Control"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "High"
+      impact: "Opened page can access window.opener and redirect the original page (tabnabbing)."
+      recommendation: "Add rel='noopener' (preferably 'noreferrer') when using target='_blank' in <Link>."
+      references:
+        - https://web.dev/external-anchors-use-rel-noopener/
+      tags:
+        - react
+        - jsx
+        - navigation
+        - router
+        - tabnabbing
+        - CWE-1022
+        - A01:2021
+      verification:
+        strategy: unit
+        steps:
+          - Detect JSX <Link target="_blank"> without rel containing noopener/noreferrer
+        expected_outcome: Potential tabnabbing risk identified
+        tooling:
+          unit: none
+          dast: none

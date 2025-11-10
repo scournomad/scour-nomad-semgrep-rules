@@ -1,0 +1,40 @@
+rules:
+  - id: react-ref-outerhtml-sanitized
+    languages: [javascript, typescript]
+    message: outerHTML set via a React ref using a sanitizer; risk reduced but still review configuration and context.
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: $REF.current.outerHTML = DOMPurify.sanitize($HTML, ...)
+          - pattern: $REF.outerHTML = DOMPurify.sanitize($HTML, ...)
+          - pattern: $REF.current.outerHTML = sanitizeHtml($HTML, ...)
+          - pattern: $REF.outerHTML = sanitizeHtml($HTML, ...)
+          - pattern: $REF.current.outerHTML = filterXSS($HTML, ...)
+          - pattern: $REF.outerHTML = filterXSS($HTML, ...)
+    metadata:
+      cwe: "CWE-79: Cross-site Scripting"
+      owasp: "A03:2021-Injection"
+      severity: "Medium"
+      risk_score: ""
+      confidence: "High"
+      impact: "Sanitization reduces XSS risk, but misconfiguration or bypasses may still allow exploitation."
+      recommendation: "Prefer safe rendering; if using outerHTML via refs, ensure robust sanitization (DOMPurify strict config/Trusted Types) and validate sources."
+      references:
+        - https://github.com/cure53/DOMPurify
+        - https://github.com/apostrophecms/sanitize-html
+        - https://github.com/leizongmin/js-xss
+      tags:
+        - react
+        - refs
+        - sanitizer-aware
+        - xss
+        - CWE-79
+        - A03:2021
+      verification:
+        strategy: manual
+        steps:
+          - Confirm sanitizer configuration (allowed tags/attributes/URI schemes) is strict and appropriate
+        expected_outcome: Sanitized content renders safely without script execution
+        tooling:
+          unit: none
+          dast: none
